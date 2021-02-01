@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-64)]
 public class Match : MonoBehaviour {
 	static Match instance;
-	public UnityEvent coinSelected;
-	public UnityEvent coinDeselected;
+	public UnityEvent coinStatusChanged;
 	public UnityEvent coinShot;
 
 	void Awake() {
 		assertSingleton();
 
-		coinSelected = new UnityEvent();
-		coinDeselected = new UnityEvent();
+		coinStatusChanged = new UnityEvent();
 		coinShot = new UnityEvent();
 	}
 

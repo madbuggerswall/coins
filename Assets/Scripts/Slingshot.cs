@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Bitwise check: |= uncheck: &= ~(value)
+public enum CoinStatus {
+	selected = (1 << 0),
+	drawn = (1 << 1),
+	shot = (1 << 2)
+}
+
 public class Slingshot : MonoBehaviour {
 
 	Vector3 initialPos;
@@ -11,15 +19,11 @@ public class Slingshot : MonoBehaviour {
 	Guide guide;
 	Rigidbody rigidBody;
 
-	bool selected;
-	bool shot;
-
+	[SerializeField] CoinStatus coinStatus;
 	void Awake() {
+		Debug.Log(coinStatus);
 		guide = GetComponentInChildren<Guide>();
 		rigidBody = GetComponent<Rigidbody>();
-
-		selected = false;
-		shot = false;
 	}
 
 	// Update is called once per frame
@@ -29,13 +33,13 @@ public class Slingshot : MonoBehaviour {
 
 	// Select coin
 	void OnMouseEnter() {
-		selected = true;
-		Match.getInstance().coinSelected.Invoke();
+		coinStatus |= CoinStatus.selected;
+		Match.getInstance().coinStatusChanged.Invoke();
 	}
 
 	void OnMouseExit() {
-		selected = false;
-		Match.getInstance().coinDeselected.Invoke();
+		coinStatus &= ~CoinStatus.selected;
+		Match.getInstance().coinStatusChanged.Invoke();
 	}
 
 	// Draw
@@ -47,14 +51,19 @@ public class Slingshot : MonoBehaviour {
 
 	// Aim
 	void OnMouseDrag() {
+		coinStatus |= CoinStatus.drawn;
+		Match.getInstance().coinStatusChanged.Invoke();
+
 		calculateThrowForce();
 		guide.setPoints(transform.position, transform.position + throwForce);
 	}
 
 	// Release
 	void OnMouseUp() {
+		coinStatus = CoinStatus.shot;
+		Match.getInstance().coinStatusChanged.Invoke();
+
 		rigidBody.AddForce(throwForce, ForceMode.Impulse);
-		shot = true;
 		gameObject.layer = Layers.thrownCoin;
 		Match.getInstance().coinShot.Invoke();
 		guide.enable(false);
@@ -69,10 +78,8 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void clearFlags() {
-		selected = false;
-		shot = false;
+		coinStatus = 0;
 	}
-	
-	public bool isSelected() { return selected; }
-	public bool isShot() { return shot; }
+
+	public CoinStatus getCoinStatus() { return coinStatus; }
 }

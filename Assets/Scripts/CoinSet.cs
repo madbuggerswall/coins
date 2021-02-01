@@ -10,49 +10,40 @@ enum CoinSelection {
 }
 
 public class CoinSet : MonoBehaviour {
+	public CoinSetState state;
+
 	Coin[] coins;
 	Guide guide;
+	bool passedThrough = false;
 
-	int layerMask;
-
-	delegate void CheckLine();
-	CheckLine checkLine;
-
-	delegate void CheckAllStopped();
-	CheckAllStopped checkAllStopped;
-
-	bool hasFauled = true;
-	CoinSetState state;
+	public delegate void CheckFaulLineDelegate();
+	public CheckFaulLineDelegate checkFaulLine;
 
 	void Awake() {
 		coins = GetComponentsInChildren<Coin>();
 		guide = GetComponentInChildren<Guide>();
-		layerMask = 1 << Layers.thrownCoin;
 
-		Match.getInstance().coinSelected.AddListener(drawGuide);
-		Match.getInstance().coinDeselected.AddListener(deleteGuide);
-		Match.getInstance().coinShot.AddListener(drawFaulLine);
+		Match.getInstance().coinStatusChanged.AddListener(drawGuide);
+		Match.getInstance().coinShot.AddListener(selectFaulLine);
+		Match.getInstance().coinShot.AddListener(() => { setState(new ShotState(this)); });
 
 		state = new AimState(this);
-
-		checkLine = () => { };
-		checkAllStopped = () => { };
 	}
 
 	// Update is called once per frame
 	void Update() {
-		checkLine();
-		checkAllStopped();
+		state.checkPassThrough();
+		state.hasCoinsStopped();
 	}
 
+	// Move to guide class
 	void drawGuide() {
 		guide.enable(true);
 		int coinSelection = 0;
 		for (int index = 0; index < coins.Length; index++) {
-			bool coinSelected = coins[index].GetComponent<Slingshot>().isSelected();
-			bool coinShot = coins[index].GetComponent<Slingshot>().isShot();
+			bool coinSelected = coins[index].GetComponent<Slingshot>().getCoinStatus() > 0;
 
-			if (coinSelected || coinShot) {
+			if (coinSelected) {
 				coinSelection = (1 << index);
 				if (coinSelection == 1) {
 					guide.setPoints(coins[1].transform.position, coins[2].transform.position);
@@ -61,39 +52,38 @@ public class CoinSet : MonoBehaviour {
 				} else if (coinSelection == 4) {
 					guide.setPoints(coins[0].transform.position, coins[1].transform.position);
 				}
+				return;
 			}
 		}
+		guide.enable(false);
 	}
 
-	void drawFaulLine() {
+	void selectFaulLine() {
 		int coinSelection = 0;
 		for (int index = 0; index < coins.Length; index++) {
-			bool coinShot = coins[index].GetComponent<Slingshot>().isShot();
+			bool coinShot = (coins[index].GetComponent<Slingshot>().getCoinStatus() & CoinStatus.shot) > 0;
 			if (coinShot) {
 				coinSelection = (1 << index);
 				if (coinSelection == 1) {
-					checkLine = () => { checkLineBetween(coins[1].transform.position, coins[2].transform.position); };
+					checkFaulLine = () => { checkLineBetween(coins[1].transform.position, coins[2].transform.position); };
 				} else if (coinSelection == 2) {
-					checkLine = () => { checkLineBetween(coins[0].transform.position, coins[2].transform.position); };
+					checkFaulLine = () => { checkLineBetween(coins[0].transform.position, coins[2].transform.position); };
 				} else if (coinSelection == 4) {
-					checkLine = () => { checkLineBetween(coins[0].transform.position, coins[1].transform.position); };
+					checkFaulLine = () => { checkLineBetween(coins[0].transform.position, coins[1].transform.position); };
 				}
 			}
 		}
 	}
 
-	void deleteGuide() {
-		guide.enable(false);
-	}
-
 	void checkLineBetween(Vector3 startPos, Vector3 endPos) {
+		int layerMask = 1 << Layers.thrownCoin;
 		if (Physics.Linecast(startPos, endPos, layerMask)) {
-			hasFauled = false;
+			passedThrough = true;
 			Debug.Log("In between");
 		}
 	}
 
-	bool hasCoinsStopped() {
+	public bool hasCoinsStopped() {
 		bool result = true;
 		foreach (Coin coin in coins) {
 			bool coinStopped = coin.GetComponent<Rigidbody>().IsSleeping();
@@ -118,29 +108,62 @@ public class CoinSet : MonoBehaviour {
 	public void clearAllFlags() {
 		foreach (Coin coin in coins) {
 			coin.GetComponent<Slingshot>().clearFlags();
+			coin.gameObject.layer = Layers.coin;
 		}
 	}
+
+	// Setters & Getters
+	public void setState(CoinSetState state) { this.state = state; }
+	public bool hasPassedThrough() { return passedThrough; }
+}
+
+
+public interface CoinSetState {
+	void hasCoinsStopped();
+	void checkPassThrough();
 }
 
 public class AimState : CoinSetState {
 	CoinSet coinSet;
+
 	public AimState(CoinSet coinSet) {
+		this.coinSet = coinSet;
 		coinSet.enableControls();
 	}
+	public void hasCoinsStopped() { }
+	public void checkPassThrough() { }
 }
 
 public class ShotState : CoinSetState {
 	CoinSet coinSet;
+
 	public ShotState(CoinSet coinSet) {
+		this.coinSet = coinSet;
 		coinSet.disableControls();
+	}
+
+	public void hasCoinsStopped() {
+		if (coinSet.hasCoinsStopped()) {
+			coinSet.setState(new StationaryState(coinSet));
+		}
+	}
+
+	public void checkPassThrough() {
+		coinSet.checkFaulLine();
 	}
 }
 
 public class StationaryState : CoinSetState {
 	CoinSet coinSet;
-	public StationaryState(CoinSet coinSet) { }
-}
-
-public interface CoinSetState {
-
+	public StationaryState(CoinSet coinSet) {
+		this.coinSet = coinSet;
+		coinSet.clearAllFlags();
+		if (!coinSet.hasPassedThrough()) {
+			Debug.Log("Did not passed through");
+		}else{
+			Debug.Log("Passed through");
+		}
+	}
+	public void hasCoinsStopped() { }
+	public void checkPassThrough() { }
 }
