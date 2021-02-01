@@ -1,0 +1,9 @@
+/*
+**.meta
+!Assets
+# !ProjectSettings
+Assets/*
+!Scripts
+!Editor
+!omnisharp.json
+!.gitignore
