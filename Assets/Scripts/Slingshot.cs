@@ -26,7 +26,7 @@ public class Slingshot : MonoBehaviour {
 	UnityAction onMouseDrag;
 	UnityAction onMouseUp;
 
-	[SerializeField] CoinStatus coinStatus;
+	CoinStatus coinStatus;
 
 	void Awake() {
 		guide = GetComponentInChildren<Guide>();
@@ -75,12 +75,12 @@ public class Slingshot : MonoBehaviour {
 			initialPos = Input.mousePosition;
 			guide.enable(true);
 			guide.setPoints(transform.position, transform.position + throwForce);
+
+			coinStatus |= CoinStatus.drawn;
+			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
 		};
 		// Aim
 		onMouseDrag = () => {
-			coinStatus |= CoinStatus.drawn;
-			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
-
 			calculateThrowForce();
 			guide.setPoints(transform.position, transform.position + throwForce);
 		};

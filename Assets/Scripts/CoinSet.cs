@@ -27,6 +27,7 @@ public class CoinSet : MonoBehaviour {
 	Coin[] coins;
 	Guide guide;
 	bool passedThrough = false;
+	Pair<Vector3> endpoints = new Pair<Vector3>();
 
 	CoinSetState state;
 	void Awake() {
@@ -36,13 +37,13 @@ public class CoinSet : MonoBehaviour {
 		events = new CoinSetEvents();
 		events.coinStatusChanged.AddListener(selectGuide);
 		events.coinShot.AddListener(selectFaulLine);
-		events.coinShot.AddListener(() => { setState(new ShotState(this)); });
+		events.coinShot.AddListener(() => setState(new ShotState(this)));
 
 		state = new AimState(this);
 	}
 
 	void Update() {
-		state.drawGuide();
+		drawGuideLine();
 		state.checkPassThrough();
 		state.hasCoinsStopped();
 	}
@@ -54,11 +55,11 @@ public class CoinSet : MonoBehaviour {
 			if (coinShot) {
 				coinSelection = (1 << index);
 				if (coinSelection == 1) {
-					checkFaulLine = () => { checkLineBetween(coins[1].transform.position, coins[2].transform.position); };
+					checkFaulLine = () => checkLineBetween(coins[1].transform.position, coins[2].transform.position);
 				} else if (coinSelection == 2) {
-					checkFaulLine = () => { checkLineBetween(coins[0].transform.position, coins[2].transform.position); };
+					checkFaulLine = () => checkLineBetween(coins[0].transform.position, coins[2].transform.position);
 				} else if (coinSelection == 4) {
-					checkFaulLine = () => { checkLineBetween(coins[0].transform.position, coins[1].transform.position); };
+					checkFaulLine = () => checkLineBetween(coins[0].transform.position, coins[1].transform.position);
 				}
 			}
 		}
@@ -83,6 +84,7 @@ public class CoinSet : MonoBehaviour {
 
 	// State functions
 	public void selectGuide() {
+		Debug.Log("selectGuide");
 		guide.enable(true);
 		CoinStatus maxCoinStatus = 0;
 		int maxCoinStatusIndex = 0;
@@ -93,20 +95,20 @@ public class CoinSet : MonoBehaviour {
 				maxCoinStatusIndex = index;
 			}
 		}
-		if (maxCoinStatus > 0)
+		if (maxCoinStatus > 0) {
 			selectCoinPair(maxCoinStatusIndex);
-		else
+		} else
 			guide.enable(false);
 	}
 
 	void selectCoinPair(int index) {
 		int coinSelection = (1 << index);
 		if (coinSelection == 1) {
-			drawGuideLine = () => { guide.setPoints(coins[1].transform.position, coins[2].transform.position); };
+			drawGuideLine = () => guide.setPoints(coins[1].transform.position, coins[2].transform.position);
 		} else if (coinSelection == 2) {
-			drawGuideLine = () => { guide.setPoints(coins[0].transform.position, coins[2].transform.position); };
+			drawGuideLine = () => guide.setPoints(coins[0].transform.position, coins[2].transform.position);
 		} else if (coinSelection == 4) {
-			drawGuideLine = () => { guide.setPoints(coins[0].transform.position, coins[1].transform.position); };
+			drawGuideLine = () => guide.setPoints(coins[0].transform.position, coins[1].transform.position);
 		}
 	}
 

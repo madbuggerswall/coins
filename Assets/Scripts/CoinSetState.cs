@@ -5,7 +5,6 @@ using UnityEngine;
 public interface CoinSetState {
 	void hasCoinsStopped();
 	void checkPassThrough();
-	void drawGuide();
 }
 
 public class AimState : CoinSetState {
@@ -17,9 +16,6 @@ public class AimState : CoinSetState {
 	}
 	public void hasCoinsStopped() { }
 	public void checkPassThrough() { }
-	public void drawGuide() {
-		coinSet.drawGuideLine();
-	}
 }
 
 public class ShotState : CoinSetState {
@@ -38,10 +34,6 @@ public class ShotState : CoinSetState {
 
 	public void checkPassThrough() {
 		coinSet.checkFaulLine();
-	}
-
-	public void drawGuide() {
-		coinSet.drawGuideLine();
 	}
 }
 
@@ -63,5 +55,4 @@ public class StationaryState : CoinSetState {
 	}
 	public void hasCoinsStopped() { }
 	public void checkPassThrough() { }
-	public void drawGuide() { }
 }
