@@ -21,7 +21,7 @@ public class CoinSetEvents {
 public class CoinSet : MonoBehaviour {
 	public CoinSetEvents events;
 
-	public UnityAction checkFaulLine = () => { };
+	public UnityAction checkFoulLine = () => { };
 	public UnityAction drawGuideLine = () => { };
 
 	Coin[] coins;
@@ -36,10 +36,8 @@ public class CoinSet : MonoBehaviour {
 
 		events = new CoinSetEvents();
 		events.coinStatusChanged.AddListener(selectGuide);
-		events.coinShot.AddListener(selectFaulLine);
+		events.coinShot.AddListener(selectFoulLine);
 		events.coinShot.AddListener(() => setState(new ShotState(this)));
-
-		state = new AimState(this);
 	}
 
 	void Update() {
@@ -48,18 +46,18 @@ public class CoinSet : MonoBehaviour {
 		state.hasCoinsStopped();
 	}
 
-	void selectFaulLine() {
+	void selectFoulLine() {
 		int coinSelection = 0;
 		for (int index = 0; index < coins.Length; index++) {
 			bool coinShot = (coins[index].GetComponent<Slingshot>().getCoinStatus() & CoinStatus.shot) > 0;
 			if (coinShot) {
 				coinSelection = (1 << index);
 				if (coinSelection == 1) {
-					checkFaulLine = () => checkLineBetween(coins[1].transform.position, coins[2].transform.position);
+					checkFoulLine = () => checkLineBetween(coins[1].transform.position, coins[2].transform.position);
 				} else if (coinSelection == 2) {
-					checkFaulLine = () => checkLineBetween(coins[0].transform.position, coins[2].transform.position);
+					checkFoulLine = () => checkLineBetween(coins[0].transform.position, coins[2].transform.position);
 				} else if (coinSelection == 4) {
-					checkFaulLine = () => checkLineBetween(coins[0].transform.position, coins[1].transform.position);
+					checkFoulLine = () => checkLineBetween(coins[0].transform.position, coins[1].transform.position);
 				}
 			}
 		}
@@ -69,7 +67,6 @@ public class CoinSet : MonoBehaviour {
 		int layerMask = 1 << Layers.thrownCoin;
 		if (Physics.Linecast(startPos, endPos, layerMask)) {
 			passedThrough = true;
-			Debug.Log("In between");
 		}
 	}
 
@@ -84,7 +81,6 @@ public class CoinSet : MonoBehaviour {
 
 	// State functions
 	public void selectGuide() {
-		Debug.Log("selectGuide");
 		guide.enable(true);
 		CoinStatus maxCoinStatus = 0;
 		int maxCoinStatusIndex = 0;
@@ -138,4 +134,5 @@ public class CoinSet : MonoBehaviour {
 	// Setters & Getters
 	public void setState(CoinSetState state) { this.state = state; }
 	public bool hasPassedThrough() { return passedThrough; }
+	public void resetPassedThrough() { passedThrough = false; }
 }

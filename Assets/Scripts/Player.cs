@@ -16,4 +16,5 @@ public class Player {
 	public void decrementShotsLeft() { shotsLeft--; }
 	public void restoreShotsLeft() { shotsLeft = maxShots; }
 	public ushort getShotsLeft() { return shotsLeft; }
+	public ushort getScore() { return score; }
 }

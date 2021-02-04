@@ -5,8 +5,6 @@ using UnityEngine.Events;
 
 [DefaultExecutionOrder(-64)]
 public class Match : MonoBehaviour {
-	static Match instance;
-
 	CoinSet coinSet;
 
 	[SerializeField] Player playerLeft;
@@ -14,7 +12,6 @@ public class Match : MonoBehaviour {
 	Player activePlayer;
 
 	public UnityEvent playerScored;
-	public UnityEvent playerFouled;
 	public UnityEvent playerShotEnded;
 
 	MatchState state;
@@ -22,13 +19,11 @@ public class Match : MonoBehaviour {
 	ushort winningScore = 5;
 
 	void Awake() {
-		assertSingleton();
 		coinSet = FindObjectOfType<CoinSet>();
 		playerLeft = new Player();
 		playerRight = new Player();
 
 		playerScored = new UnityEvent();
-		playerFouled = new UnityEvent();
 		playerShotEnded = new UnityEvent();
 
 		state = new CoinToss(this);
@@ -41,10 +36,6 @@ public class Match : MonoBehaviour {
 			activePlayer = playerLeft;
 	}
 
-	// Singleton utilities
-	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
-	public static Match getInstance() { return instance; }
-
 	// Setters & Getters
 	public void setState(MatchState state) { this.state = state; }
 	public void setActivePlayer(Player player) { activePlayer = player; }
@@ -52,4 +43,5 @@ public class Match : MonoBehaviour {
 	public Player getPlayerLeft() { return playerLeft; }
 	public Player getPlayerRight() { return playerRight; }
 	public Player getActivePlayer() { return activePlayer; }
+	public ushort getWinningScore() { return winningScore; }
 }
