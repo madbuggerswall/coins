@@ -41,18 +41,21 @@ public class PlayerTurn : MatchState {
 
 	void evaluateShot() {
 		if (playerFouled()) {
-			passTurnToOtherPlayer();
+			removeListeners();
+			match.passTurn();
 		} else if (isPlayerScored) {
+			removeListeners();
 			match.setState(new PlayerScored(match));
 		} else if (playerHasShotsLeft()) {
 			continueTurn();
 		} else {
-			passTurnToOtherPlayer();
+			removeListeners();
+			match.passTurn();
 		}
 	}
 
 	bool playerFouled() {
-		if (coinSet.hasPassedThrough())
+		if (coinSet.getMechanics().hasPassedThrough())
 			return false;
 		return true;
 	}
@@ -64,18 +67,13 @@ public class PlayerTurn : MatchState {
 		return false;
 	}
 
-	void passTurnToOtherPlayer() {
-		Debug.Log("passTurn");
-		match.playerScored.RemoveListener(playerScored);
-		match.playerShotEnded.RemoveListener(evaluateShot);
-
-		match.getActivePlayer().restoreShotsLeft();
-		match.passTurn();
-		match.setState(new PlayerTurn(match));
-	}
-
 	void continueTurn() {
 		coinSet.setState(new AimState(coinSet));
+	}
+
+	void removeListeners() {
+		match.playerScored.RemoveListener(playerScored);
+		match.playerShotEnded.RemoveListener(evaluateShot);
 	}
 }
 
@@ -96,18 +94,8 @@ public class PlayerScored : MatchState {
 		if (playerWon()) {
 			match.setState(new MatchEnded(match));
 		} else {
-			passTurnToOtherPlayer();
+			match.passTurn();
 		}
-	}
-
-	void passTurnToOtherPlayer() {
-		Debug.Log("passTurn");
-		match.playerScored.RemoveAllListeners();
-		match.playerShotEnded.RemoveAllListeners();
-
-		match.getActivePlayer().restoreShotsLeft();
-		match.passTurn();
-		match.setState(new PlayerTurn(match));
 	}
 
 	bool playerWon() {

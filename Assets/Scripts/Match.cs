@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[DefaultExecutionOrder(-64)]
+// [DefaultExecutionOrder(-64)]
 public class Match : MonoBehaviour {
 	CoinSet coinSet;
 
@@ -29,11 +29,24 @@ public class Match : MonoBehaviour {
 		state = new CoinToss(this);
 	}
 
-	public void passTurn() {
+	void passTurnToOtherPlayer() {
 		if (activePlayer == playerLeft)
 			activePlayer = playerRight;
 		else
 			activePlayer = playerLeft;
+	}
+
+	public void passTurn() {
+		Debug.Log("passTurn");
+
+		activePlayer.restoreShotsLeft();
+		passTurnToOtherPlayer();
+		StartCoroutine(resetCoins());
+	}
+
+	public IEnumerator resetCoins() {
+		yield return coinSet.getFormation().resetCoins(coinSet.getCoins());
+		setState(new PlayerTurn(this));
 	}
 
 	// Setters & Getters

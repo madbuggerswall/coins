@@ -16,7 +16,7 @@ public class Slingshot : MonoBehaviour {
 	Vector3 finalPos;
 	Vector3 throwForce;
 
-	Guide guide;
+	Crosshair crosshair;
 	Rigidbody rigidBody;
 
 	// Functions are to be overriden to disable controls.
@@ -29,7 +29,7 @@ public class Slingshot : MonoBehaviour {
 	CoinStatus coinStatus;
 
 	void Awake() {
-		guide = GetComponentInChildren<Guide>();
+		crosshair = GetComponentInChildren<Crosshair>();
 		rigidBody = GetComponent<Rigidbody>();
 		rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;
 	}
@@ -73,8 +73,8 @@ public class Slingshot : MonoBehaviour {
 		// Draw
 		onMouseDown = () => {
 			initialPos = Input.mousePosition;
-			guide.enable(true);
-			guide.setPoints(transform.position, transform.position + throwForce);
+			crosshair.enable(true);
+			crosshair.setPoints(transform.position, transform.position + throwForce);
 
 			coinStatus |= CoinStatus.drawn;
 			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
@@ -82,7 +82,7 @@ public class Slingshot : MonoBehaviour {
 		// Aim
 		onMouseDrag = () => {
 			calculateThrowForce();
-			guide.setPoints(transform.position, transform.position + throwForce);
+			crosshair.setPoints(transform.position, transform.position + throwForce);
 		};
 		// Release
 		onMouseUp = () => {
@@ -92,7 +92,7 @@ public class Slingshot : MonoBehaviour {
 			rigidBody.AddForce(throwForce, ForceMode.Impulse);
 			gameObject.layer = Layers.thrownCoin;
 			GetComponentInParent<CoinSet>().events.coinShot.Invoke();
-			guide.enable(false);
+			crosshair.enable(false);
 		};
 	}
 

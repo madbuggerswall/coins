@@ -3,71 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-enum CoinSelection {
-	CoinA = (1 << 0),
-	CoinB = (1 << 1),
-	CoinC = (1 << 2)
-}
-
-public class CoinSetEvents {
-	public UnityEvent coinStatusChanged;
-	public UnityEvent coinShot;
-	public CoinSetEvents() {
-		coinStatusChanged = new UnityEvent();
-		coinShot = new UnityEvent();
-	}
-}
-
 public class CoinSet : MonoBehaviour {
 	public CoinSetEvents events;
 
-	public UnityAction checkFoulLine = () => { };
-	public UnityAction drawGuideLine = () => { };
+	SetMechanics setMechanics;
+	Guide guide;
+	CoinFormation formation;
 
 	Coin[] coins;
-	Guide guide;
-	bool passedThrough = false;
-	Pair<Vector3> endpoints = new Pair<Vector3>();
-
 	CoinSetState state;
 	void Awake() {
 		coins = GetComponentsInChildren<Coin>();
 		guide = GetComponentInChildren<Guide>();
 
 		events = new CoinSetEvents();
-		events.coinStatusChanged.AddListener(selectGuide);
-		events.coinShot.AddListener(selectFoulLine);
+		setMechanics = new SetMechanics(this);
+		formation = new CoinFormation(coins);
+
 		events.coinShot.AddListener(() => setState(new ShotState(this)));
 	}
 
 	void Update() {
-		drawGuideLine();
 		state.checkPassThrough();
 		state.hasCoinsStopped();
-	}
-
-	void selectFoulLine() {
-		int coinSelection = 0;
-		for (int index = 0; index < coins.Length; index++) {
-			bool coinShot = (coins[index].GetComponent<Slingshot>().getCoinStatus() & CoinStatus.shot) > 0;
-			if (coinShot) {
-				coinSelection = (1 << index);
-				if (coinSelection == 1) {
-					checkFoulLine = () => checkLineBetween(coins[1].transform.position, coins[2].transform.position);
-				} else if (coinSelection == 2) {
-					checkFoulLine = () => checkLineBetween(coins[0].transform.position, coins[2].transform.position);
-				} else if (coinSelection == 4) {
-					checkFoulLine = () => checkLineBetween(coins[0].transform.position, coins[1].transform.position);
-				}
-			}
-		}
-	}
-
-	void checkLineBetween(Vector3 startPos, Vector3 endPos) {
-		int layerMask = 1 << Layers.thrownCoin;
-		if (Physics.Linecast(startPos, endPos, layerMask)) {
-			passedThrough = true;
-		}
 	}
 
 	public bool hasCoinsStopped() {
@@ -79,35 +37,6 @@ public class CoinSet : MonoBehaviour {
 		return result;
 	}
 
-	// State functions
-	public void selectGuide() {
-		guide.enable(true);
-		CoinStatus maxCoinStatus = 0;
-		int maxCoinStatusIndex = 0;
-		for (int index = 0; index < coins.Length; index++) {
-			CoinStatus coinStatus = coins[index].GetComponent<Slingshot>().getCoinStatus();
-			if (coinStatus > maxCoinStatus) {
-				maxCoinStatus = coinStatus;
-				maxCoinStatusIndex = index;
-			}
-		}
-		if (maxCoinStatus > 0) {
-			selectCoinPair(maxCoinStatusIndex);
-		} else
-			guide.enable(false);
-	}
-
-	void selectCoinPair(int index) {
-		int coinSelection = (1 << index);
-		if (coinSelection == 1) {
-			drawGuideLine = () => guide.setPoints(coins[1].transform.position, coins[2].transform.position);
-		} else if (coinSelection == 2) {
-			drawGuideLine = () => guide.setPoints(coins[0].transform.position, coins[2].transform.position);
-		} else if (coinSelection == 4) {
-			drawGuideLine = () => guide.setPoints(coins[0].transform.position, coins[1].transform.position);
-		}
-	}
-
 	public void disableGuide() {
 		guide.enable(false);
 	}
@@ -117,7 +46,6 @@ public class CoinSet : MonoBehaviour {
 			slingshot.enableControls();
 		}
 	}
-
 	public void disableControls() {
 		foreach (Slingshot slingshot in GetComponentsInChildren<Slingshot>()) {
 			slingshot.disableControls();
@@ -133,6 +61,56 @@ public class CoinSet : MonoBehaviour {
 
 	// Setters & Getters
 	public void setState(CoinSetState state) { this.state = state; }
-	public bool hasPassedThrough() { return passedThrough; }
-	public void resetPassedThrough() { passedThrough = false; }
+	public Coin[] getCoins() { return coins; }
+	public Guide getGuide() { return guide; }
+	public SetMechanics getMechanics() { return setMechanics; }
+	public CoinFormation getFormation() { return formation; }
+}
+
+public class CoinSetEvents {
+	public UnityEvent coinStatusChanged;
+	public UnityEvent coinShot;
+	public CoinSetEvents() {
+		coinStatusChanged = new UnityEvent();
+		coinShot = new UnityEvent();
+	}
+}
+
+public class CoinFormation {
+	TransformDTO[] formationL;
+	TransformDTO[] formationR;
+
+	public CoinFormation(Coin[] coins) {
+		initializeFormations(coins);
+		Debug.Log(formationL[0].localPosition);
+		Debug.Log(formationR[0].localPosition);
+	}
+
+	void initializeFormations(Coin[] coins) {
+		formationL = new TransformDTO[coins.Length];
+		formationR = new TransformDTO[coins.Length];
+		for (int i = 0; i < coins.Length; i++) {
+			formationL[i] = new TransformDTO(coins[i].transform);
+			formationR[i] = new TransformDTO(coins[i].transform);
+			formationR[i].localPosition.x *= -1;
+		}
+	}
+
+	public IEnumerator resetCoins(Coin[] coins) {
+		TransformDTO[] current = new CoinFormation(coins).formationL;
+
+		float interpolant = 0;
+		while (true) {
+			for (int i = 0; i < coins.Length; i++) {
+				coins[i].transform.localPosition = Vector3.Lerp(current[i].localPosition, formationL[i].localPosition, interpolant);
+				coins[i].transform.localRotation = Quaternion.Lerp(current[i].localRotation, formationL[i].localRotation, interpolant);
+			}
+			
+			if (interpolant > 1f)
+				break;
+
+			interpolant += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+	}
 }

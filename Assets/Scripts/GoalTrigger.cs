@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class GoalTrigger : MonoBehaviour {
 	Collider trigger;
+	bool scored = false;
 
+	[SerializeField] float dragMultiplier = 8;
 	void Awake() {
 		trigger = GetComponent<Collider>();
 	}
 
+
 	void OnTriggerEnter(Collider other) {
-		GameObject.FindObjectOfType<Match>().playerScored.Invoke();
-		Debug.Log("Goal");
+		// IDEA: Zoom in
+		other.GetComponent<Coin>().multiplyDrag(dragMultiplier);
 	}
 
-	private void OnTriggerStay(Collider other) {
-		if (trigger.bounds.Contains(other.transform.position)) {
-			Debug.Log("Scored");
+	void OnTriggerStay(Collider other) {
+		if (trigger.bounds.Contains(other.transform.position) && !scored) {
+			scored = true;
+			FindObjectOfType<Match>().playerScored.Invoke();
 		}
+	}
+
+	void OnTriggerExit(Collider other) {
+		other.GetComponent<Coin>().multiplyDrag(1f / dragMultiplier);
+		scored = false;
 	}
 }

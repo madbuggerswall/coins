@@ -11,14 +11,11 @@ static class Layers {
 }
 
 public class Coin : MonoBehaviour {
+	Rigidbody rigidBody;
 
-	// Start is called before the first frame update
-	void Start() {
-
+	void Awake() {
+		rigidBody = GetComponent<Rigidbody>();
 	}
 
-	// Update is called once per frame
-	void Update() {
-
-	}
+	public void multiplyDrag(float value) { rigidBody.drag *= value; }
 }
