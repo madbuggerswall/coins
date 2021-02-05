@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour {
 	LineRenderer lineRenderer;
-	CoinSet coinSet;
-
+	
 	void Awake() {
 		lineRenderer = GetComponent<LineRenderer>();
 	}
@@ -15,5 +14,10 @@ public class Crosshair : MonoBehaviour {
 	public void setPoints(Vector3 startPoint, Vector3 endPoint) {
 		lineRenderer.SetPosition(0, startPoint);
 		lineRenderer.SetPosition(1, endPoint);
+	}
+
+	public void setColor(Color color){
+		lineRenderer.startColor = color;
+		lineRenderer.endColor = color;
 	}
 }

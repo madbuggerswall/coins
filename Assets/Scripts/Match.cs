@@ -11,6 +11,9 @@ public class Match : MonoBehaviour {
 	[SerializeField] Player playerRight;
 	Player activePlayer;
 
+	[SerializeField] Blocker blockerLeft;
+	[SerializeField] Blocker blockerRight;
+
 	public UnityEvent playerScored;
 	public UnityEvent playerShotEnded;
 
@@ -29,26 +32,63 @@ public class Match : MonoBehaviour {
 		state = new CoinToss(this);
 	}
 
+	public void blockLeftPost(bool value) {
+		blockerLeft.block(value);
+		blockerRight.block(!value);
+	}
+
 	void passTurnToOtherPlayer() {
-		if (activePlayer == playerLeft)
+		if (activePlayer == playerLeft) {
 			activePlayer = playerRight;
-		else
+			blockLeftPost(false);
+			FindObjectOfType<UI>().passTurn(false);
+		} else {
+			blockLeftPost(true);
 			activePlayer = playerLeft;
+			FindObjectOfType<UI>().passTurn(true);
+		}
 	}
 
 	public void passTurn() {
-		Debug.Log("passTurn");
-
 		activePlayer.restoreShotsLeft();
 		passTurnToOtherPlayer();
+		startResettingCoins();
+	}
+
+	public void startResettingCoins() {
 		StartCoroutine(resetCoins());
 	}
 
-	public IEnumerator resetCoins() {
-		yield return coinSet.getFormation().resetCoins(coinSet.getCoins());
+	IEnumerator resetCoins() {
+		yield return coinSet.getFormation().resetCoins(coinSet.getCoins(), (activePlayer == playerLeft));
 		setState(new PlayerTurn(this));
 	}
 
+	// UI
+	public void resetActivePlayerShotsUI() {
+		if (activePlayer == playerLeft)
+			FindObjectOfType<UI>().resetShotsLeftL();
+		else
+			FindObjectOfType<UI>().resetShotsLeftR();
+	}
+	public void setActivePlayerScore() {
+		if (activePlayer == playerLeft)
+			FindObjectOfType<UI>().setScoreL(activePlayer.getScore());
+		else
+			FindObjectOfType<UI>().setScoreR(activePlayer.getScore());
+	}
+	public void setActivePlayerShotsLeft() {
+		if (activePlayer == playerLeft)
+			FindObjectOfType<UI>().setShotsLeftL(activePlayer.getShotsLeft());
+		else
+			FindObjectOfType<UI>().setShotsLeftR(activePlayer.getShotsLeft());
+	}
+	public void showWinPanel(){
+		StartCoroutine(FindObjectOfType<UI>().enableWinPanelAfter(activePlayer == playerLeft, 1));
+	}
+	public void showGoalPanel() { StartCoroutine(FindObjectOfType<UI>().enableGoalPanelFor(1)); }
+	public void showFaulPanel() { StartCoroutine(FindObjectOfType<UI>().enableFaulPanelFor(1)); }
+	
 	// Setters & Getters
 	public void setState(MatchState state) { this.state = state; }
 	public void setActivePlayer(Player player) { activePlayer = player; }

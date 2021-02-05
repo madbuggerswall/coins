@@ -19,6 +19,7 @@ public class CoinSet : MonoBehaviour {
 		events = new CoinSetEvents();
 		setMechanics = new SetMechanics(this);
 		formation = new CoinFormation(coins);
+		state = new StationaryState(this);
 
 		events.coinShot.AddListener(() => setState(new ShotState(this)));
 	}
@@ -82,8 +83,6 @@ public class CoinFormation {
 
 	public CoinFormation(Coin[] coins) {
 		initializeFormations(coins);
-		Debug.Log(formationL[0].localPosition);
-		Debug.Log(formationR[0].localPosition);
 	}
 
 	void initializeFormations(Coin[] coins) {
@@ -96,16 +95,16 @@ public class CoinFormation {
 		}
 	}
 
-	public IEnumerator resetCoins(Coin[] coins) {
+	public IEnumerator resetCoins(Coin[] coins, bool isLeft) {
 		TransformDTO[] current = new CoinFormation(coins).formationL;
-
+		TransformDTO[] formation = isLeft ? formationL : formationR;
 		float interpolant = 0;
 		while (true) {
 			for (int i = 0; i < coins.Length; i++) {
-				coins[i].transform.localPosition = Vector3.Lerp(current[i].localPosition, formationL[i].localPosition, interpolant);
-				coins[i].transform.localRotation = Quaternion.Lerp(current[i].localRotation, formationL[i].localRotation, interpolant);
+				coins[i].transform.localPosition = Vector3.Lerp(current[i].localPosition, formation[i].localPosition, interpolant);
+				coins[i].transform.localRotation = Quaternion.Lerp(current[i].localRotation, formation[i].localRotation, interpolant);
 			}
-			
+
 			if (interpolant > 1f)
 				break;
 

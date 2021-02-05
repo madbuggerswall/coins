@@ -5,17 +5,23 @@ public interface MatchState { }
 public class CoinToss : MatchState {
 	Match match;
 	public CoinToss(Match match) {
-		Debug.Log("CoinToss");
 		this.match = match;
 		tossCoin();
-		match.setState(new PlayerTurn(match));
+		match.startResettingCoins();
+		GameObject.FindObjectOfType<UI>().resetShotsLeftL();
+		GameObject.FindObjectOfType<UI>().resetShotsLeftR();
 	}
 
 	void tossCoin() {
-		if (Random.value < 0.5f)
+		if (Random.value < 0.5f) {
 			match.setActivePlayer(match.getPlayerLeft());
-		else
+			match.blockLeftPost(true);
+			GameObject.FindObjectOfType<UI>().passTurn(true);
+		} else {
 			match.setActivePlayer(match.getPlayerRight());
+			match.blockLeftPost(false);
+			GameObject.FindObjectOfType<UI>().passTurn(false);
+		}
 	}
 }
 
@@ -25,7 +31,6 @@ public class PlayerTurn : MatchState {
 	CoinSet coinSet;
 	bool isPlayerScored;
 	public PlayerTurn(Match match) {
-		Debug.Log("PlayerTurn");
 		this.match = match;
 		coinSet = match.getCoinSet();
 		isPlayerScored = false;
@@ -41,18 +46,27 @@ public class PlayerTurn : MatchState {
 
 	void evaluateShot() {
 		if (playerFouled()) {
+			match.showFaulPanel();            //	UI
+			match.resetActivePlayerShotsUI(); //	UI
 			removeListeners();
 			match.passTurn();
 		} else if (isPlayerScored) {
+			// UI
+			match.resetActivePlayerShotsUI();
 			removeListeners();
 			match.setState(new PlayerScored(match));
 		} else if (playerHasShotsLeft()) {
+			// UI
+			match.setActivePlayerShotsLeft();
 			continueTurn();
 		} else {
+			match.resetActivePlayerShotsUI();
 			removeListeners();
 			match.passTurn();
 		}
 	}
+
+
 
 	bool playerFouled() {
 		if (coinSet.getMechanics().hasPassedThrough())
@@ -82,11 +96,11 @@ public class PlayerScored : MatchState {
 	CoinSet coinSet;
 
 	public PlayerScored(Match match) {
-		Debug.Log("PlayerScored");
 		this.match = match;
 		coinSet = match.getCoinSet();
+		match.showGoalPanel();
 		match.getActivePlayer().incrementScore();
-
+		match.setActivePlayerScore();
 		evaluateWin();
 	}
 
@@ -109,5 +123,6 @@ public class MatchEnded : MatchState {
 	Match match;
 	public MatchEnded(Match match) {
 		this.match = match;
+		match.showWinPanel();
 	}
 }

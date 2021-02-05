@@ -15,10 +15,12 @@ public class Slingshot : MonoBehaviour {
 	Vector3 initialPos;
 	Vector3 finalPos;
 	Vector3 throwForce;
+	float maxThrowForceMag = 32;
 
 	Crosshair crosshair;
 	Rigidbody rigidBody;
 
+	float cancelThreshold = 4;
 	// Functions are to be overriden to disable controls.
 	UnityAction onMouseEnter;
 	UnityAction onMouseExit;
@@ -73,8 +75,8 @@ public class Slingshot : MonoBehaviour {
 		// Draw
 		onMouseDown = () => {
 			initialPos = Input.mousePosition;
+			crosshair.setPoints(transform.position, transform.position);
 			crosshair.enable(true);
-			crosshair.setPoints(transform.position, transform.position + throwForce);
 
 			coinStatus |= CoinStatus.drawn;
 			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
@@ -82,17 +84,27 @@ public class Slingshot : MonoBehaviour {
 		// Aim
 		onMouseDrag = () => {
 			calculateThrowForce();
-			crosshair.setPoints(transform.position, transform.position + throwForce);
+			crosshair.setPoints(transform.position, transform.position + throwForce * 0.4f);
+			if (throwForce.magnitude <= cancelThreshold)
+				crosshair.setColor(Color.red);
+			else
+				crosshair.setColor(Color.white);
 		};
 		// Release
 		onMouseUp = () => {
+			crosshair.enable(false);
+			// Cancel shot
+			if (throwForce.magnitude <= cancelThreshold) {
+				coinStatus = coinStatus &= ~CoinStatus.drawn;
+				return;
+			}
+
 			coinStatus = CoinStatus.shot;
 			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
 
 			rigidBody.AddForce(throwForce, ForceMode.Impulse);
 			gameObject.layer = Layers.thrownCoin;
 			GetComponentInParent<CoinSet>().events.coinShot.Invoke();
-			crosshair.enable(false);
 		};
 	}
 
@@ -110,6 +122,7 @@ public class Slingshot : MonoBehaviour {
 		throwForce.z = throwForce.y;
 		throwForce.y = 0f;
 		throwForce *= Time.fixedDeltaTime * 4;
+		throwForce = Vector3.ClampMagnitude(throwForce, maxThrowForceMag);
 	}
 
 	public void clearFlags() {

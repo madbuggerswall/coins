@@ -3,9 +3,9 @@ using System;
 
 [Serializable]
 public class Player {
-	static readonly ushort maxShots = 3;
-	[SerializeField] ushort shotsLeft;
-	[SerializeField] ushort score;
+	static readonly int maxShots = 3;
+	[SerializeField] int shotsLeft;
+	[SerializeField] int score;
 
 	public Player() {
 		restoreShotsLeft();
@@ -15,6 +15,6 @@ public class Player {
 	public void incrementScore() { score++; }
 	public void decrementShotsLeft() { shotsLeft--; }
 	public void restoreShotsLeft() { shotsLeft = maxShots; }
-	public ushort getShotsLeft() { return shotsLeft; }
-	public ushort getScore() { return score; }
+	public int getShotsLeft() { return shotsLeft; }
+	public int getScore() { return score; }
 }
