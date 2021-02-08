@@ -18,10 +18,8 @@ public class CoinSetEvents {
 		Match match = GameObject.FindObjectOfType<Match>();
 		Puzzle puzzle = GameObject.FindObjectOfType<Puzzle>();
 		if (match != null) {
-			Debug.Log("Match");
 			shotEnded.AddListener(() => match.playerShotEnded.Invoke());
 		} else if (puzzle != null) {
-			Debug.Log("Puzzle");
 			shotEnded.AddListener(() => puzzle.playerShotEnded.Invoke());
 		}
 	}
