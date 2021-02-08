@@ -10,17 +10,5 @@ public class CoinSetEvents {
 		coinStatusChanged = new UnityEvent();
 		coinShot = new UnityEvent();
 		shotEnded = new UnityEvent();
-		determineGameType();
-	}
-
-	// Assign shot ended event according to level type.
-	void determineGameType() {
-		Match match = GameObject.FindObjectOfType<Match>();
-		Puzzle puzzle = GameObject.FindObjectOfType<Puzzle>();
-		if (match != null) {
-			shotEnded.AddListener(() => match.playerShotEnded.Invoke());
-		} else if (puzzle != null) {
-			shotEnded.AddListener(() => puzzle.playerShotEnded.Invoke());
-		}
 	}
 }

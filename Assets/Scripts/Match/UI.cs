@@ -25,17 +25,13 @@ public class UI : MonoBehaviour {
 		restart.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); });
 	}
 
-	public void setScoreL(int score) { scoreLeft.text = score.ToString(); }
-	public void setScoreR(int score) { scoreRight.text = score.ToString(); }
-	public void setShotsLeftL(int shotsLeft) { shotsLeftUILeft.setShotsLeft(shotsLeft); }
-	public void setShotsLeftR(int shotsLeft) { shotsLeftUIRight.setShotsLeft(shotsLeft); }
-	public void resetShotsLeftL() { shotsLeftUILeft.resetShotsLeft(); }
-	public void resetShotsLeftR() { shotsLeftUIRight.resetShotsLeft(); }
-	public void passTurn(bool isLeftsTurn) {
-		turnIndicatorL.enabled = isLeftsTurn;
-		turnIndicatorR.enabled = !isLeftsTurn;
-	}
-	public IEnumerator enableWinPanelAfter(bool hasLeftWon, float seconds) {
+	void setScoreL(int score) { scoreLeft.text = score.ToString(); }
+	void setScoreR(int score) { scoreRight.text = score.ToString(); }
+	void setShotsLeftL(int shotsLeft) { shotsLeftUILeft.setShotsLeft(shotsLeft); }
+	void setShotsLeftR(int shotsLeft) { shotsLeftUIRight.setShotsLeft(shotsLeft); }
+	void resetShotsLeftL() { shotsLeftUILeft.resetShotsLeft(); }
+	void resetShotsLeftR() { shotsLeftUIRight.resetShotsLeft(); }
+	IEnumerator enableWinPanelAfter(bool hasLeftWon, float seconds) {
 		string leftWon = "<b>PLAYER L \n WON</b>";
 		string rightWon = "<b>PLAYER R \n WON</b>";
 		if (hasLeftWon)
@@ -45,16 +41,46 @@ public class UI : MonoBehaviour {
 		yield return new WaitForSeconds(seconds);
 		winPanel.SetActive(true);
 	}
-	public IEnumerator enableGoalPanelFor(float seconds) {
+	IEnumerator enableGoalPanelFor(float seconds) {
 		goalPanel.SetActive(true);
 		yield return new WaitForSeconds(seconds);
 		goalPanel.SetActive(false);
 	}
-	public IEnumerator enableFaulPanelFor(float seconds) {
+	IEnumerator enableFaulPanelFor(float seconds) {
 		faulPanel.SetActive(true);
 		yield return new WaitForSeconds(seconds);
 		faulPanel.SetActive(false);
 	}
+
+
+	// Interface
+	public void passTurn(bool isLeftsTurn) {
+		turnIndicatorL.enabled = isLeftsTurn;
+		turnIndicatorR.enabled = !isLeftsTurn;
+	}
+	public void resetActivePlayerShotsUI(bool isPlayerLeftActive) {
+		if (isPlayerLeftActive)
+			FindObjectOfType<UI>().resetShotsLeftL();
+		else
+			FindObjectOfType<UI>().resetShotsLeftR();
+	}
+	public void setActivePlayerScore(bool isPlayerLeftActive, int score) {
+		if (isPlayerLeftActive)
+			FindObjectOfType<UI>().setScoreL(score);
+		else
+			FindObjectOfType<UI>().setScoreR(score);
+	}
+	public void setActivePlayerShotsLeft(bool isPlayerLeftActive, int shotsLeft) {
+		if (isPlayerLeftActive)
+			FindObjectOfType<UI>().setShotsLeftL(shotsLeft);
+		else
+			FindObjectOfType<UI>().setShotsLeftR(shotsLeft);
+	}
+	public void showWinPanel(bool isPlayerLeftActive) {
+		StartCoroutine(FindObjectOfType<UI>().enableWinPanelAfter(isPlayerLeftActive, 1));
+	}
+	public void showGoalPanel() { StartCoroutine(FindObjectOfType<UI>().enableGoalPanelFor(1)); }
+	public void showFaulPanel() { StartCoroutine(FindObjectOfType<UI>().enableFaulPanelFor(1)); }
 }
 
 public class ShotsLeftUI {

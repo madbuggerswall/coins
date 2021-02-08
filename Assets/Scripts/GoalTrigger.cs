@@ -20,7 +20,7 @@ public class GoalTrigger : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (trigger.bounds.Contains(other.transform.position) && !scored) {
 			scored = true;
-			FindObjectOfType<Match>().playerScored.Invoke();
+			FindObjectOfType<Match>().events.playerShotInGoal.Invoke();
 		}
 	}
 
