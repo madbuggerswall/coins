@@ -6,7 +6,7 @@ public class GoalTrigger : MonoBehaviour {
 	Collider trigger;
 	bool scored = false;
 
-	[SerializeField] float dragMultiplier = 8;
+	[SerializeField] float drag = 4;
 	void Awake() {
 		trigger = GetComponent<Collider>();
 	}
@@ -14,7 +14,7 @@ public class GoalTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		// IDEA: Zoom in
-		other.GetComponent<Coin>().multiplyDrag(dragMultiplier);
+		other.GetComponent<Coin>().setDrag(drag);
 	}
 
 	void OnTriggerStay(Collider other) {
@@ -25,7 +25,7 @@ public class GoalTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider other) {
-		other.GetComponent<Coin>().multiplyDrag(1f / dragMultiplier);
+		other.GetComponent<Coin>().setDrag(0);
 		scored = false;
 	}
 }

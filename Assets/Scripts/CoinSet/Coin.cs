@@ -17,5 +17,5 @@ public class Coin : MonoBehaviour {
 		rigidBody = GetComponent<Rigidbody>();
 	}
 
-	public void multiplyDrag(float value) { rigidBody.drag *= value; }
+	public void setDrag(float drag) { rigidBody.drag = drag; }
 }
