@@ -11,6 +11,8 @@ public class Match : MonoBehaviour {
 	[SerializeField] Player playerRight;
 	Player activePlayer;
 
+	[SerializeField] ushort winningScore = 5;
+
 	[SerializeField] Blocker blockerLeft;
 	[SerializeField] Blocker blockerRight;
 
@@ -19,7 +21,6 @@ public class Match : MonoBehaviour {
 
 	MatchState state;
 
-	ushort winningScore = 5;
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
@@ -83,12 +84,12 @@ public class Match : MonoBehaviour {
 		else
 			FindObjectOfType<UI>().setShotsLeftR(activePlayer.getShotsLeft());
 	}
-	public void showWinPanel(){
+	public void showWinPanel() {
 		StartCoroutine(FindObjectOfType<UI>().enableWinPanelAfter(activePlayer == playerLeft, 1));
 	}
 	public void showGoalPanel() { StartCoroutine(FindObjectOfType<UI>().enableGoalPanelFor(1)); }
 	public void showFaulPanel() { StartCoroutine(FindObjectOfType<UI>().enableFaulPanelFor(1)); }
-	
+
 	// Setters & Getters
 	public void setState(MatchState state) { this.state = state; }
 	public void setActivePlayer(Player player) { activePlayer = player; }

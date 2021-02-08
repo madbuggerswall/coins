@@ -69,7 +69,6 @@ public class ShotsLeftUI {
 			shots[i].color = Color.red;
 		}
 	}
-
 	public void resetShotsLeft() {
 		foreach (Image image in shots) {
 			image.color = Color.green;

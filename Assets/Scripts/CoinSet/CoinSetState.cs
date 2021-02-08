@@ -50,7 +50,7 @@ public class StationaryState : CoinSetState {
 		coinSet.getMechanics().checkFoulLine = () => { };
 		coinSet.getGuide().drawGuideLine = () => { };
 
-		GameObject.FindObjectOfType<Match>().playerShotEnded.Invoke();
+		coinSet.events.shotEnded.Invoke();
 	}
 	public void hasCoinsStopped() { }
 	public void checkPassThrough() { }
