@@ -17,6 +17,7 @@ public class GoalTrigger : MonoBehaviour {
 		other.GetComponent<Coin>().setDrag(drag);
 	}
 
+	// Generic events and game-type-specific events.
 	void OnTriggerStay(Collider other) {
 		if (trigger.bounds.Contains(other.transform.position) && !scored) {
 			scored = true;

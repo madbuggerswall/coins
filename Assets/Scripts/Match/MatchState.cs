@@ -13,10 +13,10 @@ namespace MatchState {
 
 		void tossCoin() {
 			if (Random.value < 0.5f) {
-				match.setActivePlayer(match.getPlayerLeft());
+				match.setPlayer(match.getPlayerLeft());
 				match.blockLeftPost(true);
 			} else {
-				match.setActivePlayer(match.getPlayerRight());
+				match.setPlayer(match.getPlayerRight());
 				match.blockLeftPost(false);
 			}
 		}
@@ -24,63 +24,10 @@ namespace MatchState {
 
 	public class PlayerTurn : State {
 		Match match;
-
-		CoinSet coinSet;
-		bool hasPlayerShotInGoal;
 		public PlayerTurn(Match match) {
 			this.match = match;
-			coinSet = match.getCoinSet();
-			hasPlayerShotInGoal = false;
-
-			coinSet.setState(new AimState(coinSet));
-			match.events.playerShotInGoal.AddListener(playerShotInGoal);
-			match.events.playerShotEnded.AddListener(evaluateShot);
-		}
-
-		void playerShotInGoal() {
-			hasPlayerShotInGoal = true;
-		}
-
-		// Move this function to Match
-		void evaluateShot() {
-			if (playerFouled()) {
-				match.events.playerFouled.Invoke();
-				removeListeners();
-				match.passTurn();
-			} else if (hasPlayerShotInGoal) {
-				match.events.playerScored.Invoke();
-				removeListeners();
-				match.setState(new PlayerScored(match));
-			} else if (playerHasShotsLeft()) {
-				match.events.playerContinuesTurn.Invoke();
-				continueTurn();
-			} else {
-				match.events.playerHasNoShotsLeft.Invoke();
-				removeListeners();
-				match.passTurn();
-			}
-		}
-
-		bool playerFouled() {
-			if (coinSet.getMechanics().hasPassedThrough())
-				return false;
-			return true;
-		}
-
-		bool playerHasShotsLeft() {
-			match.getActivePlayer().decrementShotsLeft();
-			if (match.getActivePlayer().getShotsLeft() > 0)
-				return true;
-			return false;
-		}
-
-		void continueTurn() {
-			coinSet.setState(new AimState(coinSet));
-		}
-
-		void removeListeners() {
-			match.events.playerShotInGoal.RemoveListener(playerShotInGoal);
-			match.events.playerShotEnded.RemoveListener(evaluateShot);
+			match.setPlayerShotInGoal(false);
+			match.getCoinSet().setState(new AimState(match.getCoinSet()));
 		}
 	}
 
@@ -91,7 +38,7 @@ namespace MatchState {
 		public PlayerScored(Match match) {
 			this.match = match;
 			coinSet = match.getCoinSet();
-			match.getActivePlayer().incrementScore();
+			match.getPlayer().incrementScore();
 			match.events.playerScored.Invoke();
 			evaluateWin();
 		}
@@ -105,7 +52,7 @@ namespace MatchState {
 		}
 
 		bool playerWon() {
-			if (match.getActivePlayer().getScore() >= match.getWinningScore())
+			if (match.getPlayer().getScore() >= match.getWinningScore())
 				return true;
 			return false;
 		}
