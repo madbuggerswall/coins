@@ -1,13 +1,12 @@
 using UnityEngine;
 
 // Base class for Match and Puzzle levels
-public class CoinGame : MonoBehaviour {
+public abstract class CoinGame : MonoBehaviour {
 	protected CoinSet coinSet;
 	[SerializeField] protected Player player;
 	protected bool hasPlayerShotInGoal;
 
-	protected virtual void evaluateShot() { }
-	
+
 	protected bool playerFouled() {
 		if (coinSet.getMechanics().hasPassedThrough())
 			return false;
@@ -22,6 +21,8 @@ public class CoinGame : MonoBehaviour {
 	protected void continueTurn() {
 		coinSet.setState(new AimState(coinSet));
 	}
+	protected abstract void evaluateShot();
+	public abstract GameEvents getEvents();
 
 	public void setPlayerShotInGoal(bool value) { hasPlayerShotInGoal = value; }
 	public CoinSet getCoinSet() { return coinSet; }

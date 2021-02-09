@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Puzzle : CoinGame {
-	public PuzzleEvents events;
+	GameEvents events;
 	public PuzzleState.State state;
+
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
 		events = new PuzzleEvents(this);
@@ -30,6 +31,6 @@ public class Puzzle : CoinGame {
 			events.playerHasNoShotsLeft.Invoke();
 		}
 	}
-
+	public override GameEvents getEvents() { return events; }
 	public void setState(PuzzleState.State state) { this.state = state; }
 }

@@ -7,7 +7,7 @@ namespace MatchState {
 		public CoinToss(Match match) {
 			this.match = match;
 			tossCoin();
-			match.events.playerTurnPassed.Invoke();
+			((MatchEvents) match.getEvents()).playerTurnPassed.Invoke();
 			match.startResettingCoins();
 		}
 
@@ -39,7 +39,7 @@ namespace MatchState {
 			this.match = match;
 			coinSet = match.getCoinSet();
 			match.getPlayer().incrementScore();
-			match.events.playerScored.Invoke();
+			match.getEvents().playerScored.Invoke();
 			evaluateWin();
 		}
 
@@ -62,7 +62,7 @@ namespace MatchState {
 		Match match;
 		public MatchEnded(Match match) {
 			this.match = match;
-			match.events.matchEnded.Invoke();
+			((MatchEvents) match.getEvents()).matchEnded.Invoke();
 		}
 	}
 }

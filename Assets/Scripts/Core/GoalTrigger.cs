@@ -7,6 +7,7 @@ public class GoalTrigger : MonoBehaviour {
 	bool scored = false;
 
 	[SerializeField] float drag = 4;
+
 	void Awake() {
 		trigger = GetComponent<Collider>();
 	}
@@ -21,7 +22,7 @@ public class GoalTrigger : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (trigger.bounds.Contains(other.transform.position) && !scored) {
 			scored = true;
-			FindObjectOfType<Match>().events.playerShotInGoal.Invoke();
+			FindObjectOfType<CoinGame>().getEvents().playerShotInGoal.Invoke();
 		}
 	}
 

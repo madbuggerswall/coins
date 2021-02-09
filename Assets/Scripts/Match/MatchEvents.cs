@@ -1,24 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class MatchEvents {
-	public UnityEvent playerShotInGoal;
-	public UnityEvent playerShotEnded;
-	public UnityEvent playerFouled;
-	public UnityEvent playerScored;
-	public UnityEvent playerContinuesTurn;
-	public UnityEvent playerHasNoShotsLeft;
+public class MatchEvents : GameEvents{
 	public UnityEvent playerTurnPassed;
 	public UnityEvent matchEnded;
 	UI ui;
 
-	public MatchEvents(Match match) {
-		playerShotInGoal = new UnityEvent();
-		playerShotEnded = new UnityEvent();
-		playerFouled = new UnityEvent();
-		playerScored = new UnityEvent();
-		playerContinuesTurn = new UnityEvent();
-		playerHasNoShotsLeft = new UnityEvent();
+	public MatchEvents(Match match) : base(){
+
 		playerTurnPassed = new UnityEvent();
 		matchEnded = new UnityEvent();
 

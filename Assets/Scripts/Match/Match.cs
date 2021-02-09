@@ -4,7 +4,7 @@ using UnityEngine;
 
 // [DefaultExecutionOrder(-64)]
 public class Match : CoinGame {
-	public MatchEvents events;
+	MatchEvents events;
 	[SerializeField] Player playerLeft;
 	[SerializeField] Player playerRight;
 	[SerializeField] Blocker blockerLeft;
@@ -75,6 +75,9 @@ public class Match : CoinGame {
 	public bool isPlayerLeftActive() { return player == playerLeft; }
 
 	// Setters & Getters
+	public override GameEvents getEvents() {
+		return events;
+	}
 	public void setState(MatchState.State state) { this.state = state; }
 	public void setPlayer(Player player) { this.player = player; }
 	public Player getPlayerLeft() { return playerLeft; }
