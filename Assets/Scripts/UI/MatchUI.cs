@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UI : MonoBehaviour {
+public class MatchUI : MonoBehaviour {
 	[SerializeField] Text scoreLeft;
 	[SerializeField] Text scoreRight;
 	[SerializeField] Image turnIndicatorL;
@@ -22,6 +22,8 @@ public class UI : MonoBehaviour {
 	void Awake() {
 		shotsLeftUILeft = new ShotsLeftUI(shotsLeftL);
 		shotsLeftUIRight = new ShotsLeftUI(shotsLeftR);
+		resetShotsLeftL();
+		resetShotsLeftR();
 		restart.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); });
 	}
 
@@ -60,44 +62,25 @@ public class UI : MonoBehaviour {
 	}
 	public void resetActivePlayerShotsUI(bool isPlayerLeftActive) {
 		if (isPlayerLeftActive)
-			FindObjectOfType<UI>().resetShotsLeftL();
+			resetShotsLeftL();
 		else
-			FindObjectOfType<UI>().resetShotsLeftR();
+			resetShotsLeftR();
 	}
 	public void setActivePlayerScore(bool isPlayerLeftActive, int score) {
 		if (isPlayerLeftActive)
-			FindObjectOfType<UI>().setScoreL(score);
+			setScoreL(score);
 		else
-			FindObjectOfType<UI>().setScoreR(score);
+			setScoreR(score);
 	}
 	public void setActivePlayerShotsLeft(bool isPlayerLeftActive, int shotsLeft) {
 		if (isPlayerLeftActive)
-			FindObjectOfType<UI>().setShotsLeftL(shotsLeft);
+			setShotsLeftL(shotsLeft);
 		else
-			FindObjectOfType<UI>().setShotsLeftR(shotsLeft);
+			setShotsLeftR(shotsLeft);
 	}
 	public void showWinPanel(bool isPlayerLeftActive) {
-		StartCoroutine(FindObjectOfType<UI>().enableWinPanelAfter(isPlayerLeftActive, 1));
+		StartCoroutine(enableWinPanelAfter(isPlayerLeftActive, 1));
 	}
-	public void showGoalPanel() { StartCoroutine(FindObjectOfType<UI>().enableGoalPanelFor(1)); }
-	public void showFaulPanel() { StartCoroutine(FindObjectOfType<UI>().enableFaulPanelFor(1)); }
-}
-
-public class ShotsLeftUI {
-	Image[] shots;
-
-	public ShotsLeftUI(GameObject shotsLeftPanel) {
-		shots = shotsLeftPanel.GetComponentsInChildren<Image>();
-	}
-
-	public void setShotsLeft(int shotsLeft) {
-		for (int i = 0; i < shots.Length - shotsLeft; i++) {
-			shots[i].color = Color.red;
-		}
-	}
-	public void resetShotsLeft() {
-		foreach (Image image in shots) {
-			image.color = Color.green;
-		}
-	}
+	public void showGoalPanel() { StartCoroutine(enableGoalPanelFor(1)); }
+	public void showFaulPanel() { StartCoroutine(enableFaulPanelFor(1)); }
 }

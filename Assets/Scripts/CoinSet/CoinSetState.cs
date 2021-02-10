@@ -11,6 +11,7 @@ public class AimState : CoinSetState {
 	CoinSet coinSet;
 
 	public AimState(CoinSet coinSet) {
+		Debug.Log("AimState");
 		this.coinSet = coinSet;
 		coinSet.getMechanics().resetPassedThrough();
 		coinSet.enableControls();
@@ -23,12 +24,14 @@ public class ShotState : CoinSetState {
 	CoinSet coinSet;
 
 	public ShotState(CoinSet coinSet) {
+		Debug.Log("ShotState");
 		this.coinSet = coinSet;
 		coinSet.disableControls();
 	}
 	public void hasCoinsStopped() {
 		if (coinSet.hasCoinsStopped()) {
 			coinSet.setState(new StationaryState(coinSet));
+			coinSet.events.shotEnded.Invoke();
 		}
 	}
 	public void checkPassThrough() {
@@ -40,6 +43,7 @@ public class ShotState : CoinSetState {
 public class StationaryState : CoinSetState {
 	CoinSet coinSet;
 	public StationaryState(CoinSet coinSet) {
+		Debug.Log("StationaryState");
 		this.coinSet = coinSet;
 
 		coinSet.clearAllFlags();
@@ -49,8 +53,6 @@ public class StationaryState : CoinSetState {
 		// TODO: Trigger these operations via Events.
 		coinSet.getMechanics().checkFoulLine = () => { };
 		coinSet.getGuide().drawGuideLine = () => { };
-
-		coinSet.events.shotEnded.Invoke();
 	}
 	public void hasCoinsStopped() { }
 	public void checkPassThrough() { }

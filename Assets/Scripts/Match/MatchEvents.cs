@@ -4,16 +4,15 @@ using UnityEngine.Events;
 public class MatchEvents : GameEvents{
 	public UnityEvent playerTurnPassed;
 	public UnityEvent matchEnded;
-	UI ui;
+	MatchUI ui;
 
 	public MatchEvents(Match match) : base(){
-
 		playerTurnPassed = new UnityEvent();
 		matchEnded = new UnityEvent();
 
-		ui = GameObject.FindObjectOfType<UI>();
+		ui = GameObject.FindObjectOfType<MatchUI>();
 
-		// UI
+		// Move this code block to MatchUI
 		playerFouled.AddListener(() => ui.showFaulPanel());
 		playerFouled.AddListener(() => ui.resetActivePlayerShotsUI(match.isPlayerLeftActive()));
 		playerScored.AddListener(() => ui.resetActivePlayerShotsUI(match.isPlayerLeftActive()));

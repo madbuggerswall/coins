@@ -74,7 +74,7 @@ public class Slingshot : MonoBehaviour {
 
 		// Draw
 		onMouseDown = () => {
-			initialPos = Input.mousePosition;
+			initialPos = getMousePosition();
 			crosshair.setPoints(transform.position, transform.position);
 			crosshair.enable(true);
 
@@ -117,12 +117,18 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	void calculateThrowForce() {
-		finalPos = Input.mousePosition;
+		finalPos = getMousePosition();
 		throwForce = initialPos - finalPos;
-		throwForce.z = throwForce.y;
 		throwForce.y = 0f;
-		throwForce *= Time.fixedDeltaTime * 4;
+		throwForce *= 4;
 		throwForce = Vector3.ClampMagnitude(throwForce, maxThrowForceMag);
+	}
+
+	// Input
+	Vector3 getMousePosition() {
+		Vector3 mousePosition = Input.mousePosition;
+		mousePosition.z = Camera.main.nearClipPlane;
+		return Camera.main.ScreenToWorldPoint(mousePosition);
 	}
 
 	public void clearFlags() {
