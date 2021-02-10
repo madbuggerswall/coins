@@ -1,34 +1,34 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shrink : Card {
-	float scaleMul = 0.5f;
+public class Expand : Card {
+	float scaleMul = 1.5f;
 	Vector3 initialScale;
-	Vector3 shrunkenScale;
+	Vector3 expandedScale;
 
 	public override void apply() {
 		gameObject.GetComponent<Renderer>().enabled = false;
 		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 
-		StartCoroutine(shrink());
+		StartCoroutine(expand());
 		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.AddListener(reset);
 	}
 
 	public override void reset() {
-		StartCoroutine(resetShrink());
+		StartCoroutine(resetExpand());
 		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.RemoveListener(reset);
 	}
 
-	IEnumerator shrink() {
+	IEnumerator expand() {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		float interpolant = 0;
 
 		initialScale = coins[0].transform.localScale;
-		shrunkenScale = new Vector3(initialScale.x * scaleMul, initialScale.y, initialScale.z * scaleMul);
+		expandedScale = new Vector3(initialScale.x * scaleMul, initialScale.y, initialScale.z * scaleMul);
 		while (true) {
 			foreach (Coin coin in coins) {
-				coin.transform.localScale = Vector3.Lerp(initialScale, shrunkenScale, interpolant);
+				coin.transform.localScale = Vector3.Lerp(initialScale, expandedScale, interpolant);
 			}
 			if (interpolant > 1) break;
 			interpolant += Time.deltaTime;
@@ -37,13 +37,13 @@ public class Shrink : Card {
 		((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.Invoke();
 	}
 
-	IEnumerator resetShrink() {
+	IEnumerator resetExpand() {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 
 		float interpolant = 0;
 		while (true) {
 			foreach (Coin coin in coins) {
-				coin.transform.localScale = Vector3.Lerp(shrunkenScale, initialScale, interpolant);
+				coin.transform.localScale = Vector3.Lerp(expandedScale, initialScale, interpolant);
 			}
 
 			if (interpolant > 1) break;

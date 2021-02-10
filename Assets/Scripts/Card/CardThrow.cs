@@ -27,11 +27,11 @@ public class CardThrow : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-		initialMousePos = getMousePosition();
+		initialMousePos = PlayerInput.getMousePosition();
 	}
 
 	void OnMouseDrag() {
-		finalMousePos = getMousePosition();
+		finalMousePos = PlayerInput.getMousePosition();
 		cancelThrow();
 		rigidBody.MovePosition(finalMousePos);
 	}
@@ -45,14 +45,6 @@ public class CardThrow : MonoBehaviour {
 		}
 		outline.resetColor();
 		outline.enable(false);
-	}
-
-	Vector3 getMousePosition() {
-		Vector3 mousePosition = Input.mousePosition;
-		mousePosition.z = Camera.main.nearClipPlane;
-		mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-		mousePosition.y = transform.position.y;
-		return mousePosition;
 	}
 
 	void cancelThrow() {
