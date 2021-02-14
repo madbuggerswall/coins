@@ -32,8 +32,21 @@ public class Ghost : Card {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
 			coin.GetComponent<Renderer>().material.color = coinColor;
+			moveOutsideObstacle(coin.transform);
 		}
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, false);
 		Physics.IgnoreLayerCollision(Layers.thrownCoin, Layers.obstacle, false);
+	}
+
+	void moveOutsideObstacle(Transform transform) {
+		if (isInsideObstacle(transform)) {
+			while (isInsideObstacle(transform)) {
+				transform.position -= Vector3.right;
+			}
+		}
+	}
+
+	bool isInsideObstacle(Transform transform) {
+		return Physics.CheckBox(transform.position, transform.localScale / 2, transform.rotation, (1 << Layers.obstacle));
 	}
 }

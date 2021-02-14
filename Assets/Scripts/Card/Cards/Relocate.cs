@@ -1,11 +1,13 @@
 using UnityEngine;
 
 public class Relocate : MonoBehaviour {
+	DoubleTap doubleTap;
 	Rigidbody rigidBody;
 	Vector3 initialPosition;
 	float radius = 1;
 
 	void Awake() {
+		doubleTap = new DoubleTap();
 		rigidBody = GetComponent<Rigidbody>();
 		initialPosition = rigidBody.position;
 	}
@@ -14,14 +16,15 @@ public class Relocate : MonoBehaviour {
 		Debug.Log("OnMouseDown");
 	}
 	void OnMouseUpAsButton() {
-		Debug.Log("MouseUp");
+		if (doubleTap.doubleTapped()) {
+			((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.Invoke();
+		}
 	}
 
 	void OnMouseDrag() {
 		Vector3 mousePosition = PlayerInput.getMousePosition(Camera.main.transform.position.y - transform.position.y);
 		mousePosition.y = rigidBody.position.y;
 		Vector3 coinPosition = Vector3.ClampMagnitude(mousePosition - initialPosition, radius);
-		// coinPosition.y = rigidBody.position.y;
 		rigidBody.MovePosition(initialPosition + coinPosition);
 	}
 }

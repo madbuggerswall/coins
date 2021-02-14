@@ -13,7 +13,7 @@ public class CardThrow : MonoBehaviour {
 
 	bool throwCanceled;
 	void Awake() {
-		initialPosition = transform.position;
+		initialPosition = transform.localPosition;
 		rigidBody = GetComponent<Rigidbody>();
 		outline = GetComponentInChildren<CardOutline>();
 	}
@@ -27,18 +27,19 @@ public class CardThrow : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-		initialMousePos = PlayerInput.getMousePosition();
+		initialMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
 	}
 
 	void OnMouseDrag() {
-		finalMousePos = PlayerInput.getMousePosition();
+		finalMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
 		cancelThrow();
-		rigidBody.MovePosition(finalMousePos);
+		// rigidBody.MovePosition(finalMousePos);
+		transform.position = finalMousePos;
 	}
 
 	void OnMouseUp() {
 		if (throwCanceled) {
-			rigidBody.MovePosition(initialPosition);
+			transform.localPosition = initialPosition;
 		} else {
 			((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardPlayed.Invoke();
 			GetComponent<Card>().apply();

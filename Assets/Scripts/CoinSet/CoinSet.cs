@@ -25,8 +25,11 @@ public class CoinSet : MonoBehaviour {
 	}
 
 	void Update() {
-		state.checkPassThrough();
 		state.hasCoinsStopped();
+	}
+
+	void FixedUpdate() {
+		state.checkPassThrough();
 	}
 
 	public bool hasCoinsStopped() {
