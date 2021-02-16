@@ -8,9 +8,6 @@ public class Expand : Card {
 	Vector3 expandedScale;
 
 	public override void apply() {
-		gameObject.GetComponent<Renderer>().enabled = false;
-		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
-
 		StartCoroutine(expand());
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}

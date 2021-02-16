@@ -6,8 +6,6 @@ public class Reposition : Card {
 	float radius = 1;
 
 	public override void apply() {
-		gameObject.GetComponent<Renderer>().enabled = false;
-		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 		spawnRepositionAreas();
 		relocateCoins();
 		LevelManager.getInstance().events.cardApplied.AddListener(resetRelocating);

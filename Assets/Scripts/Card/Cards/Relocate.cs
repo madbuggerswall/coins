@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Reposition helper class.
 public class Relocate : MonoBehaviour {
 	DoubleTap doubleTap;
 	Rigidbody rigidBody;

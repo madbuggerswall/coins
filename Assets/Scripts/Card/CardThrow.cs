@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CardThrow : MonoBehaviour {
 	Rigidbody rigidBody;
@@ -12,40 +13,58 @@ public class CardThrow : MonoBehaviour {
 	Vector3 finalMousePos;
 
 	bool throwCanceled;
+
+	UnityAction onMouseEnter;
+	UnityAction onMouseExit;
+	UnityAction onMouseDown;
+	UnityAction onMouseDrag;
+	UnityAction onMouseUp;
+
 	void Awake() {
 		initialPosition = transform.localPosition;
 		rigidBody = GetComponent<Rigidbody>();
 		outline = GetComponentInChildren<CardOutline>();
+		enableControls();
+
+		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
+		LevelManager.getInstance().events.coinShotEnded.AddListener(enableControls);
 	}
 
-	void OnMouseEnter() {
-		outline.enable(true);
+	void OnMouseEnter() { onMouseEnter(); }
+	void OnMouseExit() { onMouseExit(); }
+	void OnMouseDown() { onMouseDown(); }
+	void OnMouseDrag() { onMouseDrag(); }
+	void OnMouseUp() { onMouseUp(); }
+
+	void enableControls() {
+		onMouseEnter = () => { outline.enable(true); };
+		onMouseExit = () => { outline.enable(false); };
+		onMouseDown = () => { initialMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1); };
+		onMouseDrag = () => {
+			finalMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
+			cancelThrow();
+			transform.position = finalMousePos;
+		};
+		onMouseUp = () => {
+			if (throwCanceled) {
+				transform.localPosition = initialPosition;
+			} else {
+				gameObject.GetComponent<Renderer>().enabled = false;
+				GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
+				LevelManager.getInstance().events.cardPlayed.Invoke();
+				GetComponent<Card>().apply();
+			}
+			outline.resetColor();
+			outline.enable(false);
+		};
 	}
 
-	void OnMouseExit() {
-		outline.enable(false);
-	}
-
-	void OnMouseDown() {
-		initialMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
-	}
-
-	void OnMouseDrag() {
-		finalMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
-		cancelThrow();
-		// rigidBody.MovePosition(finalMousePos);
-		transform.position = finalMousePos;
-	}
-
-	void OnMouseUp() {
-		if (throwCanceled) {
-			transform.localPosition = initialPosition;
-		} else {
-			LevelManager.getInstance().events.cardPlayed.Invoke();
-			GetComponent<Card>().apply();
-		}
-		outline.resetColor();
-		outline.enable(false);
+	void disableControls() {
+		onMouseEnter = () => { };
+		onMouseExit = () => { };
+		onMouseDown = () => { };
+		onMouseDrag = () => { };
+		onMouseUp = () => { };
 	}
 
 	void cancelThrow() {

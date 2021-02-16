@@ -26,6 +26,8 @@ public class ShotState : CoinSetState {
 	public ShotState(CoinSet coinSet) {
 		Debug.Log("ShotState");
 		this.coinSet = coinSet;
+
+		// Maybe trigger this function via events.coinShot inside each Slingshot script.
 		coinSet.disableControls();
 	}
 	public void hasCoinsStopped() {

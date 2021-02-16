@@ -8,9 +8,6 @@ public class Shrink : Card {
 	Vector3 shrunkenScale;
 
 	public override void apply() {
-		gameObject.GetComponent<Renderer>().enabled = false;
-		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
-
 		StartCoroutine(shrink());
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}

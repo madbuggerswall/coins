@@ -5,8 +5,6 @@ using UnityEngine;
 public class Ghost : Card {
 
 	public override void apply() {
-		gameObject.GetComponent<Renderer>().enabled = false;
-		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 		becomeGhost();
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
