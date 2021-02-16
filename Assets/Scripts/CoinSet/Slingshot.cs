@@ -61,15 +61,17 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void enableControls() {
+		Events events = LevelManager.getInstance().events;
+
 		// Select coin
 		onMouseEnter = () => {
 			coinStatus |= CoinStatus.selected;
-			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
+			events.coinStatusChanged.Invoke();
 		};
 
 		onMouseExit = () => {
 			coinStatus &= ~CoinStatus.selected;
-			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
+			events.coinStatusChanged.Invoke();
 		};
 
 		// Draw
@@ -79,17 +81,21 @@ public class Slingshot : MonoBehaviour {
 			crosshair.enable(true);
 
 			coinStatus |= CoinStatus.drawn;
-			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
+			events.coinStatusChanged.Invoke();
 		};
+
 		// Aim
 		onMouseDrag = () => {
 			calculateThrowForce();
 			crosshair.setPoints(transform.position, transform.position + throwForce * 0.4f);
+
 			if (throwForce.magnitude <= cancelThreshold)
 				crosshair.setColor(Color.red);
 			else
 				crosshair.setColor(Color.white);
 		};
+
+
 		// Release
 		onMouseUp = () => {
 			crosshair.enable(false);
@@ -100,11 +106,11 @@ public class Slingshot : MonoBehaviour {
 			}
 
 			coinStatus = CoinStatus.shot;
-			GetComponentInParent<CoinSet>().events.coinStatusChanged.Invoke();
+			events.coinStatusChanged.Invoke();
 
-			rigidBody.AddForce(throwForce, ForceMode.Impulse);
 			gameObject.layer = Layers.thrownCoin;
-			GetComponentInParent<CoinSet>().events.coinShot.Invoke();
+			rigidBody.AddForce(throwForce, ForceMode.Impulse);
+			events.coinShot.Invoke();
 		};
 	}
 
@@ -124,7 +130,7 @@ public class Slingshot : MonoBehaviour {
 		throwForce = Vector3.ClampMagnitude(throwForce, maxThrowForceMag);
 	}
 
-	public void clearFlags() {
+	public void resetStatus() {
 		coinStatus = 0;
 	}
 

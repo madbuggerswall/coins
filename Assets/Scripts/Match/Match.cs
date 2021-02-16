@@ -4,7 +4,6 @@ using UnityEngine;
 
 // [DefaultExecutionOrder(-64)]
 public class Match : CoinGame {
-	MatchEvents events;
 	[SerializeField] Player playerLeft;
 	[SerializeField] Player playerRight;
 	[SerializeField] Blocker blockerLeft;
@@ -16,14 +15,12 @@ public class Match : CoinGame {
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
-		events = new MatchEvents(this);
 		playerLeft = new Player();
 		playerRight = new Player();
 		state = new MatchState.CoinToss(this);
 
-		events.playerShotInGoal.AddListener(() => setPlayerShotInGoal(true));
-		events.playerShotEnded.AddListener(evaluateShot);
-		coinSet.events.shotEnded.AddListener(() => events.playerShotEnded.Invoke());
+		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
+		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}
 
 	void passTurnToOtherPlayer() {
@@ -43,17 +40,18 @@ public class Match : CoinGame {
 	// From PlayerTurnState
 	protected override void evaluateShot() {
 		if (playerFouled()) {
-			events.playerFouled.Invoke();
+			LevelManager.getInstance().events.playerFouled.Invoke();
 			passTurn();
 		} else if (hasPlayerShotInGoal) {
-			events.playerScored.Invoke();
+			LevelManager.getInstance().events.playerScored.Invoke();
 			setState(new MatchState.PlayerScored(this));
 		} else if (playerHasShotsLeft()) {
-			events.playerContinuesTurn.Invoke();
+			LevelManager.getInstance().events.playerContinuesTurn.Invoke();
 			continueTurn();
 		} else {
-			events.playerHasNoShotsLeft.Invoke();
+			LevelManager.getInstance().events.playerHasNoShotsLeft.Invoke();
 			passTurn();
+			LevelManager.getInstance().events.playerTurnPassed.Invoke();
 		}
 	}
 
@@ -67,7 +65,6 @@ public class Match : CoinGame {
 		player.restoreShotsLeft();
 		passTurnToOtherPlayer();
 		startResettingCoins();
-		events.playerTurnPassed.Invoke();
 	}
 	public void startResettingCoins() {
 		StartCoroutine(resetCoins());
@@ -75,9 +72,6 @@ public class Match : CoinGame {
 	public bool isPlayerLeftActive() { return player == playerLeft; }
 
 	// Setters & Getters
-	public override GameEvents getEvents() {
-		return events;
-	}
 	public void setState(MatchState.State state) { this.state = state; }
 	public void setPlayer(Player player) { this.player = player; }
 	public Player getPlayerLeft() { return playerLeft; }

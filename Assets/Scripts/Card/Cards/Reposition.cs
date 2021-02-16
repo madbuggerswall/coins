@@ -10,7 +10,7 @@ public class Reposition : Card {
 		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 		spawnRepositionAreas();
 		relocateCoins();
-		((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.AddListener(resetRelocating);
+		LevelManager.getInstance().events.cardApplied.AddListener(resetRelocating);
 	}
 
 	public override void reset() { }

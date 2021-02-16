@@ -22,7 +22,7 @@ public class GoalTrigger : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (trigger.bounds.Contains(other.transform.position) && !scored) {
 			scored = true;
-			FindObjectOfType<CoinGame>().getEvents().playerShotInGoal.Invoke();
+			LevelManager.getInstance().events.coinShotInGoal.Invoke();
 		}
 	}
 

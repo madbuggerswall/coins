@@ -17,7 +17,7 @@ public class Relocate : MonoBehaviour {
 	}
 	void OnMouseUpAsButton() {
 		if (doubleTap.doubleTapped()) {
-			((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.Invoke();
+			 LevelManager.getInstance().events.cardApplied.Invoke();
 		}
 	}
 

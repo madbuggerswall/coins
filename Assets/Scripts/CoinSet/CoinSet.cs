@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class CoinSet : MonoBehaviour {
-	public CoinSetEvents events;
-
 	SetMechanics setMechanics;
 	Guide guide;
 	CoinFormation formation;
@@ -16,12 +14,14 @@ public class CoinSet : MonoBehaviour {
 		coins = GetComponentsInChildren<Coin>();
 		guide = GetComponentInChildren<Guide>();
 
-		events = new CoinSetEvents();
 		setMechanics = new SetMechanics(this);
 		formation = new CoinFormation(coins);
 		state = new StationaryState(this);
 
-		events.coinShot.AddListener(() => setState(new ShotState(this)));
+		// Move this line to a more context-appropriate script/function.
+		LevelManager.getInstance().events.coinShot.AddListener(() => setState(new ShotState(this)));
+		LevelManager.getInstance().events.cardPlayed.AddListener(() => setState(new StationaryState(this)));
+		LevelManager.getInstance().events.cardApplied.AddListener(() => setState(new AimState(this)));
 	}
 
 	void Update() {
@@ -40,11 +40,9 @@ public class CoinSet : MonoBehaviour {
 		}
 		return result;
 	}
-
 	public void disableGuide() {
 		guide.enable(false);
 	}
-
 	public void enableControls() {
 		foreach (Slingshot slingshot in GetComponentsInChildren<Slingshot>()) {
 			slingshot.enableControls();
@@ -55,10 +53,9 @@ public class CoinSet : MonoBehaviour {
 			slingshot.disableControls();
 		}
 	}
-
 	public void clearAllFlags() {
 		foreach (Coin coin in coins) {
-			coin.GetComponent<Slingshot>().clearFlags();
+			coin.GetComponent<Slingshot>().resetStatus();
 			coin.gameObject.layer = Layers.coin;
 		}
 	}

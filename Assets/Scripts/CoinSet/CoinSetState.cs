@@ -31,7 +31,7 @@ public class ShotState : CoinSetState {
 	public void hasCoinsStopped() {
 		if (coinSet.hasCoinsStopped()) {
 			coinSet.setState(new StationaryState(coinSet));
-			coinSet.events.shotEnded.Invoke();
+			LevelManager.getInstance().events.coinShotEnded.Invoke();
 		}
 	}
 	public void checkPassThrough() {

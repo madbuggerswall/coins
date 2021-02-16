@@ -9,7 +9,7 @@ public class SetMechanics {
 
 	public SetMechanics(CoinSet coinSet) {
 		this.coinSet = coinSet;
-		coinSet.events.coinShot.AddListener(selectFoulLine);
+		LevelManager.getInstance().events.coinShot.AddListener(selectFoulLine);
 	}
 
 	public void selectFoulLine() {

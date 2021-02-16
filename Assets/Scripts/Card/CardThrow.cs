@@ -41,7 +41,7 @@ public class CardThrow : MonoBehaviour {
 		if (throwCanceled) {
 			transform.localPosition = initialPosition;
 		} else {
-			((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardPlayed.Invoke();
+			LevelManager.getInstance().events.cardPlayed.Invoke();
 			GetComponent<Card>().apply();
 		}
 		outline.resetColor();

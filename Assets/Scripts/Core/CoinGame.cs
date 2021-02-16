@@ -6,7 +6,6 @@ public abstract class CoinGame : MonoBehaviour {
 	[SerializeField] protected Player player;
 	protected bool hasPlayerShotInGoal;
 
-
 	protected bool playerFouled() {
 		if (coinSet.getMechanics().hasPassedThrough())
 			return false;
@@ -22,7 +21,6 @@ public abstract class CoinGame : MonoBehaviour {
 		coinSet.setState(new AimState(coinSet));
 	}
 	protected abstract void evaluateShot();
-	public abstract GameEvents getEvents();
 
 	public void setPlayerShotInGoal(bool value) { hasPlayerShotInGoal = value; }
 	public CoinSet getCoinSet() { return coinSet; }

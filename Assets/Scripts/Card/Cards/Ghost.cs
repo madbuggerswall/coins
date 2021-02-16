@@ -8,12 +8,12 @@ public class Ghost : Card {
 		gameObject.GetComponent<Renderer>().enabled = false;
 		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 		becomeGhost();
-		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.AddListener(reset);
+		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
 
 	public override void reset() {
 		resetGhost();
-		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.RemoveListener(reset);
+		LevelManager.getInstance().events.coinShotEnded.RemoveListener(reset);
 	}
 
 	void becomeGhost() {
@@ -24,7 +24,7 @@ public class Ghost : Card {
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, true);
 		Physics.IgnoreLayerCollision(Layers.thrownCoin, Layers.obstacle, true);
 
-		((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.Invoke();
+		LevelManager.getInstance().events.cardApplied.Invoke();
 	}
 
 	void resetGhost() {

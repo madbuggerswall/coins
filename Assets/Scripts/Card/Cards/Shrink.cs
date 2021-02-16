@@ -12,12 +12,12 @@ public class Shrink : Card {
 		GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 
 		StartCoroutine(shrink());
-		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.AddListener(reset);
+		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
 
 	public override void reset() {
 		StartCoroutine(resetShrink());
-		FindObjectOfType<Puzzle>().getEvents().playerShotEnded.RemoveListener(reset);
+		LevelManager.getInstance().events.coinShotEnded.RemoveListener(reset);
 	}
 
 	IEnumerator shrink() {
@@ -34,7 +34,7 @@ public class Shrink : Card {
 			interpolant += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
-		((PuzzleEvents) FindObjectOfType<Puzzle>().getEvents()).cardApplied.Invoke();
+		LevelManager.getInstance().events.cardApplied.Invoke();
 	}
 
 	IEnumerator resetShrink() {

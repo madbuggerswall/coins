@@ -15,7 +15,7 @@ public class Guide : MonoBehaviour {
 
 	void Start() {
 		coins = GetComponentInParent<CoinSet>().getCoins();
-		GetComponentInParent<CoinSet>().events.coinStatusChanged.AddListener(selectGuide);
+		LevelManager.getInstance().events.coinStatusChanged.AddListener(selectGuide);
 	}
 
 	// Update is called once per frame

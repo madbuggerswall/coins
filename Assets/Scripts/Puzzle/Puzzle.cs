@@ -4,21 +4,20 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Puzzle : CoinGame {
-	GameEvents events;
 	public PuzzleState.State state;
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
-		events = new PuzzleEvents(this);
 		player = new Player();
 		state = new PuzzleState.PlayerTurn(this);
 
-		events.playerShotInGoal.AddListener(() => setPlayerShotInGoal(true));
-		events.playerShotEnded.AddListener(evaluateShot);
-		coinSet.events.shotEnded.AddListener(() => events.playerShotEnded.Invoke());
+		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
+		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}
 
 	protected override void evaluateShot() {
+		Events events = LevelManager.getInstance().events;
+
 		if (playerFouled()) {
 			events.playerFouled.Invoke();
 		} else if (hasPlayerShotInGoal) {
@@ -31,6 +30,5 @@ public class Puzzle : CoinGame {
 			events.playerHasNoShotsLeft.Invoke();
 		}
 	}
-	public override GameEvents getEvents() { return events; }
 	public void setState(PuzzleState.State state) { this.state = state; }
 }

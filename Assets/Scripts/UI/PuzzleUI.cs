@@ -17,6 +17,19 @@ public class PuzzleUI : MonoBehaviour {
 		shotsLeftUI = new ShotsLeftUI(shotsLeft);
 		resetPlayerShotsUI();
 		restart.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); });
+		initializeListeners();
+	}
+
+	void initializeListeners() {
+		Events events = LevelManager.getInstance().events;
+
+		events.playerFouled.AddListener(() => showFaulPanel());
+		events.playerFouled.AddListener(() => resetPlayerShotsUI());
+		events.playerScored.AddListener(() => resetPlayerShotsUI());
+		events.playerContinuesTurn.AddListener(() => setShotsLeft(FindObjectOfType<Puzzle>().getPlayer().getShotsLeft()));
+		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
+		events.playerScored.AddListener(() => showGoalPanel());
+		events.sessionEnded.AddListener(() => showWinPanel());
 	}
 
 	IEnumerator enableWinPanelAfter(float seconds) {

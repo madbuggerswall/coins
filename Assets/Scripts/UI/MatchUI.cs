@@ -25,6 +25,24 @@ public class MatchUI : MonoBehaviour {
 		resetShotsLeftL();
 		resetShotsLeftR();
 		restart.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); });
+
+		initializeListeners();
+	}
+
+	// Initializes event listeners.
+	void initializeListeners() {
+		Events events = LevelManager.getInstance().events;
+		Match match = (Match) LevelManager.getInstance().getGame();
+
+		events.playerFouled.AddListener(() => showFaulPanel());
+		events.playerFouled.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		events.playerScored.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		events.playerContinuesTurn.AddListener(() => setActivePlayerShotsLeft(match.isPlayerLeftActive(), match.getPlayer().getShotsLeft()));
+		events.playerHasNoShotsLeft.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		events.playerScored.AddListener(() => showGoalPanel());
+		events.playerScored.AddListener(() => setActivePlayerScore(match.isPlayerLeftActive(), match.getPlayer().getScore()));
+		events.playerTurnPassed.AddListener(() => passTurn(match.isPlayerLeftActive()));
+		events.sessionEnded.AddListener(() => showWinPanel(match.isPlayerLeftActive()));
 	}
 
 	void setScoreL(int score) { scoreLeft.text = score.ToString(); }
