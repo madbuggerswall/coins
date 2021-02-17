@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Expand : Card {
-	float scaleMul = 1.5f;
+	float scaleMul = 1.25f;
+	float expandSpeed = 2f;
 	Vector3 initialScale;
 	Vector3 expandedScale;
 
@@ -28,7 +29,7 @@ public class Expand : Card {
 				coin.transform.localScale = Vector3.Lerp(initialScale, expandedScale, interpolant);
 			}
 			if (interpolant > 1) break;
-			interpolant += Time.deltaTime;
+			interpolant += Time.deltaTime * expandSpeed;
 			yield return new WaitForEndOfFrame();
 		}
 		LevelManager.getInstance().events.cardApplied.Invoke();
@@ -44,7 +45,7 @@ public class Expand : Card {
 			}
 
 			if (interpolant > 1) break;
-			interpolant += Time.deltaTime;
+			interpolant += Time.deltaTime * expandSpeed;
 			yield return new WaitForEndOfFrame();
 		}
 	}

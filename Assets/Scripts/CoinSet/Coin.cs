@@ -7,6 +7,7 @@ public class Coin : MonoBehaviour {
 
 	void Awake() {
 		rigidBody = GetComponent<Rigidbody>();
+
 	}
 
 	public void setDrag(float drag) { rigidBody.drag = drag; }

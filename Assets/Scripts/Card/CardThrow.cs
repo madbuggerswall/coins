@@ -39,9 +39,9 @@ public class CardThrow : MonoBehaviour {
 	void enableControls() {
 		onMouseEnter = () => { outline.enable(true); };
 		onMouseExit = () => { outline.enable(false); };
-		onMouseDown = () => { initialMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1); };
+		onMouseDown = () => { initialMousePos = PlayerInput.getPosition(Camera.main.nearClipPlane + 1); };
 		onMouseDrag = () => {
-			finalMousePos = PlayerInput.getMousePosition(Camera.main.nearClipPlane + 1);
+			finalMousePos = PlayerInput.getPosition(Camera.main.nearClipPlane + 1);
 			cancelThrow();
 			transform.position = finalMousePos;
 		};

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Shrink : Card {
-	float scaleMul = 0.5f;
+	float scaleMul = 0.75f;
+	float shrinkSpeed = 2f;
 	Vector3 initialScale;
 	Vector3 shrunkenScale;
 
@@ -28,7 +29,7 @@ public class Shrink : Card {
 				coin.transform.localScale = Vector3.Lerp(initialScale, shrunkenScale, interpolant);
 			}
 			if (interpolant > 1) break;
-			interpolant += Time.deltaTime;
+			interpolant += Time.deltaTime * shrinkSpeed;
 			yield return new WaitForEndOfFrame();
 		}
 		LevelManager.getInstance().events.cardApplied.Invoke();
@@ -44,7 +45,7 @@ public class Shrink : Card {
 			}
 
 			if (interpolant > 1) break;
-			interpolant += Time.deltaTime;
+			interpolant += Time.deltaTime * shrinkSpeed;
 			yield return new WaitForEndOfFrame();
 		}
 	}

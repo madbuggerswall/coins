@@ -76,7 +76,7 @@ public class Slingshot : MonoBehaviour {
 
 		// Draw
 		onMouseDown = () => {
-			initialPos = PlayerInput.getMousePosition();
+			initialPos = PlayerInput.getPosition();
 			crosshair.setPoints(transform.position, transform.position);
 			crosshair.enable(true);
 
@@ -123,10 +123,15 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	void calculateThrowForce() {
-		finalPos = PlayerInput.getMousePosition();
+		finalPos = PlayerInput.getPosition();
 		throwForce = initialPos - finalPos;
 		throwForce.y = 0f;
-		throwForce *= 4;
+		
+		#if UNITY_EDITOR
+			throwForce *= 4;
+		#elif UNITY_ANDROID
+			throwForce *= 8;
+		#endif
 		throwForce = Vector3.ClampMagnitude(throwForce, maxThrowForceMag);
 	}
 

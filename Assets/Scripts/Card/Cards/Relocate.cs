@@ -23,7 +23,7 @@ public class Relocate : MonoBehaviour {
 	}
 
 	void OnMouseDrag() {
-		Vector3 mousePosition = PlayerInput.getMousePosition(Camera.main.transform.position.y - transform.position.y);
+		Vector3 mousePosition = PlayerInput.getPosition(Camera.main.transform.position.y - transform.position.y);
 		mousePosition.y = rigidBody.position.y;
 		Vector3 coinPosition = Vector3.ClampMagnitude(mousePosition - initialPosition, radius);
 		rigidBody.MovePosition(initialPosition + coinPosition);
