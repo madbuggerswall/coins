@@ -5,19 +5,19 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PuzzleUI : MonoBehaviour {
+	[SerializeField] Button pause;
+	[SerializeField] GameObject pauseMenu;
 	[SerializeField] GameObject shotsLeft;
 	[SerializeField] GameObject goalPanel;
 	[SerializeField] GameObject faulPanel;
 	[SerializeField] GameObject winPanel;
-	[SerializeField] Button restart;
-
 	ShotsLeftUI shotsLeftUI;
 
 	void Awake() {
 		shotsLeftUI = new ShotsLeftUI(shotsLeft);
 		resetPlayerShotsUI();
-		restart.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); });
 		initializeListeners();
+		pause.onClick.AddListener(() => pauseMenu.SetActive(!pauseMenu.activeSelf));
 	}
 
 	void initializeListeners() {
