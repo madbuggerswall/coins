@@ -29,9 +29,12 @@ public class PauseMenu : MonoBehaviour {
 	}
 
 	void pauseGame(bool paused) {
-		if (paused)
+		if (paused) {
 			Time.timeScale = 0;
-		else
+			LevelManager.getInstance().getGame().getCoinSet().disableControls();
+		} else {
 			Time.timeScale = 1;
+			LevelManager.getInstance().getGame().getCoinSet().enableControls();
+		}
 	}
 }

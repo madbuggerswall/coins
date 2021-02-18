@@ -10,7 +10,8 @@ public class PuzzleUI : MonoBehaviour {
 	[SerializeField] GameObject shotsLeft;
 	[SerializeField] GameObject goalPanel;
 	[SerializeField] GameObject faulPanel;
-	[SerializeField] GameObject winPanel;
+	[SerializeField] GameObject completedPanel;
+	[SerializeField] GameObject failedPanel;
 	ShotsLeftUI shotsLeftUI;
 
 	void Awake() {
@@ -24,19 +25,15 @@ public class PuzzleUI : MonoBehaviour {
 		Events events = LevelManager.getInstance().events;
 
 		events.playerFouled.AddListener(() => showFaulPanel());
-		events.playerFouled.AddListener(() => resetPlayerShotsUI());
 		events.playerScored.AddListener(() => resetPlayerShotsUI());
 		events.playerContinuesTurn.AddListener(() => setShotsLeft(FindObjectOfType<Puzzle>().getPlayer().getShotsLeft()));
 		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
 		events.playerScored.AddListener(() => showGoalPanel());
-		events.sessionEnded.AddListener(() => showWinPanel());
+
+		events.playerHasNoShotsLeft.AddListener(() => failedPanel.SetActive(true));
+		events.playerScored.AddListener(() => completedPanel.SetActive(true));
 	}
 
-	IEnumerator enableWinPanelAfter(float seconds) {
-		winPanel.GetComponentInChildren<Text>().text = "WON";
-		yield return new WaitForSeconds(seconds);
-		winPanel.SetActive(true);
-	}
 	IEnumerator enableGoalPanelFor(float seconds) {
 		goalPanel.SetActive(true);
 		yield return new WaitForSeconds(seconds);
@@ -56,9 +53,6 @@ public class PuzzleUI : MonoBehaviour {
 		resetShotsLeft();
 	}
 
-	public void showWinPanel() {
-		StartCoroutine(enableWinPanelAfter(1));
-	}
 	public void showGoalPanel() { StartCoroutine(enableGoalPanelFor(1)); }
 	public void showFaulPanel() { StartCoroutine(enableFaulPanelFor(1)); }
 }

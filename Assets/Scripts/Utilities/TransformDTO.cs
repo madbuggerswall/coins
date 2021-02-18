@@ -21,6 +21,7 @@ class TransformDTO {
 		transform.localRotation = localRotation;
 	}
 
+	// Vector3.Slerp does not work like Mathf.Slerp [It creates an arc between two positons]
 	public static TransformDTO Slerp(TransformDTO first, TransformDTO second, float interpolant) {
 		TransformDTO result = new TransformDTO();
 		result.localPosition = Vector3.Slerp(first.localPosition, second.localPosition, interpolant);
