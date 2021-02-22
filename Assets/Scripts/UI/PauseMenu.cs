@@ -17,8 +17,8 @@ public class PauseMenu : MonoBehaviour {
 		home.onClick.AddListener(loadMainMenu);
 	}
 
-	void OnEnable() { pauseGame(true); }
-	void OnDisable() { pauseGame(false); }
+	void OnEnable() { Debug.Log("Pause Enable"); pauseGame(true); }
+	void OnDisable() { Debug.Log("Pause Disable"); pauseGame(false); }
 
 	void restartScene() {
 		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);

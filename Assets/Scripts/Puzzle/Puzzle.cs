@@ -8,7 +8,6 @@ public class Puzzle : CoinGame {
 	Formation formation;
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
-		player = new Player();
 		state = new PuzzleState.PlayerTurn(this);
 		formation = new Formation(coinSet.getCoins());
 

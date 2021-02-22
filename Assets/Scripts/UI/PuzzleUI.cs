@@ -15,10 +15,10 @@ public class PuzzleUI : MonoBehaviour {
 	ShotsLeftUI shotsLeftUI;
 
 	void Awake() {
-		shotsLeftUI = new ShotsLeftUI(shotsLeft);
+		shotsLeftUI = new ShotsLeftUI(shotsLeft, LevelManager.getInstance().getGame().getPlayer().getShotsLeft());
 		resetPlayerShotsUI();
 		initializeListeners();
-		pause.onClick.AddListener(() => pauseMenu.SetActive(!pauseMenu.activeSelf));
+		pause.onClick.AddListener(() => pauseMenu.SetActive(!pauseMenu.activeInHierarchy));
 	}
 
 	void initializeListeners() {
@@ -30,8 +30,11 @@ public class PuzzleUI : MonoBehaviour {
 		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
 		events.playerScored.AddListener(() => showGoalPanel());
 
-		events.playerHasNoShotsLeft.AddListener(() => failedPanel.SetActive(true));
 		events.playerScored.AddListener(() => completedPanel.SetActive(true));
+		events.playerHasNoShotsLeft.AddListener(() => {
+			failedPanel.SetActive(true);
+			pause.enabled = false;
+		});
 	}
 
 	IEnumerator enableGoalPanelFor(float seconds) {

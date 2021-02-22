@@ -12,11 +12,10 @@ public class Match : CoinGame {
 	MatchState.State state;
 
 	[SerializeField] ushort winningScore = 5;
+	[SerializeField] ushort playerShots = 3;
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
-		playerLeft = new Player();
-		playerRight = new Player();
 		state = new MatchState.CoinToss(this);
 
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
@@ -62,7 +61,7 @@ public class Match : CoinGame {
 		blockerRight.block(!value);
 	}
 	public void passTurn() {
-		player.restoreShotsLeft();
+		player.setShotsLeft(playerShots);
 		passTurnToOtherPlayer();
 		startResettingCoins();
 	}

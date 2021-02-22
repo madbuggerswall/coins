@@ -8,11 +8,11 @@ public class CardThrow : MonoBehaviour {
 	CardOutline outline;
 
 	Vector3 initialPosition;
-
 	Vector3 initialMousePos;
 	Vector3 finalMousePos;
 
 	bool throwCanceled;
+	float offset;
 
 	UnityAction onMouseEnter;
 	UnityAction onMouseExit;
@@ -24,6 +24,7 @@ public class CardThrow : MonoBehaviour {
 		initialPosition = transform.localPosition;
 		rigidBody = GetComponent<Rigidbody>();
 		outline = GetComponentInChildren<CardOutline>();
+		offset = Camera.main.transform.position.y - transform.position.y;
 		enableControls();
 
 		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
@@ -39,9 +40,9 @@ public class CardThrow : MonoBehaviour {
 	void enableControls() {
 		onMouseEnter = () => { outline.enable(true); };
 		onMouseExit = () => { outline.enable(false); };
-		onMouseDown = () => { initialMousePos = PlayerInput.getPosition(Camera.main.nearClipPlane + 1); };
+		onMouseDown = () => { initialMousePos = PlayerInput.getPosition(offset); };
 		onMouseDrag = () => {
-			finalMousePos = PlayerInput.getPosition(Camera.main.nearClipPlane + 1);
+			finalMousePos = PlayerInput.getPosition(offset);
 			cancelThrow();
 			transform.position = finalMousePos;
 		};

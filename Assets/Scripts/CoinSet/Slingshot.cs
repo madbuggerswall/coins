@@ -15,7 +15,7 @@ public class Slingshot : MonoBehaviour {
 	Vector3 initialPos;
 	Vector3 finalPos;
 	Vector3 throwForce;
-	float maxThrowForceMag = 32;
+	[SerializeField] float maxThrowForceMag = 32;
 
 	Crosshair crosshair;
 	Rigidbody rigidBody;
@@ -128,7 +128,7 @@ public class Slingshot : MonoBehaviour {
 		throwForce.y = 0f;
 		
 		#if UNITY_EDITOR
-			throwForce *= 4;
+			throwForce *= 8;
 		#elif UNITY_ANDROID
 			throwForce *= 8;
 		#endif

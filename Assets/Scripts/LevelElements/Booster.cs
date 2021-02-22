@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Booster : MonoBehaviour {
-	float force = 36;
+	[SerializeField] float force = 36;
 	Material material;
-	Vector2 textureOffset = new Vector2(0,0);
+	Vector2 textureOffset = new Vector2(0, 0);
 	void Awake() {
 		material = GetComponent<Renderer>().material;
 	}
