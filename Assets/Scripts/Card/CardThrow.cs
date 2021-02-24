@@ -28,7 +28,8 @@ public class CardThrow : MonoBehaviour {
 		enableControls();
 
 		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
-		LevelManager.getInstance().events.coinShotEnded.AddListener(enableControls);
+		LevelManager.getInstance().events.playerFouled.AddListener(disableControls);
+		LevelManager.getInstance().events.playerContinuesTurn.AddListener(enableControls);
 	}
 
 	void OnMouseEnter() { onMouseEnter(); }

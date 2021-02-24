@@ -16,14 +16,15 @@ public class Relocate : MonoBehaviour {
 	void OnMouseDown() {
 		Debug.Log("OnMouseDown");
 	}
+	
 	void OnMouseUpAsButton() {
 		if (doubleTap.doubleTapped()) {
-			 LevelManager.getInstance().events.cardApplied.Invoke();
+			LevelManager.getInstance().events.cardApplied.Invoke();
 		}
 	}
 
 	void OnMouseDrag() {
-		Vector3 mousePosition = PlayerInput.getPosition(Camera.main.transform.position.y - transform.position.y);
+		Vector3 mousePosition = PlayerInput.getPosition(Vector3.Distance(Camera.main.transform.position, transform.position));
 		mousePosition.y = rigidBody.position.y;
 		Vector3 coinPosition = Vector3.ClampMagnitude(mousePosition - initialPosition, radius);
 		rigidBody.MovePosition(initialPosition + coinPosition);

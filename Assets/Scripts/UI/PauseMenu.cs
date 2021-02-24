@@ -13,19 +13,17 @@ public class PauseMenu : MonoBehaviour {
 
 	void Awake() {
 		play.onClick.AddListener(() => gameObject.SetActive(!gameObject.activeSelf));
-		restart.onClick.AddListener(restartScene);
-		home.onClick.AddListener(loadMainMenu);
+		restart.onClick.AddListener(GameManager.getInstance().levels.restartLevel);
+		home.onClick.AddListener(GameManager.getInstance().levels.loadMainMenu);
 	}
 
-	void OnEnable() { Debug.Log("Pause Enable"); pauseGame(true); }
-	void OnDisable() { Debug.Log("Pause Disable"); pauseGame(false); }
-
-	void restartScene() {
-		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+	void OnEnable() {
+		Debug.Log("Pause Enable");
+		pauseGame(true);
 	}
-
-	void loadMainMenu() {
-		SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Single);
+	void OnDisable() {
+		Debug.Log("Pause Disable");
+		pauseGame(false);
 	}
 
 	void pauseGame(bool paused) {

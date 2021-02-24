@@ -22,7 +22,7 @@ public class Events {
 		coinShot = new UnityEvent();
 		coinShotInGoal = new UnityEvent();
 		coinShotEnded = new UnityEvent();
-		
+
 		playerFouled = new UnityEvent();
 		playerScored = new UnityEvent();
 		playerContinuesTurn = new UnityEvent();

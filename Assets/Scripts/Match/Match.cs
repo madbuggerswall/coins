@@ -9,15 +9,16 @@ public class Match : CoinGame {
 	[SerializeField] Blocker blockerLeft;
 	[SerializeField] Blocker blockerRight;
 
-	MatchState.State state;
-
 	[SerializeField] ushort winningScore = 5;
 	[SerializeField] ushort playerShots = 3;
+
+	MatchState.State state;
+	CoinFormation formation;
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
 		state = new MatchState.CoinToss(this);
-
+		formation = new CoinFormation(coinSet.getCoins());
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}
@@ -32,7 +33,7 @@ public class Match : CoinGame {
 		}
 	}
 	IEnumerator resetCoins() {
-		yield return coinSet.getFormation().resetCoins(coinSet.getCoins(), (player == playerLeft));
+		yield return formation.resetCoins(coinSet.getCoins(), (player == playerLeft));
 		setState(new MatchState.PlayerTurn(this));
 	}
 

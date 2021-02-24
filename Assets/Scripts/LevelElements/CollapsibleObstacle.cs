@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class CollapsibleObstacle : MonoBehaviour {
 	Rigidbody rigidBody;
 
@@ -11,7 +12,7 @@ public class CollapsibleObstacle : MonoBehaviour {
 	void Awake() {
 		rigidBody = GetComponent<Rigidbody>();
 		initialPosition = transform.position;
-		collapsedPosition = initialPosition + Vector3.down * 1.5f;
+		collapsedPosition = initialPosition + Vector3.down * 2.5f;
 	}
 
 	public void startCollapsing() { StartCoroutine(collapse()); }

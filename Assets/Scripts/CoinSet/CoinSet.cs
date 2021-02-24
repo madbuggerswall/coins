@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class CoinSet : MonoBehaviour {
 	SetMechanics setMechanics;
 	Guide guide;
-	CoinFormation formation;
 
 	Coin[] coins;
 	CoinSetState state;
@@ -15,7 +14,6 @@ public class CoinSet : MonoBehaviour {
 		guide = GetComponentInChildren<Guide>();
 
 		setMechanics = new SetMechanics(this);
-		formation = new CoinFormation(coins);
 		state = new StationaryState(this);
 
 		// Move this line to a more context-appropriate script/function.
@@ -65,5 +63,4 @@ public class CoinSet : MonoBehaviour {
 	public Coin[] getCoins() { return coins; }
 	public Guide getGuide() { return guide; }
 	public SetMechanics getMechanics() { return setMechanics; }
-	public CoinFormation getFormation() { return formation; }
 }

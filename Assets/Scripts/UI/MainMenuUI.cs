@@ -12,15 +12,15 @@ public class MainMenuUI : MonoBehaviour {
 	[SerializeField] Button settings;
 
 	void Awake() {
-		play.onClick.AddListener(loadPuzzle);
+		play.onClick.AddListener(loadLevelsPage);
 		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
 	}
 
-	void loadPuzzle() {
-		SceneManager.LoadSceneAsync("Puzzle", LoadSceneMode.Single);
+	void loadLevelsPage() {
+		GameManager.getInstance().levels.loadLevelsPage();
 	}
 
 	void loadOfflineMultiplayer() {
-		SceneManager.LoadSceneAsync("Classic Match", LoadSceneMode.Single);
+		
 	}
 }

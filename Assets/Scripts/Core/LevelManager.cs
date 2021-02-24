@@ -14,6 +14,21 @@ public class LevelManager : MonoBehaviour {
 		assertSingleton();
 		events = new Events();
 		selectGameType();
+
+
+		// Debug
+		events.coinStatusChanged.AddListener(() => Debug.Log("coinStatusChanged"));
+		events.coinShot.AddListener(() => Debug.Log("coinShot"));
+		events.coinShotInGoal.AddListener(() => Debug.Log("coinShotInGoal"));
+		events.coinShotEnded.AddListener(() => Debug.Log("coinShotEnded"));
+		events.playerFouled.AddListener(() => Debug.Log("playerFouled"));
+		events.playerScored.AddListener(() => Debug.Log("playerScored"));
+		events.playerContinuesTurn.AddListener(() => Debug.Log("playerContinuesTurn"));
+		events.playerTurnPassed.AddListener(() => Debug.Log("playerTurnPassed"));
+		events.playerHasNoShotsLeft.AddListener(() => Debug.Log("playerHasNoShotsLeft"));
+		events.sessionEnded.AddListener(() => Debug.Log("sessionEnded"));
+		events.cardPlayed.AddListener(() => Debug.Log("cardPlayed"));
+		events.cardApplied.AddListener(() => Debug.Log("cardApplied"));
 	}
 
 	// Singleton 
@@ -24,12 +39,9 @@ public class LevelManager : MonoBehaviour {
 		puzzle = FindObjectOfType<Puzzle>();
 		match = FindObjectOfType<Match>();
 		if (puzzle == null) {
-			getGame = getMatch;
-		}else{
-			getGame = getPuzzle;
+			getGame = () => { return match; };
+		} else {
+			getGame = () => { return puzzle; };
 		}
 	}
-
-	Puzzle getPuzzle() { return puzzle; }
-	Match getMatch() { return match; }
 }

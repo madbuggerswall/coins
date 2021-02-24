@@ -10,16 +10,8 @@ public class CompletedPanelUI : MonoBehaviour {
 	[SerializeField] Button nextLevel;
 
 	void Awake() {
-		restart.onClick.AddListener(restartScene);
-		mainMenu.onClick.AddListener(loadMainMenu);
-	}
-
-
-	void restartScene() {
-		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-	}
-
-	void loadMainMenu() {
-		SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Single);
+		restart.onClick.AddListener(GameManager.getInstance().levels.restartLevel);
+		mainMenu.onClick.AddListener(GameManager.getInstance().levels.loadMainMenu);
+		nextLevel.onClick.AddListener(GameManager.getInstance().levels.loadNextLevel);
 	}
 }

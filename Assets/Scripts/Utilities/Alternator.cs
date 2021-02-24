@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Rigidbody))]
 class Alternator : MonoBehaviour {
 	[RangeAttribute(1, 24)]
 	[SerializeField] float period = 16;
