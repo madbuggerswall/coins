@@ -8,6 +8,7 @@ public class Levels {
 	List<int> puzzles = new List<int>();
 	int mainMenuIndex = 0;
 	int levelsPageIndex = 1;
+	int puzzleIndex = 2;
 
 	public Levels() {
 		initializePuzzleIndices();

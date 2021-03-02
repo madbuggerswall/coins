@@ -17,6 +17,7 @@ public class CoinSet : MonoBehaviour {
 		state = new StationaryState(this);
 
 		// Move this line to a more context-appropriate script/function.
+		LevelManager.getInstance().events.playerContinuesTurn.AddListener(() => setState(new AimState(this)));
 		LevelManager.getInstance().events.coinShot.AddListener(() => setState(new ShotState(this)));
 		LevelManager.getInstance().events.cardPlayed.AddListener(() => setState(new StationaryState(this)));
 		LevelManager.getInstance().events.cardApplied.AddListener(() => setState(new AimState(this)));

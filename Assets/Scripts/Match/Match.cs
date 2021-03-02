@@ -47,7 +47,6 @@ public class Match : CoinGame {
 			setState(new MatchState.PlayerScored(this));
 		} else if (playerHasShotsLeft()) {
 			LevelManager.getInstance().events.playerContinuesTurn.Invoke();
-			continueTurn();
 		} else {
 			LevelManager.getInstance().events.playerHasNoShotsLeft.Invoke();
 			passTurn();

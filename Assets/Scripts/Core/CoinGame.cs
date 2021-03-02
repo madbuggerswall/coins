@@ -17,9 +17,6 @@ public abstract class CoinGame : MonoBehaviour {
 			return true;
 		return false;
 	}
-	protected void continueTurn() {
-		coinSet.setState(new AimState(coinSet));
-	}
 	protected abstract void evaluateShot();
 
 	public void setPlayerShotInGoal(bool value) { hasPlayerShotInGoal = value; }

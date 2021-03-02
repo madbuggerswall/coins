@@ -7,7 +7,15 @@ public class Coin : MonoBehaviour {
 
 	void Awake() {
 		rigidBody = GetComponent<Rigidbody>();
+	}
 
+	void OnCollisionEnter(Collision other) {
+		SoundManager.getInstance().playImpactSound(other.collider, other.relativeVelocity.magnitude / 48);
+		FindObjectOfType<Particles>().explodeAt(Particles.wallParticlePrefab, other);
+	}
+
+	void OnTriggerEnter(Collider other) {
+		SoundManager.getInstance().playImpactSound(other, .2f);
 	}
 
 	public void setDrag(float drag) { rigidBody.drag = drag; }

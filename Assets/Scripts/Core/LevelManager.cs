@@ -1,5 +1,6 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-4)]
 public class LevelManager : MonoBehaviour {
@@ -14,21 +15,16 @@ public class LevelManager : MonoBehaviour {
 		assertSingleton();
 		events = new Events();
 		selectGameType();
+	}
 
-
-		// Debug
-		events.coinStatusChanged.AddListener(() => Debug.Log("coinStatusChanged"));
-		events.coinShot.AddListener(() => Debug.Log("coinShot"));
-		events.coinShotInGoal.AddListener(() => Debug.Log("coinShotInGoal"));
-		events.coinShotEnded.AddListener(() => Debug.Log("coinShotEnded"));
-		events.playerFouled.AddListener(() => Debug.Log("playerFouled"));
-		events.playerScored.AddListener(() => Debug.Log("playerScored"));
-		events.playerContinuesTurn.AddListener(() => Debug.Log("playerContinuesTurn"));
-		events.playerTurnPassed.AddListener(() => Debug.Log("playerTurnPassed"));
-		events.playerHasNoShotsLeft.AddListener(() => Debug.Log("playerHasNoShotsLeft"));
-		events.sessionEnded.AddListener(() => Debug.Log("sessionEnded"));
-		events.cardPlayed.AddListener(() => Debug.Log("cardPlayed"));
-		events.cardApplied.AddListener(() => Debug.Log("cardApplied"));
+	bool loaded = false;
+	void Update() {
+		if (!loaded) {
+			if (Input.GetKeyDown(KeyCode.L)) {
+				SceneManager.LoadSceneAsync("Puzzle Japanese Garden 1", LoadSceneMode.Additive);
+				loaded = true;
+			}
+		}
 	}
 
 	// Singleton 

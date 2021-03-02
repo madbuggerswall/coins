@@ -8,17 +8,19 @@ public class Puzzle : CoinGame {
 	Formation formation;
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
-		state = new PuzzleState.PlayerTurn(this);
-		formation = new Formation(coinSet.getCoins());
 
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}
-
+	
+	void Start() {
+		state = new PuzzleState.PlayerTurn(this);
+		formation = new Formation(coinSet.getCoins());
+	}
+	
 	IEnumerator resetCoinSet() {
 		yield return formation.resetCoinSet();
 		LevelManager.getInstance().events.playerContinuesTurn.Invoke();
-		continueTurn();
 	}
 
 	protected override void evaluateShot() {
@@ -32,7 +34,6 @@ public class Puzzle : CoinGame {
 			setState(new PuzzleState.PlayerScored(this));
 		} else if (playerHasShotsLeft()) {
 			events.playerContinuesTurn.Invoke();
-			continueTurn();
 		} else {
 			events.playerHasNoShotsLeft.Invoke();
 		}

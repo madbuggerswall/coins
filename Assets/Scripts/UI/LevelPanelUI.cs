@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelPanelUI : MonoBehaviour {
-	Button[] levels;
+	[SerializeField] Button level1;
+	[SerializeField] Button level2;
+	[SerializeField] Button level3;
+	[SerializeField] Button level4;
 
 	void Awake() {
-		levels = GetComponentsInChildren<Button>();
-
-		for (int i = 0; i < levels.Length; i++) {
-			levels[i].onClick.AddListener(() => GameManager.getInstance().levels.loadPuzzle(i));
-			Debug.Log(levels[i].gameObject.name + " | i: " + i);
-		}
+		level1.onClick.AddListener(() => GameManager.getInstance().levels.loadPuzzle(0));
+		level2.onClick.AddListener(() => GameManager.getInstance().levels.loadPuzzle(1));
+		level3.onClick.AddListener(() => GameManager.getInstance().levels.loadPuzzle(2));
+		level4.onClick.AddListener(() => GameManager.getInstance().levels.loadPuzzle(3));
 	}
 }

@@ -7,4 +7,5 @@ static class Layers {
 	public static int wall = LayerMask.NameToLayer("Wall");
 	public static int goalpost = LayerMask.NameToLayer("Goalpost");
 	public static int obstacle = LayerMask.NameToLayer("Obstacle");
+	public static int trigger = LayerMask.NameToLayer("Trigger");
 }

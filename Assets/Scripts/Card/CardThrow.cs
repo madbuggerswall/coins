@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class CardThrow : MonoBehaviour {
-	Rigidbody rigidBody;
-	CardOutline outline;
-
+public class CardThrow : EventTrigger {
+	GameObject cancelOverlay;
 	Vector3 initialPosition;
 	Vector3 initialMousePos;
 	Vector3 finalMousePos;
 
 	bool throwCanceled;
-	float offset;
 
 	UnityAction onMouseEnter;
 	UnityAction onMouseExit;
@@ -22,9 +21,7 @@ public class CardThrow : MonoBehaviour {
 
 	void Awake() {
 		initialPosition = transform.localPosition;
-		rigidBody = GetComponent<Rigidbody>();
-		outline = GetComponentInChildren<CardOutline>();
-		offset = Camera.main.transform.position.y - transform.position.y;
+		cancelOverlay = transform.Find("Cancel Overlay").gameObject;
 		enableControls();
 
 		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
@@ -32,32 +29,34 @@ public class CardThrow : MonoBehaviour {
 		LevelManager.getInstance().events.playerContinuesTurn.AddListener(enableControls);
 	}
 
-	void OnMouseEnter() { onMouseEnter(); }
-	void OnMouseExit() { onMouseExit(); }
-	void OnMouseDown() { onMouseDown(); }
-	void OnMouseDrag() { onMouseDrag(); }
-	void OnMouseUp() { onMouseUp(); }
+	public override void OnPointerEnter(PointerEventData pointerEventData) { onMouseEnter(); }
+	public override void OnPointerExit(PointerEventData pointerEventData) { onMouseExit(); }
+	public override void OnPointerDown(PointerEventData pointerEventData) { onMouseDown(); }
+	public override void OnDrag(PointerEventData pointerEventData) { onMouseDrag(); }
+	public override void OnPointerUp(PointerEventData pointerEventData) { onMouseUp(); }
 
 	void enableControls() {
-		onMouseEnter = () => { outline.enable(true); };
-		onMouseExit = () => { outline.enable(false); };
-		onMouseDown = () => { initialMousePos = PlayerInput.getPosition(offset); };
+		onMouseEnter = () => { };
+		onMouseExit = () => { };
+		onMouseDown = () => { initialMousePos = Input.mousePosition; };
 		onMouseDrag = () => {
-			finalMousePos = PlayerInput.getPosition(offset);
+			finalMousePos = Input.mousePosition;
 			cancelThrow();
 			transform.position = finalMousePos;
 		};
 		onMouseUp = () => {
 			if (throwCanceled) {
 				transform.localPosition = initialPosition;
+				cancelOverlay.SetActive(false);
 			} else {
-				gameObject.GetComponent<Renderer>().enabled = false;
-				GetComponentInChildren<CardOutline>().gameObject.SetActive(false);
 				LevelManager.getInstance().events.cardPlayed.Invoke();
 				GetComponent<Card>().apply();
+				
+				GetComponentInChildren<Text>().enabled = false;
+				foreach (Image image in GetComponentsInChildren<Image>()) {
+					image.enabled = false;
+				}
 			}
-			outline.resetColor();
-			outline.enable(false);
 		};
 	}
 
@@ -70,12 +69,12 @@ public class CardThrow : MonoBehaviour {
 	}
 
 	void cancelThrow() {
-		if ((finalMousePos - initialMousePos).magnitude > 5) {
-			outline.changeColor(Color.green);
+		if ((finalMousePos - initialMousePos).magnitude > 400) {
 			throwCanceled = false;
+			cancelOverlay.SetActive(false);
 		} else {
 			throwCanceled = true;
-			outline.changeColor(Color.red);
+			cancelOverlay.SetActive(true);
 		}
 	}
 }
