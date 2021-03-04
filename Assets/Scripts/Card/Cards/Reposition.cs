@@ -8,6 +8,7 @@ public class Reposition : Card {
 	public override void apply() {
 		spawnRepositionAreas();
 		relocateCoins();
+		spawnParticleFX(Particles.repositionFXPrefab);
 		LevelManager.getInstance().events.cardApplied.AddListener(reset);
 	}
 

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class PrefabPath {
-	public static readonly string explosions = "Prefabs/Particles/Explosions";
+	public static readonly string explosions = "Prefabs/Particles/Impacts";
+	public static readonly string cards = "Prefabs/Particles/Cards";
+	public static readonly string coin = "Prefabs/Particles/Coin";
+
 }
 
 // Random prefab generator. 

@@ -11,6 +11,7 @@ public class Puzzle : CoinGame {
 
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
+		LevelManager.getInstance().events.cardPlayed.AddListener(()=>Debug.Log("Card Played"));
 	}
 
 	void Start() {

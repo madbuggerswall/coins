@@ -6,6 +6,7 @@ public class Ghost : Card {
 
 	public override void apply() {
 		becomeGhost();
+		spawnParticleFX(Particles.ghostFXPrefab);
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
 

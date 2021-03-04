@@ -8,11 +8,12 @@ public class Boost : Card {
 
 	public override void apply() {
 		boostCoins();
+		spawnParticleFX(Particles.boostFXPrefab);
 		LevelManager.getInstance().events.cardApplied.Invoke();
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
-	
-	public override void reset() { 
+
+	public override void reset() {
 		resetBoost();
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}

@@ -10,6 +10,7 @@ public class Expand : Card {
 
 	public override void apply() {
 		StartCoroutine(expand());
+		spawnParticleFX(Particles.expandFXPrefab);
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class CoinSet : MonoBehaviour {
+	SelectedCoinIndicator selectedCoinIndicator;
 	SetMechanics setMechanics;
 	Guide guide;
 
@@ -14,8 +15,7 @@ public class CoinSet : MonoBehaviour {
 		guide = GetComponentInChildren<Guide>();
 
 		setMechanics = new SetMechanics(this);
-		state = new StationaryState(this);
-
+		selectedCoinIndicator = new SelectedCoinIndicator();
 		// Move this line to a more context-appropriate script/function.
 		LevelManager.getInstance().events.playerContinuesTurn.AddListener(() => setState(new AimState(this)));
 		LevelManager.getInstance().events.coinShot.AddListener(() => setState(new ShotState(this)));

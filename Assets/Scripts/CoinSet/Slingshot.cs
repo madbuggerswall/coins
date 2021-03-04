@@ -62,7 +62,6 @@ public class Slingshot : MonoBehaviour {
 
 		// Select coin
 		coinStatus |= CoinStatus.selected;
-		aimAction = freeAim;
 		resetOtherCoinStatus();
 		LevelManager.getInstance().events.coinStatusChanged.Invoke();
 	}
@@ -80,7 +79,10 @@ public class Slingshot : MonoBehaviour {
 	void release() {
 		crosshair.enable(false);
 		// Cancel shot
-		if (throwForce.magnitude <= cancelThreshold) { return; }
+		if (throwForce.magnitude <= cancelThreshold) {
+			aimAction = freeAim;
+			return;
+		}
 
 		Events events = LevelManager.getInstance().events;
 		coinStatus = CoinStatus.shot;
@@ -143,4 +145,25 @@ public class Slingshot : MonoBehaviour {
 	public CoinStatus getCoinStatus() { return coinStatus; }
 	public float getMaxForceMag() { return maxThrowForceMag; }
 	public void setMaxForceMag(float maxThrowForceMag) { this.maxThrowForceMag = maxThrowForceMag; }
+}
+
+public class SelectedCoinIndicator {
+	Coin[] coins;
+	GameObject indicator;
+
+	public SelectedCoinIndicator() {
+		coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		LevelManager.getInstance().events.coinStatusChanged.AddListener(spawnIndicator);
+	}
+
+	void spawnIndicator() {
+		foreach (Coin coin in coins) {
+			if ((coin.GetComponent<Slingshot>().getCoinStatus() & CoinStatus.selected) > 0) {
+				if (indicator != null) indicator.SetActive(false);
+				indicator = GameObject.FindObjectOfType<Particles>().explodeAt(Particles.coinSelectedPrefab, coin.transform.position);
+				return;
+			}
+		}
+		if (indicator != null) indicator.SetActive(false);
+	}
 }

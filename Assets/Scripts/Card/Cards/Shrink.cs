@@ -10,6 +10,7 @@ public class Shrink : Card {
 
 	public override void apply() {
 		StartCoroutine(shrink());
+		spawnParticleFX(Particles.shrinkFXPrefab);
 		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
 	}
 
