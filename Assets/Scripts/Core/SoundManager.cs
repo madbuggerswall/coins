@@ -6,13 +6,14 @@ public class SoundManager : MonoBehaviour {
 	static SoundManager instance;
 
 	AudioSource audioSource;
+	[SerializeField] AudioSource musicSource;
+
 	[SerializeField] AudioClip wall;
 	[SerializeField] AudioClip coin;
 	[SerializeField] AudioClip obstacle;
 	[SerializeField] AudioClip trigger;
 	[SerializeField] AudioClip goal;
 	[SerializeField] AudioClip faul;
-
 
 	void Awake() {
 		assertSingleton();
@@ -29,18 +30,27 @@ public class SoundManager : MonoBehaviour {
 			audioSource.clip = coin;
 			audioSource.PlayOneShot(audioSource.clip, volumeScale);
 		}
-		
+
 		if (other.gameObject.layer == Layers.obstacle) {
 			audioSource.clip = obstacle;
 			audioSource.PlayOneShot(audioSource.clip, volumeScale);
 		}
-		
+
 		if (other.gameObject.layer == Layers.trigger) {
 			audioSource.clip = trigger;
 			audioSource.PlayOneShot(audioSource.clip, volumeScale);
 		}
 	}
 
+	public void toggleSound(){
+		audioSource.enabled = !audioSource.enabled;
+	}
+	
+	public void toggleMusic(){
+		musicSource.enabled = !musicSource.enabled;
+	}
+
+	// Singleton
 	public static SoundManager getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 }

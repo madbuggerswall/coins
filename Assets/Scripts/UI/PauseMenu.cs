@@ -17,9 +17,19 @@ public class PauseMenu : MonoBehaviour {
 			pauseGame(false);
 			GameManager.getInstance().levels.restartLevel();
 		});
+
 		home.onClick.AddListener(() => {
 			pauseGame(false);
 			GameManager.getInstance().levels.loadMainMenu();
+		});
+
+		sound.onClick.AddListener(() => {
+			SoundManager.getInstance().toggleSound();
+			toggleSoundImage();
+		});
+		music.onClick.AddListener(() => {
+			SoundManager.getInstance().toggleMusic();
+			toggleMusicImage();
 		});
 	}
 
@@ -33,5 +43,19 @@ public class PauseMenu : MonoBehaviour {
 			LevelManager.getInstance().getGame().getCoinSet().enableControls();
 			gameObject.SetActive(paused);
 		}
+	}
+
+	void toggleSoundImage() {
+		GameObject soundOn = sound.transform.GetChild(0).gameObject;
+		GameObject soundOff = sound.transform.GetChild(1).gameObject;
+		soundOn.SetActive(!soundOn.activeSelf);
+		soundOff.SetActive(!soundOff.activeSelf);
+	}
+
+	void toggleMusicImage() {
+		GameObject musicOn = music.transform.GetChild(0).gameObject;
+		GameObject musicOff = music.transform.GetChild(1).gameObject;
+		musicOn.SetActive(!musicOn.activeSelf);
+		musicOff.SetActive(!musicOff.activeSelf);
 	}
 }

@@ -13,12 +13,12 @@ public class Match : CoinGame {
 	[SerializeField] ushort playerShots = 3;
 
 	MatchState.State state;
-	CoinFormation formation;
+	MultiplayerFormation formation;
 
 	void Awake() {
 		coinSet = FindObjectOfType<CoinSet>();
 		state = new MatchState.CoinToss(this);
-		formation = new CoinFormation(coinSet.getCoins());
+		formation = new MultiplayerFormation(coinSet.getCoins());
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}

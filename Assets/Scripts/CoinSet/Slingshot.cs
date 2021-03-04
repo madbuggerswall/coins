@@ -20,29 +20,24 @@ public class Slingshot : MonoBehaviour {
 	Crosshair crosshair;
 	Rigidbody rigidBody;
 
-	float cancelThreshold = 4;
+	float cancelThreshold = 8;
 	// Functions are to be overriden to disable controls.
-	UnityAction onMouseEnter;
-	UnityAction onMouseExit;
 	UnityAction onMouseDown;
 	UnityAction onMouseDrag;
 	UnityAction onMouseUp;
+	UnityAction aimAction;
 
 	CoinStatus coinStatus;
 
 	void Awake() {
 		crosshair = GetComponentInChildren<Crosshair>();
 		rigidBody = GetComponent<Rigidbody>();
-		rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;
+		// rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;
+		aimAction = () => { };
 	}
 
-	// Select coin
-	void OnMouseEnter() {
-		onMouseEnter();
-	}
-
-	void OnMouseExit() {
-		onMouseExit();
+	void Update() {
+		aimAction();
 	}
 
 	// Draw
@@ -60,79 +55,85 @@ public class Slingshot : MonoBehaviour {
 		onMouseUp();
 	}
 
-	public void enableControls() {
-		Events events = LevelManager.getInstance().events;
+	void draw() {
+		initialPos = PlayerInput.getPosition();
+		crosshair.setPoints(transform.position, transform.position);
+		crosshair.enable(true);
 
 		// Select coin
-		onMouseEnter = () => {
-			coinStatus |= CoinStatus.selected;
-			events.coinStatusChanged.Invoke();
-		};
-
-		onMouseExit = () => {
-			coinStatus &= ~CoinStatus.selected;
-			events.coinStatusChanged.Invoke();
-		};
-
-		// Draw
-		onMouseDown = () => {
-			initialPos = PlayerInput.getPosition();
-			crosshair.setPoints(transform.position, transform.position);
-			crosshair.enable(true);
-
-			coinStatus |= CoinStatus.drawn;
-			events.coinStatusChanged.Invoke();
-		};
-
-		// Aim
-		onMouseDrag = () => {
-			calculateThrowForce();
-			crosshair.setPoints(transform.position, transform.position + throwForce * 0.4f);
-
-			if (throwForce.magnitude <= cancelThreshold)
-				crosshair.setColor(Color.red);
-			else
-				crosshair.setColor(Color.white);
-		};
-
-
-		// Release
-		onMouseUp = () => {
-			crosshair.enable(false);
-			// Cancel shot
-			if (throwForce.magnitude <= cancelThreshold) {
-				coinStatus = coinStatus &= ~CoinStatus.drawn;
-				return;
-			}
-
-			coinStatus = CoinStatus.shot;
-			events.coinStatusChanged.Invoke();
-
-			gameObject.layer = Layers.thrownCoin;
-			rigidBody.AddForce(throwForce, ForceMode.Impulse);
-			events.coinShot.Invoke();
-		};
+		coinStatus |= CoinStatus.selected;
+		aimAction = freeAim;
+		resetOtherCoinStatus();
+		LevelManager.getInstance().events.coinStatusChanged.Invoke();
 	}
 
-	public void disableControls() {
-		onMouseEnter = () => { };
-		onMouseExit = () => { };
-		onMouseDown = () => { };
-		onMouseDrag = () => { };
-		onMouseUp = () => { };
+	void aim() {
+		calculateThrowForce();
+		crosshair.setPoints(transform.position, transform.position + throwForce * 0.4f);
+
+		if (throwForce.magnitude <= cancelThreshold)
+			crosshair.setColor(Color.red);
+		else
+			crosshair.setColor(Color.white);
+	}
+
+	void release() {
+		crosshair.enable(false);
+		// Cancel shot
+		if (throwForce.magnitude <= cancelThreshold) { return; }
+
+		Events events = LevelManager.getInstance().events;
+		coinStatus = CoinStatus.shot;
+		events.coinStatusChanged.Invoke();
+		aimAction = () => { };
+
+		gameObject.layer = Layers.thrownCoin;
+		rigidBody.AddForce(throwForce, ForceMode.Impulse);
+		events.coinShot.Invoke();
+	}
+
+	void freeAim() {
+		if ((coinStatus & CoinStatus.selected) > 0) {
+			if (Input.GetMouseButtonDown(0)) {
+				crosshair.enable(true);
+				initialPos = PlayerInput.getPosition();
+			} else if (Input.GetMouseButton(0)) {
+				aim();
+			} else if (Input.GetMouseButtonUp(0)) {
+				release();
+			}
+		}
 	}
 
 	void calculateThrowForce() {
 		finalPos = PlayerInput.getPosition();
 		throwForce = initialPos - finalPos;
 		throwForce.y = 0f;
-		
-		#if UNITY_EDITOR
-			throwForce *= 8;
-		#elif UNITY_ANDROID
-			throwForce *= 8;
-		#endif
+		throwForce *= 8;
 		throwForce = Vector3.ClampMagnitude(throwForce, maxThrowForceMag);
+	}
+
+	void resetOtherCoinStatus() {
+		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		foreach (Coin coin in coins) {
+			if (coin != GetComponent<Coin>()) {
+				coin.GetComponent<Slingshot>().resetStatus();
+			}
+		}
+	}
+
+	public void enableControls() {
+		onMouseDown = draw;
+		onMouseDrag = aim;
+		onMouseUp = release;
+		aimAction = freeAim;
+	}
+
+	public void disableControls() {
+		onMouseDown = () => { };
+		onMouseDrag = () => { };
+		onMouseUp = () => { };
+		aimAction = () => { };
 	}
 
 	public void resetStatus() {
@@ -140,4 +141,6 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public CoinStatus getCoinStatus() { return coinStatus; }
+	public float getMaxForceMag() { return maxThrowForceMag; }
+	public void setMaxForceMag(float maxThrowForceMag) { this.maxThrowForceMag = maxThrowForceMag; }
 }

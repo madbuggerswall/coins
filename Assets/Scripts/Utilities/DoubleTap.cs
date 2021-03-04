@@ -9,10 +9,10 @@ public class DoubleTap {
 	public DoubleTap() { }
 
 	public bool doubleTapped() {
-		if (!tappedOnce) {
+		if (!tappedOnce && Input.GetMouseButtonDown(0)) {
 			tapTime = Time.time;
 			tappedOnce = true;
-		} else {
+		} else if (Input.GetMouseButtonDown(0)) {
 			tappedOnce = false;
 			float doubleTapTime = Time.time - tapTime;
 			if (doubleTapTime <= doubleTapThreshold)

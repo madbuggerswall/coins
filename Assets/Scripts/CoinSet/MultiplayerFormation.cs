@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class CoinFormation {
+public class MultiplayerFormation {
 	TransformDTO[] formationL;
 	TransformDTO[] formationR;
 
-	public CoinFormation(Coin[] coins) {
+	public MultiplayerFormation(Coin[] coins) {
 		initializeFormations(coins);
 	}
 
@@ -20,7 +20,7 @@ public class CoinFormation {
 	}
 
 	public IEnumerator resetCoins(Coin[] coins, bool isLeft) {
-		TransformDTO[] current = new CoinFormation(coins).formationL;
+		TransformDTO[] current = new MultiplayerFormation(coins).formationL;
 		TransformDTO[] formation = isLeft ? formationL : formationR;
 		float interpolant = 0;
 		while (true) {

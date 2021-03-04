@@ -13,11 +13,7 @@ public class Relocate : MonoBehaviour {
 		initialPosition = rigidBody.position;
 	}
 
-	void OnMouseDown() {
-		Debug.Log("OnMouseDown");
-	}
-	
-	void OnMouseUpAsButton() {
+	void Update() {
 		if (doubleTap.doubleTapped()) {
 			LevelManager.getInstance().events.cardApplied.Invoke();
 		}

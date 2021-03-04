@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Reposition : Card {
-	float radius = 1;
+	float radius = 1.5f;
 
 	public override void apply() {
 		spawnRepositionAreas();
 		relocateCoins();
-		LevelManager.getInstance().events.cardApplied.AddListener(resetRelocating);
+		LevelManager.getInstance().events.cardApplied.AddListener(reset);
 	}
 
-	public override void reset() { }
+	public override void reset() {
+		disableRepositionAreas();
+		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
+		foreach (Coin coin in coins) {
+			Destroy(coin.gameObject.GetComponent<Relocate>());
+		}
+	}
 
 	void relocateCoins() {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
 			coin.gameObject.AddComponent<Relocate>();
-		}
-	}
-
-	void resetRelocating() {
-		disableRepositionAreas();
-		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
-		foreach (Coin coin in coins) {
-			Destroy(coin.gameObject.GetComponent<Relocate>());
 		}
 	}
 

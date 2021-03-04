@@ -15,13 +15,13 @@ public class Particles : MonoBehaviour {
 		wallParticlePrefab = Resources.Load(PrefabPath.explosions + "/Wall") as GameObject;
 	}
 
-	public void explodeAt(GameObject explosionPrefab, Vector3 position) {
-		pool.spawn(explosionPrefab, position);
+	public void explodeAt(GameObject particlePrefab, Vector3 position) {
+		pool.spawn(particlePrefab, position);
 	}
 
-	public void explodeAt(GameObject explosionPrefab, Collision other) {
+	public void explodeAt(GameObject particlePrefab, Collision other) {
 		Vector3 position = other.contacts[0].point;
 		Quaternion rotation = Quaternion.LookRotation(other.contacts[0].normal, Vector3.up);
-		pool.spawn(explosionPrefab, position, rotation);
+		pool.spawn(particlePrefab, position, rotation);
 	}
 }
