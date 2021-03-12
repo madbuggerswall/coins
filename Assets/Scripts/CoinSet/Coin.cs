@@ -10,8 +10,10 @@ public class Coin : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other) {
-		SoundManager.getInstance().playImpactSound(other.collider, other.relativeVelocity.magnitude / 48);
-		FindObjectOfType<Particles>().explodeAt(Particles.wallParticlePrefab, other);
+		if (other.gameObject.layer != Layers.ground) {
+			SoundManager.getInstance().playImpactSound(other.collider, other.relativeVelocity.magnitude / 48);
+			Particles.getInstance().explodeAt(Particles.wallParticlePrefab, other);
+		}
 	}
 
 	void OnTriggerEnter(Collider other) {

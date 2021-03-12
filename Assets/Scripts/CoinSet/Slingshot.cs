@@ -125,6 +125,7 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void enableControls() {
+		Debug.Log("Enable controls");
 		onMouseDown = draw;
 		onMouseDrag = aim;
 		onMouseUp = release;
@@ -132,6 +133,7 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void disableControls() {
+		Debug.Log("Disable controls");
 		onMouseDown = () => { };
 		onMouseDrag = () => { };
 		onMouseUp = () => { };
@@ -145,25 +147,4 @@ public class Slingshot : MonoBehaviour {
 	public CoinStatus getCoinStatus() { return coinStatus; }
 	public float getMaxForceMag() { return maxThrowForceMag; }
 	public void setMaxForceMag(float maxThrowForceMag) { this.maxThrowForceMag = maxThrowForceMag; }
-}
-
-public class SelectedCoinIndicator {
-	Coin[] coins;
-	GameObject indicator;
-
-	public SelectedCoinIndicator() {
-		coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
-		LevelManager.getInstance().events.coinStatusChanged.AddListener(spawnIndicator);
-	}
-
-	void spawnIndicator() {
-		foreach (Coin coin in coins) {
-			if ((coin.GetComponent<Slingshot>().getCoinStatus() & CoinStatus.selected) > 0) {
-				if (indicator != null) indicator.SetActive(false);
-				indicator = GameObject.FindObjectOfType<Particles>().explodeAt(Particles.coinSelectedPrefab, coin.transform.position);
-				return;
-			}
-		}
-		if (indicator != null) indicator.SetActive(false);
-	}
 }

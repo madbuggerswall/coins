@@ -25,12 +25,12 @@ public class PuzzleUI : MonoBehaviour {
 		Events events = LevelManager.getInstance().events;
 
 		events.playerFouled.AddListener(() => showFaulPanel());
-		events.playerScored.AddListener(() => resetPlayerShotsUI());
 		events.playerContinuesTurn.AddListener(() => setShotsLeft(FindObjectOfType<Puzzle>().getPlayer().getShotsLeft()));
 		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
-		events.playerScored.AddListener(() => showGoalPanel());
-
-		events.playerScored.AddListener(() => completedPanel.SetActive(true));
+		events.playerScored.AddListener(() => {
+			completedPanel.SetActive(true);
+			pause.enabled = false;
+		});
 		events.playerHasNoShotsLeft.AddListener(() => {
 			failedPanel.SetActive(true);
 			pause.enabled = false;
@@ -48,7 +48,6 @@ public class PuzzleUI : MonoBehaviour {
 		faulPanel.SetActive(false);
 	}
 
-
 	// Interface
 	public void setShotsLeft(int shotsLeft) { shotsLeftUI.setShotsLeft(shotsLeft); }
 	public void resetShotsLeft() { shotsLeftUI.resetShotsLeft(); }
@@ -56,6 +55,5 @@ public class PuzzleUI : MonoBehaviour {
 		resetShotsLeft();
 	}
 
-	public void showGoalPanel() { StartCoroutine(enableGoalPanelFor(1)); }
 	public void showFaulPanel() { StartCoroutine(enableFaulPanelFor(1)); }
 }

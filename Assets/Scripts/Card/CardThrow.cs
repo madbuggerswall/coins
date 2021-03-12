@@ -44,6 +44,7 @@ public class CardThrow : EventTrigger {
 			cancelThrow();
 			transform.position = finalMousePos;
 		};
+		
 		onMouseUp = () => {
 			if (throwCanceled) {
 				transform.localPosition = initialPosition;

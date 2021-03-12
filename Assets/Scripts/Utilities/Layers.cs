@@ -8,4 +8,5 @@ static class Layers {
 	public static int goalpost = LayerMask.NameToLayer("Goalpost");
 	public static int obstacle = LayerMask.NameToLayer("Obstacle");
 	public static int trigger = LayerMask.NameToLayer("Trigger");
+	public static int collectible = LayerMask.NameToLayer("Collectible");
 }

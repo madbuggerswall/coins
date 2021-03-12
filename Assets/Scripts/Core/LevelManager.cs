@@ -17,16 +17,6 @@ public class LevelManager : MonoBehaviour {
 		selectGameType();
 	}
 
-	bool loaded = false;
-	void Update() {
-		if (!loaded) {
-			if (Input.GetKeyDown(KeyCode.L)) {
-				SceneManager.LoadSceneAsync("Puzzle Japanese Garden 1", LoadSceneMode.Additive);
-				loaded = true;
-			}
-		}
-	}
-
 	// Singleton 
 	public static LevelManager getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }

@@ -15,7 +15,6 @@ public class DeckHandle : EventTrigger {
 		finalPosition = initialPosition + Vector3.up * parent.sizeDelta.y;
 		
 		LevelManager.getInstance().events.cardPlayed.AddListener(() => {
-			LevelManager.getInstance().getGame().getCoinSet().enableControls();
 			StartCoroutine(collapse(finalPosition, initialPosition));
 		});
 	}
@@ -30,11 +29,14 @@ public class DeckHandle : EventTrigger {
 		float clampedY = Mathf.Clamp(parent.anchoredPosition.y, initialPosition.y, finalPosition.y);
 		parent.anchoredPosition = Vector2.up * clampedY;
 	}
+
 	public override void OnPointerUp(PointerEventData pointerEventData) {
 		if (open) {
+			Debug.Log("Pointer Up: Close");
 			LevelManager.getInstance().getGame().getCoinSet().enableControls();
 			StartCoroutine(collapse(finalPosition, initialPosition));
 		} else {
+			Debug.Log("Pointer Up: Open");
 			LevelManager.getInstance().getGame().getCoinSet().disableControls();
 			StartCoroutine(collapse(initialPosition, finalPosition));
 		}

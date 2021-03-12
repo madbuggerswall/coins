@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ghost : Card {
+	Color ghostColor = new Color32(0x43, 0x5B, 0x5E, 0xFF);
+	Color coinColor = new Color32(0x80, 0x80, 0x80, 0xFF);
 
 	public override void apply() {
 		becomeGhost();
@@ -18,7 +20,8 @@ public class Ghost : Card {
 	void becomeGhost() {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
-			coin.GetComponent<Renderer>().material.color = Color.cyan;
+			Debug.Log(coin.GetComponent<Renderer>().material.color);
+			coin.GetComponent<Renderer>().material.color = ghostColor;
 		}
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, true);
 		Physics.IgnoreLayerCollision(Layers.thrownCoin, Layers.obstacle, true);
@@ -27,10 +30,10 @@ public class Ghost : Card {
 	}
 
 	void resetGhost() {
-		Color coinColor = new Color(0xF6, 0xFF, 0x00);
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
 			coin.GetComponent<Renderer>().material.color = coinColor;
+			Debug.Log(coin.GetComponent<Renderer>().material.color);
 			moveOutsideObstacle(coin.transform);
 		}
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, false);
