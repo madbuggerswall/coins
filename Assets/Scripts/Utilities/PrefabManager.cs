@@ -6,7 +6,7 @@ public static class PrefabPath {
 	public static readonly string explosions = "Prefabs/Particles/Impacts";
 	public static readonly string cards = "Prefabs/Particles/Cards";
 	public static readonly string coin = "Prefabs/Particles/Coin";
-
+	public static readonly string obstacles = "Prefabs/Reference Obstacles";
 }
 
 // Random prefab generator. 
