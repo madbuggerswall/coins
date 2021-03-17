@@ -8,54 +8,85 @@ public class RandomLevelGenerator : MonoBehaviour {
 	ObstacleArea obstacleArea;
 	PrefabManager prefabManager;
 	Transform parent;
-	
+
 	void OnEnable() {
-		obstacleArea = new ObstacleArea(ground.GetComponent<Collider>());
-		prefabManager = new PrefabManager(PrefabPath.obstacles);
-		parent = new GameObject("Parent").transform;
-		foreach (Vector3 position in obstacleArea.getHalfGrid()) {
-			if (Random.value > .8f) {
-				GameObject obstaclePrefab = prefabManager.getRandomPrefab();
-				Vector3 spawnPosition = position;
-				spawnPosition.y = obstaclePrefab.transform.position.y;
-				GameObject obstacle = Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity);
-				obstacle.transform.SetParent(parent);
-			}
+		if (!Application.isPlaying) {
+			obstacleArea = new ObstacleArea(ground.GetComponent<Collider>());
+			prefabManager = new PrefabManager(PrefabPath.obstacles);
+			parent = new GameObject("Parent").transform;
+			spawnRandomObstacles();
 		}
+	}
+
+	void OnDisable() {
+		DestroyImmediate(parent.gameObject);
 	}
 
 	void OnDrawGizmos() {
 		float sphereRadius = .2f;
-		foreach (Vector3 position in obstacleArea.getQuarterGrid()) {
-			Gizmos.color = Color.cyan;
-			Gizmos.DrawSphere(position, sphereRadius);
-		}
+		if (!Application.isPlaying) {
+			foreach (Vector3 position in obstacleArea.getQuarterGrid()) {
+				Gizmos.color = Color.cyan;
+				Gizmos.DrawSphere(position, sphereRadius);
+			}
 
-		foreach (Vector3 position in obstacleArea.getHalfGrid()) {
-			Gizmos.color = Color.yellow;
-			Gizmos.DrawSphere(position, sphereRadius);
+			foreach (Vector3 position in obstacleArea.getHalfGrid()) {
+				Gizmos.color = Color.yellow;
+				Gizmos.DrawSphere(position, sphereRadius);
+			}
+		}
+	}
+
+	void spawnRandomObstacles() {
+		for (int i = 6; i < obstacleArea.getRowCount(); i++) {
+			GameObject obstaclePrefab = prefabManager.getRandomPrefab();
+			Vector3 position;
+			if (obstaclePrefab.name == "Obstacle") {
+				int randomIndex = Random.Range(0, obstacleArea.getHalfRowIncrement());
+				position = obstacleArea.getHalfGrid()[i * obstacleArea.getHalfRowIncrement() + randomIndex];
+				position.y = obstaclePrefab.transform.position.y;
+			} else {
+				int randomIndex = Random.Range(0, obstacleArea.getQuarterRowIncrement());
+				position = obstacleArea.getQuarterGrid()[i * obstacleArea.getQuarterRowIncrement() + randomIndex];
+				position.y = obstaclePrefab.transform.position.y;
+			}
+
+			if (Random.value < 0.5f) {
+				GameObject obstacle = Instantiate(obstaclePrefab, position, Quaternion.identity);
+				obstacle.transform.SetParent(parent);
+			}
 		}
 	}
 }
 
-struct ObstacleArea {
+class ObstacleArea {
 	List<Vector3> quarterGrid;
 	List<Vector3> halfGrid;
-	float quarterGridIncrement;
-	float halfGridIncrement;
+
+	float quarterGridIncrement = 2f;
+	float halfGridIncrement = 4f;
+
+	int halfRowIncrement = 6;
+	int quarterRowIncrement = 12;
+	int rowCount;
+
 	float xMax, xMin, zMax, zMin;
 
 	public ObstacleArea(Collider collider) {
-		quarterGridIncrement = 2f;
-		halfGridIncrement = 4f;
 		quarterGrid = new List<Vector3>();
 		halfGrid = new List<Vector3>();
+		initializeBounds(collider);
+		initializeQuarterGrid();
+		initializeHalfGrid();
+		rowCount = quarterGrid.Count / quarterRowIncrement;
+		Debug.Log("Row Count: " + rowCount);
+	}
+
+	void initializeBounds(Collider collider) {
 		xMax = collider.bounds.center.x + collider.bounds.extents.x;
 		xMin = collider.bounds.center.x - collider.bounds.extents.x;
 		zMax = collider.bounds.center.z + collider.bounds.extents.z;
 		zMin = collider.bounds.center.z - collider.bounds.extents.z;
-		initializeQuarterGrid();
-		initializeHalfGrid();
 	}
 
 	void initializeQuarterGrid() {
@@ -74,6 +105,9 @@ struct ObstacleArea {
 		}
 	}
 
+	public int getQuarterRowIncrement() { return quarterRowIncrement; }
+	public int getHalfRowIncrement() { return halfRowIncrement; }
+	public int getRowCount() { return rowCount; }
 	public List<Vector3> getHalfGrid() { return halfGrid; }
 	public List<Vector3> getQuarterGrid() { return quarterGrid; }
 }
