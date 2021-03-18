@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class CollapsibleObstacle : MonoBehaviour {
 	Rigidbody rigidBody;
 
 	Vector3 initialPosition;
 	Vector3 collapsedPosition;
-	float collapseSpeed = 4;
+	float collapseSpeed = 2;
+
 	void Awake() {
-		rigidBody = GetComponent<Rigidbody>();
+		rigidBody = GetComponentInChildren<Rigidbody>();
 		initialPosition = transform.position;
-		collapsedPosition = initialPosition + Vector3.down * 2.5f;
+		Collider collider = GetComponentInChildren<Collider>();
+		collapsedPosition = initialPosition - 2 * Vector3.up * collider.bounds.extents.y - Vector3.up; 
 	}
 
 	public void startCollapsing() { StartCoroutine(collapse()); }
