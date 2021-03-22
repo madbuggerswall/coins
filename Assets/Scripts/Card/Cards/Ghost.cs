@@ -20,7 +20,6 @@ public class Ghost : Card {
 	void becomeGhost() {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
-			Debug.Log(coin.GetComponent<Renderer>().material.color);
 			coin.GetComponent<Renderer>().material.color = ghostColor;
 		}
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, true);
@@ -33,7 +32,6 @@ public class Ghost : Card {
 		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
 		foreach (Coin coin in coins) {
 			coin.GetComponent<Renderer>().material.color = coinColor;
-			Debug.Log(coin.GetComponent<Renderer>().material.color);
 			moveOutsideObstacle(coin.transform);
 		}
 		Physics.IgnoreLayerCollision(Layers.coin, Layers.obstacle, false);

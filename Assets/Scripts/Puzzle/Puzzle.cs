@@ -11,7 +11,6 @@ public class Puzzle : CoinGame {
 
 		LevelManager.getInstance().events.coinShotInGoal.AddListener(() => setPlayerShotInGoal(true));
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
-		LevelManager.getInstance().events.cardPlayed.AddListener(()=>Debug.Log("Card Played"));
 	}
 
 	void Start() {
@@ -26,9 +25,9 @@ public class Puzzle : CoinGame {
 
 	protected override void evaluateShot() {
 		Events events = LevelManager.getInstance().events;
-
 		if (playerFouled()) {
 			events.playerFouled.Invoke();
+			setPlayerShotInGoal(false);
 			StartCoroutine(resetCoinSet());
 		} else if (hasPlayerShotInGoal) {
 			events.playerScored.Invoke();

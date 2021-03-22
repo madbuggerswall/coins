@@ -12,7 +12,6 @@ public class CollapsibleObstacle : MonoBehaviour {
 	void Awake() {
 		rigidBody = GetComponentInChildren<Rigidbody>();
 		uncollapsedPosition = rigidBody.position;
-		Debug.Log(uncollapsedPosition);
 		Collider collider = GetComponentInChildren<Collider>();
 		collapsedPosition = uncollapsedPosition - 2 * Vector3.up * collider.bounds.extents.y - Vector3.up;
 	}
@@ -34,7 +33,6 @@ public class CollapsibleObstacle : MonoBehaviour {
 
 	IEnumerator uncollapse() {
 		float interpolant = Mathf.InverseLerp(uncollapsedPosition.y, collapsedPosition.y, transform.position.y);
-		Debug.Log(interpolant);
 		while (true) {
 			Vector3 position = Vector3.Lerp(collapsedPosition, uncollapsedPosition, interpolant);
 			rigidBody.MovePosition(position);
@@ -43,6 +41,5 @@ public class CollapsibleObstacle : MonoBehaviour {
 			interpolant += Time.deltaTime * collapseSpeed;
 			yield return new WaitForEndOfFrame();
 		}
-		Debug.Log(rigidBody.position);
 	}
 }

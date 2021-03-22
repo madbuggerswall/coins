@@ -32,11 +32,9 @@ public class DeckHandle : EventTrigger {
 
 	public override void OnPointerUp(PointerEventData pointerEventData) {
 		if (open) {
-			Debug.Log("Pointer Up: Close");
 			LevelManager.getInstance().getGame().getCoinSet().enableControls();
 			StartCoroutine(collapse(finalPosition, initialPosition));
 		} else {
-			Debug.Log("Pointer Up: Open");
 			LevelManager.getInstance().getGame().getCoinSet().disableControls();
 			StartCoroutine(collapse(initialPosition, finalPosition));
 		}
