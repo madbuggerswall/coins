@@ -20,11 +20,3 @@ public class GameManager : MonoBehaviour {
 	public static GameManager getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 }
-
-public class PlayerData { }
-
-public class Stats {
-	int shots;
-	int fauls;
-	int cardsPlayed;
-}

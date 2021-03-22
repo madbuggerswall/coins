@@ -125,7 +125,6 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void enableControls() {
-		Debug.Log("Enable controls");
 		onMouseDown = draw;
 		onMouseDrag = aim;
 		onMouseUp = release;
@@ -133,7 +132,6 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void disableControls() {
-		Debug.Log("Disable controls");
 		onMouseDown = () => { };
 		onMouseDrag = () => { };
 		onMouseUp = () => { };

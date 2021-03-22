@@ -21,9 +21,10 @@ public class TriggerButton : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		coinCount++;
-		triggerEnter.Invoke();
-		StartCoroutine(collapse());
-
+		if (coinCount == 1) {
+			triggerEnter.Invoke();
+			StartCoroutine(collapse());
+		}
 	}
 
 	void OnTriggerExit(Collider other) {
