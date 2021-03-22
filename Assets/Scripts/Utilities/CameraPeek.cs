@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraLook : MonoBehaviour {
+public class CameraPeek : MonoBehaviour {
 	[SerializeField] Transform peekCrosshair;
 	[SerializeField] Transform coinL;
 	[SerializeField] Transform coinC;
@@ -10,10 +10,6 @@ public class CameraLook : MonoBehaviour {
 	Vector3 formerMousePosition;
 	Vector3 deltaMousePosition;
 	Vector3 averageCoinPosition;
-
-	void Awake() {
-
-	}
 
 	void Update() {
 		averageCoinPosition = (coinL.position + coinC.position + coinR.position) / 3f;

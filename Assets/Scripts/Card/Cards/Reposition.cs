@@ -14,14 +14,14 @@ public class Reposition : Card {
 
 	public override void reset() {
 		disableRepositionAreas();
-		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
+		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
 		foreach (Coin coin in coins) {
 			Destroy(coin.gameObject.GetComponent<Relocate>());
 		}
 	}
 
 	void relocateCoins() {
-		Coin[] coins = FindObjectOfType<CoinSet>().getCoins();
+		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
 		foreach (Coin coin in coins) {
 			coin.gameObject.AddComponent<Relocate>();
 		}

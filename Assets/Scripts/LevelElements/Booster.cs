@@ -4,16 +4,8 @@ using UnityEngine;
 
 public class Booster : MonoBehaviour {
 	[SerializeField] float force = 36;
-	Material material;
-	Vector2 textureOffset = new Vector2(0, 0);
-	void Awake() {
-		material = GetComponent<Renderer>().material;
-	}
 
-	void Update() {
-		textureOffset -= Vector2.up * Time.deltaTime;
-		textureOffset.y = textureOffset.y % -1;
-		material.SetTextureOffset("_MainTex", textureOffset);
+	void Awake() {
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -21,7 +13,7 @@ public class Booster : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider other) {
-		other.attachedRigidbody.AddForce(transform.up * force);
+		other.attachedRigidbody.AddForce(transform.forward * force);
 	}
 
 	void OnTriggerExit(Collider other) {
@@ -31,7 +23,7 @@ public class Booster : MonoBehaviour {
 	IEnumerator changeColor(Color first, Color last) {
 		float interpolant = 0;
 		while (true) {
-			material.color = Color.Lerp(first, last, interpolant);
+			// material.color = Color.Lerp(first, last, interpolant);
 			if (interpolant > 1) break;
 			interpolant += Time.deltaTime * 6;
 			yield return new WaitForEndOfFrame();
