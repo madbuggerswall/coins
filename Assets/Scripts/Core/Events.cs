@@ -6,6 +6,9 @@ public class Events {
 	public UnityEvent coinShotInGoal;
 	public UnityEvent coinShotEnded;
 
+	public UnityEvent collectibleCollected;
+	public UnityEvent obstacleHit;
+
 	public UnityEvent playerFouled;
 	public UnityEvent playerScored;
 	public UnityEvent playerContinuesTurn;
@@ -22,6 +25,9 @@ public class Events {
 		coinShot = new UnityEvent();
 		coinShotInGoal = new UnityEvent();
 		coinShotEnded = new UnityEvent();
+
+		collectibleCollected = new UnityEvent();
+		obstacleHit = new UnityEvent();
 
 		playerFouled = new UnityEvent();
 		playerScored = new UnityEvent();
