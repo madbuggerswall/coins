@@ -3,7 +3,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class FilePath {
-	public static readonly string playerStats = "/playerStats.dat";
+	public static readonly string stats = "/stats.dat";
+	public static readonly string achievements = "/achievements.dat";
 }
 
 public class SaveManager {
@@ -22,7 +23,7 @@ public class SaveManager {
 		return deserializedObject;
 	}
 
-	public static bool Exists(string filePath) {
+	public static bool exists(string filePath) {
 		return File.Exists(Application.persistentDataPath + filePath);
 	}
 }

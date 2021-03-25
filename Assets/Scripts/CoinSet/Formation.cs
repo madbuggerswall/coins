@@ -37,13 +37,22 @@ public class Formation {
 
 	public IEnumerator resetCoinSet() {
 		setCurrentFormation();
+		setCoinsKinematic(true);
 
 		float interpolant = 0;
 		while (true) {
 			lerpCoins(interpolant);
+			setCoinsKinematic(true);
 			if (interpolant > 1) break;
 			interpolant += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
+		}
+		setCoinsKinematic(false);
+	}
+
+	void setCoinsKinematic(bool isKinematic) {
+		foreach (Coin coin in coins) {
+			coin.GetComponent<Rigidbody>().isKinematic = isKinematic;
 		}
 	}
 }

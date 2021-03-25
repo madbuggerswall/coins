@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ApplyFinesse : MonoBehaviour {
 	[SerializeField] bool left;
-	
+
 	Rigidbody rigidBody;
 	Vector3 direction;
 
@@ -14,7 +14,9 @@ public class ApplyFinesse : MonoBehaviour {
 
 	void FixedUpdate() {
 		float speed = rigidBody.velocity.magnitude;
-		if (speed > 0.01f)
-			rigidBody.AddForce(-Vector3.forward * speed * 1f);
+		if (speed > 0.01f) {
+			rigidBody.AddForce(-Vector3.forward * speed);
+			rigidBody.AddTorque(Vector3.up * speed);
+		}
 	}
 }

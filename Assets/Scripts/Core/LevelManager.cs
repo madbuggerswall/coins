@@ -11,10 +11,16 @@ public class LevelManager : MonoBehaviour {
 	Puzzle puzzle;
 	Match match;
 
+	Stats stats;
+	Achievements achievements;
+
 	void Awake() {
 		assertSingleton();
-		events = new Events();
 		selectGameType();
+		
+		events = new Events();
+		stats = new Stats();
+		achievements = new Achievements(stats);
 	}
 
 	// Singleton 

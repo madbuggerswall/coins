@@ -1,4 +1,6 @@
+using System;
 
+[Serializable]
 public class Stats {
 	int coinsShot;
 	int obstaclesHit;
@@ -7,10 +9,28 @@ public class Stats {
 	int foulsCommitted;
 
 	public Stats() {
-		// Read from .bin to initialize
-		// If .bin file doesn't exist initialize a new instance.
+		initialize();
+		subscribeToEvents();
+	}
 
-		// Add Event listeners for 
+	void initialize() {
+		if (SaveManager.exists(FilePath.stats)) {
+			Stats stats = SaveManager.load<Stats>(FilePath.stats);
+			coinsShot = stats.coinsShot;
+			obstaclesHit = stats.obstaclesHit;
+			cardsPlayed = stats.cardsPlayed;
+			collectiblesCollected = stats.collectiblesCollected;
+			foulsCommitted = stats.foulsCommitted;
+		} else {
+			coinsShot = 0;
+			obstaclesHit = 0;
+			cardsPlayed = 0;
+			collectiblesCollected = 0;
+			foulsCommitted = 0;
+		}
+	}
+
+	void subscribeToEvents() {
 		LevelManager.getInstance().events.coinShot.AddListener(incrementCoinsShot);
 		LevelManager.getInstance().events.cardPlayed.AddListener(incrementCardsPlayed);
 		LevelManager.getInstance().events.playerFouled.AddListener(incrementFoulsCommitted);
@@ -30,5 +50,9 @@ public class Stats {
 	public int getCardsPlayed() { return cardsPlayed; }
 	public int getCollected() { return collectiblesCollected; }
 	public int getFoulsCommitted() { return foulsCommitted; }
+}
+
+public class PlayerData {
+	// Unlocked levels and their completion ranks
 }
 
