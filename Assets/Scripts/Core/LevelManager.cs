@@ -11,16 +11,22 @@ public class LevelManager : MonoBehaviour {
 	Puzzle puzzle;
 	Match match;
 
-	Stats stats;
-	Achievements achievements;
+	[SerializeField] Stats stats;
+	[SerializeField] Achievements achievements;
 
 	void Awake() {
 		assertSingleton();
 		selectGameType();
-		
+
 		events = new Events();
-		stats = new Stats();
-		achievements = new Achievements(stats);
+		stats.initialize();
+		achievements.initialize(stats);
+	}
+
+	void OnApplicationQuit() {
+		Debug.Log("Application has quit");
+		SaveManager.save<Stats>(stats, FilePath.stats);
+		SaveManager.save<Achievements>(achievements, FilePath.achievements);
 	}
 
 	// Singleton 

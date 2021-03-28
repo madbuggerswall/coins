@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class CommitNFouls : TieredAchievement {
 	public CommitNFouls(Stats stats) {
 		this.stats = stats;
@@ -12,6 +14,8 @@ public class CommitNFouls : TieredAchievement {
 		int index = tiers.IndexOf(foulsCommitted);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
+			tierCompleted = index;
+			unlocked = (index == tiers.Count) ? true : false;
 		}
 	}
 

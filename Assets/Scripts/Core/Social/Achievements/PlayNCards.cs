@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class PlayNCards : TieredAchievement {
 	public PlayNCards(Stats stats) {
 		this.stats = stats;
@@ -12,6 +14,8 @@ public class PlayNCards : TieredAchievement {
 		int index = tiers.IndexOf(cardsPlayed);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
+			tierCompleted = index;
+			unlocked = (index == tiers.Count) ? true : false;
 		}
 	}
 	public override string getDescription() {

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class CollectNCollectibles : TieredAchievement {
 	public CollectNCollectibles(Stats stats) {
 		this.stats = stats;
@@ -12,6 +14,8 @@ public class CollectNCollectibles : TieredAchievement {
 		int index = tiers.IndexOf(collected);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
+			tierCompleted = index;
+			unlocked = (index == tiers.Count) ? true : false;
 		}
 	}
 	public override string getDescription() {

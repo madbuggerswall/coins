@@ -1,19 +1,23 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class Stats {
-	int coinsShot;
-	int obstaclesHit;
-	int cardsPlayed;
-	int collectiblesCollected;
-	int foulsCommitted;
+	[SerializeField] int coinsShot;
+	[SerializeField] int obstaclesHit;
+	[SerializeField] int cardsPlayed;
+	[SerializeField] int collectiblesCollected;
+	[SerializeField] int foulsCommitted;
 
-	public Stats() {
-		initialize();
+	Stats() { }
+
+	// Initializer needed in order to contruct after serialization.
+	public void initialize() {
+		constructFromFile();
 		subscribeToEvents();
 	}
 
-	void initialize() {
+	void constructFromFile() {
 		if (SaveManager.exists(FilePath.stats)) {
 			Stats stats = SaveManager.load<Stats>(FilePath.stats);
 			coinsShot = stats.coinsShot;
