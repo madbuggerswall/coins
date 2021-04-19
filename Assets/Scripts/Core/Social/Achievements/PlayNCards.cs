@@ -3,8 +3,7 @@ using System;
 
 [Serializable]
 public class PlayNCards : TieredAchievement {
-	public PlayNCards(Stats stats) {
-		this.stats = stats;
+	public PlayNCards(Stats stats) : base(stats) {
 		tiers = new List<int> { 10, 25, 50, 100, 250, 500, 1000 };
 		LevelManager.getInstance().events.cardPlayed.AddListener(check);
 	}

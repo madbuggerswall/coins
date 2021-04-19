@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ApplyFinesse : MonoBehaviour {
-	[SerializeField] bool left;
+	bool left;
 
 	Rigidbody rigidBody;
 	Vector3 direction;
+	Vector3 torqueDirection;
 
 	void Awake() {
 		rigidBody = GetComponent<Rigidbody>();
@@ -15,8 +16,13 @@ public class ApplyFinesse : MonoBehaviour {
 	void FixedUpdate() {
 		float speed = rigidBody.velocity.magnitude;
 		if (speed > 0.01f) {
-			rigidBody.AddForce(-Vector3.forward * speed);
-			rigidBody.AddTorque(Vector3.up * speed);
+			rigidBody.AddForce(direction * speed);
+			rigidBody.AddTorque(torqueDirection * speed);
 		}
+	}
+
+	public void setDirection(bool isLeft) {
+		direction = isLeft ? Vector3.forward : -Vector3.forward;
+		torqueDirection = isLeft ? Vector3.up : -Vector3.up;
 	}
 }

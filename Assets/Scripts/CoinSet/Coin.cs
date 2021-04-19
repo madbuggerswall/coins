@@ -10,7 +10,7 @@ public class Coin : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other) {
-		if (other.gameObject.layer == Layers.obstacle) {
+		if (other.gameObject.layer != Layers.ground) {
 			LevelManager.getInstance().events.obstacleHit.Invoke();
 			SoundManager.getInstance().playImpactSound(other.collider, other.relativeVelocity.magnitude / 48);
 			Particles.getInstance().explodeAt(Particles.wallParticlePrefab, other);

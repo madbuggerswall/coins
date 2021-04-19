@@ -3,8 +3,7 @@ using System;
 
 [Serializable]
 public class CollectNCollectibles : TieredAchievement {
-	public CollectNCollectibles(Stats stats) {
-		this.stats = stats;
+	public CollectNCollectibles(Stats stats) : base(stats) {
 		tiers = new List<int> { 10, 25, 50, 100, 250, 500, 1000 };
 		LevelManager.getInstance().events.collectibleCollected.AddListener(check);
 	}

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Finesse : Card {
+	[SerializeField] bool isLeft;
 	ApplyFinesse finesseHelper;
-
+	
 	public override void apply() {
 		LevelManager.getInstance().events.coinShot.AddListener(applyFinesse);
 		LevelManager.getInstance().events.cardApplied.Invoke();
@@ -23,6 +24,7 @@ public class Finesse : Card {
 		foreach (Coin coin in coins) {
 			if (coin.gameObject.layer == Layers.thrownCoin) {
 				finesseHelper = coin.gameObject.AddComponent<ApplyFinesse>();
+				finesseHelper.setDirection(isLeft);
 			}
 		}
 	}

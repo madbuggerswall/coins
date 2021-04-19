@@ -3,8 +3,7 @@ using System;
 
 [Serializable]
 public class CommitNFouls : TieredAchievement {
-	public CommitNFouls(Stats stats) {
-		this.stats = stats;
+	public CommitNFouls(Stats stats) : base(stats) {
 		tiers = new List<int> { 10, 25, 50, 100, 250, 500, 1000 };
 		LevelManager.getInstance().events.playerFouled.AddListener(check);
 	}
