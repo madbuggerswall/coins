@@ -16,6 +16,7 @@ public class ShootNCoins : TieredAchievement {
 		if (index > tierCompleted) {
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;
+			GameObject.FindObjectOfType<AchievementUI>().displayAchievement(getDescription());
 		}
 	}
 

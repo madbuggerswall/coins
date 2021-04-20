@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 [Serializable]
 public class PlayNCards : TieredAchievement {
@@ -15,9 +16,10 @@ public class PlayNCards : TieredAchievement {
 			// Invoke achievement completed event.
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;
+			GameObject.FindObjectOfType<AchievementUI>().displayAchievement(getDescription());
 		}
 	}
 	public override string getDescription() {
-		return "Play " + tiers[tierCompleted] + "cards.";
+		return "Play " + tiers[tierCompleted] + " cards.";
 	}
 }

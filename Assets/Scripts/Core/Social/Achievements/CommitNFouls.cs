@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 [Serializable]
 public class CommitNFouls : TieredAchievement {
@@ -15,10 +16,11 @@ public class CommitNFouls : TieredAchievement {
 			// Invoke achievement completed event.
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;
+			GameObject.FindObjectOfType<AchievementUI>().displayAchievement(getDescription());
 		}
 	}
 
 	public override string getDescription() {
-		return "Commit " + tiers[tierCompleted] + "fouls";
+		return "Commit " + tiers[tierCompleted] + " fouls";
 	}
 }
