@@ -4,27 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class AchievementUI : MonoBehaviour {
-	Queue<string> descriptions;
-	Animation animation;
-
-	[SerializeField] Text description;
+	[SerializeField] Image bar;
+	[SerializeField] GameObject indicatorParent;
+	RectTransform[] indicators;
+	TieredAchievement tieredAchievement;
 
 	void Awake() {
-		descriptions = new Queue<string>();
-		animation = GetComponent<Animation>();
+		indicators = indicatorParent.GetComponentsInChildren<RectTransform>();
 	}
 
-	public void displayAchievement(string description) {
-		descriptions.Enqueue(description);
-		if (!animation.isPlaying)
-			StartCoroutine(playQueue());
-	}
+	public void initialize() {
+		float barLength = bar.rectTransform.rect.width;
 
-	IEnumerator playQueue() {
-		while (descriptions.Count > 0 && !animation.isPlaying) {
-			description.text = descriptions.Dequeue();
-			animation.Play();
-			yield return new WaitWhile(() => { return animation.isPlaying; });
+		List<int> tiers = tieredAchievement.getTiers();
+
+		int minTier = tiers[0];
+		indicators[0].GetComponentInChildren<Text>().text = minTier.ToString();
+		int maxTier = tiers[tiers.Count - 1];
+		indicators[indicators.Length - 1].GetComponentInChildren<Text>().text = maxTier.ToString();
+
+		for (int i = 1; i < tiers.Count - 1; i++) {
+			float indicatorPosX = Mathf.InverseLerp(minTier, maxTier, tiers[i]) * barLength;
+			indicators[i].anchoredPosition.Set(indicatorPosX, indicators[i].anchoredPosition.y);
 		}
 	}
+
+	public void setTieredAchievement(TieredAchievement tieredAchievement) {
+		this.tieredAchievement = tieredAchievement;
+	}
 }
+
+struct Progress { }
+struct Indicator {
+	Image indicator;
+	Text level;
+}
+

@@ -16,7 +16,7 @@ public class PlayNCards : TieredAchievement {
 			// Invoke achievement completed event.
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;
-			GameObject.FindObjectOfType<AchievementUI>().displayAchievement(getDescription());
+			GameObject.FindObjectOfType<AchievementPopupUI>().displayAchievement(getDescription());
 		}
 	}
 	public override string getDescription() {

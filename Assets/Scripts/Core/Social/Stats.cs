@@ -6,7 +6,7 @@ public class Stats {
 	[SerializeField] int coinsShot;
 	[SerializeField] int obstaclesHit;
 	[SerializeField] int cardsPlayed;
-	[SerializeField] int collectiblesCollected;
+	[SerializeField] int collectiblesFound;
 	[SerializeField] int foulsCommitted;
 
 	Stats() { }
@@ -23,14 +23,23 @@ public class Stats {
 			coinsShot = stats.coinsShot;
 			obstaclesHit = stats.obstaclesHit;
 			cardsPlayed = stats.cardsPlayed;
-			collectiblesCollected = stats.collectiblesCollected;
+			collectiblesFound = stats.collectiblesFound;
 			foulsCommitted = stats.foulsCommitted;
 		} else {
 			coinsShot = 0;
 			obstaclesHit = 0;
 			cardsPlayed = 0;
-			collectiblesCollected = 0;
+			collectiblesFound = 0;
 			foulsCommitted = 0;
+		}
+	}
+
+	public static Stats loadFromFile() {
+		if (SaveManager.exists(FilePath.stats)) {
+			Stats stats = SaveManager.load<Stats>(FilePath.stats);
+			return stats;
+		} else {
+			return new Stats();
 		}
 	}
 
@@ -45,14 +54,14 @@ public class Stats {
 	public void incrementCoinsShot() { coinsShot++; }
 	public void incrementObstaclesHit() { obstaclesHit++; }
 	public void incrementCardsPlayed() { cardsPlayed++; }
-	public void incrementCollected() { collectiblesCollected++; }
+	public void incrementCollected() { collectiblesFound++; }
 	public void incrementFoulsCommitted() { foulsCommitted++; }
 
 	// Getters
 	public int getCoinsShot() { return coinsShot; }
 	public int getObstaclesHit() { return obstaclesHit; }
 	public int getCardsPlayed() { return cardsPlayed; }
-	public int getCollected() { return collectiblesCollected; }
+	public int getCollectiblesFound() { return collectiblesFound; }
 	public int getFoulsCommitted() { return foulsCommitted; }
 }
 

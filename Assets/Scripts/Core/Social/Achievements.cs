@@ -11,6 +11,8 @@ public class Achievements {
 	[SerializeField] CollectNCollectibles collectNCollectibles;
 	[SerializeField] CommitNFouls commitNFouls;
 
+	List<Achievement> achievements = new List<Achievement>();
+
 	Achievements() { }
 
 	public void initialize(Stats stats) {
@@ -19,6 +21,7 @@ public class Achievements {
 		playNCards = new PlayNCards(stats);
 		collectNCollectibles = new CollectNCollectibles(stats);
 		commitNFouls = new CommitNFouls(stats);
+
 		if (SaveManager.exists(FilePath.achievements)) {
 			Achievements achievements = SaveManager.load<Achievements>(FilePath.achievements);
 
@@ -28,34 +31,22 @@ public class Achievements {
 			collectNCollectibles.loadProgress(achievements.collectNCollectibles);
 			commitNFouls.loadProgress(achievements.commitNFouls);
 		}
+		achievements.Add(shootNCoins);
+		achievements.Add(hitNObstacles);
+		achievements.Add(playNCards);
+		achievements.Add(collectNCollectibles);
+		achievements.Add(commitNFouls);
 	}
-}
 
-[Serializable]
-public abstract class Achievement {
-	protected Stats stats;
-	[SerializeField] protected bool unlocked;
+	public static Achievements loadFromFile() {
+		if (SaveManager.exists(FilePath.achievements)) {
+			Achievements achievements = SaveManager.load<Achievements>(FilePath.achievements);
 
-	protected Achievement() { }
-	protected Achievement(Stats stats) { this.stats = stats; }
-
-	public abstract void check();
-	public abstract string getDescription();
-	public void loadProgress(Achievement achievement) { unlocked = achievement.unlocked; }
-}
-
-[Serializable]
-public abstract class TieredAchievement : Achievement {
-	protected List<int> tiers;
-	[SerializeField] protected int tierCompleted;
-
-	protected TieredAchievement(Stats stats) : base(stats) { tierCompleted = -1; }
-
-	public float getProgress() {
-		return ((float) tierCompleted + 1) / (float) tiers.Count;
+			return achievements;
+		} else {
+			return new Achievements();
+		}
 	}
-	public void loadProgress(TieredAchievement achievement) {
-		unlocked = achievement.unlocked;
-		tierCompleted = achievement.tierCompleted;
-	}
+
+	public List<Achievement> getAchievements() { return achievements; }
 }

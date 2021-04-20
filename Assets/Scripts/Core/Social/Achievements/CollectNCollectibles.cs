@@ -10,13 +10,13 @@ public class CollectNCollectibles : TieredAchievement {
 	}
 
 	public override void check() {
-		int collected = stats.getCollected();
+		int collected = stats.getCollectiblesFound();
 		int index = tiers.IndexOf(collected);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;
-			GameObject.FindObjectOfType<AchievementUI>().displayAchievement(getDescription());
+			GameObject.FindObjectOfType<AchievementPopupUI>().displayAchievement(getDescription());
 		}
 	}
 	public override string getDescription() {
