@@ -18,6 +18,8 @@ public abstract class Achievement {
 [Serializable]
 public abstract class TieredAchievement : Achievement {
 	protected List<int> tiers;
+	protected int value;
+
 	[SerializeField] protected int tierCompleted;
 
 	protected TieredAchievement(Stats stats) : base(stats) { tierCompleted = -1; }
@@ -30,5 +32,8 @@ public abstract class TieredAchievement : Achievement {
 		tierCompleted = achievement.tierCompleted;
 	}
 
+	public abstract string getNextTierDescription();
+	public int getValue() { return value; }
+	public int getTierCompleted() { return tierCompleted; }
 	public List<int> getTiers() { return tiers; }
 }

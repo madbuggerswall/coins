@@ -10,8 +10,8 @@ public class ShootNCoins : TieredAchievement {
 	}
 
 	public override void check() {
-		int coinsShot = stats.getCoinsShot();
-		int index = tiers.IndexOf(coinsShot);
+		value = stats.getCoinsShot();
+		int index = tiers.IndexOf(value);
 		Debug.Log("Checked");
 		if (index > tierCompleted) {
 			tierCompleted = index;
@@ -22,5 +22,8 @@ public class ShootNCoins : TieredAchievement {
 
 	public override string getDescription() {
 		return "Shoot " + tiers[tierCompleted] + " coins.";
+	}
+	public override string getNextTierDescription() {
+		return "Shoot " + tiers[tierCompleted + 1] + " coins.";
 	}
 }

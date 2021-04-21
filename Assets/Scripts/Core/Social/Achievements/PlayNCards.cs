@@ -10,8 +10,8 @@ public class PlayNCards : TieredAchievement {
 	}
 
 	public override void check() {
-		int cardsPlayed = stats.getCardsPlayed();
-		int index = tiers.IndexOf(cardsPlayed);
+		value = stats.getCardsPlayed();
+		int index = tiers.IndexOf(value);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
 			tierCompleted = index;
@@ -19,7 +19,12 @@ public class PlayNCards : TieredAchievement {
 			GameObject.FindObjectOfType<AchievementPopupUI>().displayAchievement(getDescription());
 		}
 	}
+	
 	public override string getDescription() {
 		return "Play " + tiers[tierCompleted] + " cards.";
+	}
+	
+	public override string getNextTierDescription() {
+		return "Play " + tiers[tierCompleted+1] + " cards.";
 	}
 }

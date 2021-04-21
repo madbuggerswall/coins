@@ -10,8 +10,8 @@ public class CommitNFouls : TieredAchievement {
 	}
 
 	public override void check() {
-		int foulsCommitted = stats.getFoulsCommitted();
-		int index = tiers.IndexOf(foulsCommitted);
+		value = stats.getFoulsCommitted();
+		int index = tiers.IndexOf(value);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
 			tierCompleted = index;
@@ -21,6 +21,10 @@ public class CommitNFouls : TieredAchievement {
 	}
 
 	public override string getDescription() {
-		return "Commit " + tiers[tierCompleted] + " fouls";
+		return "Commit " + tiers[tierCompleted] + " fouls.";
+	}
+
+	public override string getNextTierDescription() {
+		return "Commit " + tiers[tierCompleted + 1] + " fouls.";
 	}
 }

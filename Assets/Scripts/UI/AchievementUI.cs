@@ -1,42 +1,73 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AchievementUI : MonoBehaviour {
-	[SerializeField] Image bar;
-	[SerializeField] GameObject indicatorParent;
-	RectTransform[] indicators;
+
+	[SerializeField] Text achievementProgress;
+	[SerializeField] Text description;
+
+	[SerializeField] ProgressBar progressBar;
 	TieredAchievement tieredAchievement;
 
 	void Awake() {
-		indicators = indicatorParent.GetComponentsInChildren<RectTransform>();
 	}
 
 	public void initialize() {
-		float barLength = bar.rectTransform.rect.width;
-
-		List<int> tiers = tieredAchievement.getTiers();
-
-		int minTier = tiers[0];
-		indicators[0].GetComponentInChildren<Text>().text = minTier.ToString();
-		int maxTier = tiers[tiers.Count - 1];
-		indicators[indicators.Length - 1].GetComponentInChildren<Text>().text = maxTier.ToString();
-
-		for (int i = 1; i < tiers.Count - 1; i++) {
-			float indicatorPosX = Mathf.InverseLerp(minTier, maxTier, tiers[i]) * barLength;
-			indicators[i].anchoredPosition.Set(indicatorPosX, indicators[i].anchoredPosition.y);
-		}
+		progressBar.initializeProgressBar();
 	}
 
 	public void setTieredAchievement(TieredAchievement tieredAchievement) {
 		this.tieredAchievement = tieredAchievement;
+		progressBar.setTieredAchievement(tieredAchievement);
+		description.text = tieredAchievement.getNextTierDescription();
+		achievementProgress.text = "[ " + (tieredAchievement.getTierCompleted() + 1) + " / " + tieredAchievement.getTiers().Count + " ]";
 	}
 }
 
-struct Progress { }
-struct Indicator {
-	Image indicator;
-	Text level;
+[Serializable]
+class ProgressBar {
+	static int lowerLimit = 648;
+	static int upperLimit = 12;
+
+	[SerializeField] Image progressBar;
+	[SerializeField] Text value;
+	[SerializeField] Text lowerIndicator;
+	[SerializeField] Text upperIndicator;
+	TieredAchievement tieredAchievement;
+
+	public void initializeProgressBar() {
+		List<int> tiers = tieredAchievement.getTiers();
+		int tierCompleted = tieredAchievement.getTierCompleted();
+		int currentTierValue;
+		int nextTierValue;
+
+		if (tierCompleted == -1) {
+			currentTierValue = 0;
+			nextTierValue = tiers[0];
+
+			lowerIndicator.text = "0";
+			upperIndicator.text = tiers[tierCompleted + 1].ToString();
+		} else if (tierCompleted == tiers.Count - 1) {
+			currentTierValue = tiers[tierCompleted - 1];
+			nextTierValue = tiers[tierCompleted];
+
+			lowerIndicator.text = tiers[tierCompleted - 1].ToString(); ;
+			upperIndicator.text = tiers[tierCompleted].ToString();
+		} else {
+			currentTierValue = tiers[tierCompleted];
+			nextTierValue = tiers[tierCompleted + 1];
+
+			lowerIndicator.text = tiers[tierCompleted].ToString();
+			upperIndicator.text = tiers[tierCompleted + 1].ToString();
+		}
+
+		float ratio = Mathf.InverseLerp(currentTierValue, nextTierValue, tieredAchievement.getValue());
+		progressBar.rectTransform.setRight(lowerLimit - (lowerLimit - upperLimit) * ratio);
+		value.text = tieredAchievement.getValue().ToString();
+	}
+
+	public void setTieredAchievement(TieredAchievement tieredAchievement) { this.tieredAchievement = tieredAchievement; }
 }
 

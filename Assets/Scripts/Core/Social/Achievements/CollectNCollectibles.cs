@@ -10,8 +10,8 @@ public class CollectNCollectibles : TieredAchievement {
 	}
 
 	public override void check() {
-		int collected = stats.getCollectiblesFound();
-		int index = tiers.IndexOf(collected);
+		value = stats.getCollectiblesFound();
+		int index = tiers.IndexOf(value);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
 			tierCompleted = index;
@@ -19,7 +19,11 @@ public class CollectNCollectibles : TieredAchievement {
 			GameObject.FindObjectOfType<AchievementPopupUI>().displayAchievement(getDescription());
 		}
 	}
+
 	public override string getDescription() {
 		return "Collect " + tiers[tierCompleted] + " collectibles.";
+	}
+	public override string getNextTierDescription() {
+		return "Collect " + tiers[tierCompleted + 1] + " collectibles.";
 	}
 }

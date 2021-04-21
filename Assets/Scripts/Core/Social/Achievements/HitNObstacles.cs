@@ -10,8 +10,8 @@ public class HitNObstacles : TieredAchievement {
 	}
 
 	public override void check() {
-		int obstaclesHit = stats.getObstaclesHit();
-		int index = tiers.IndexOf(obstaclesHit);
+		value = stats.getObstaclesHit();
+		int index = tiers.IndexOf(value);
 		if (index > tierCompleted) {
 			// Invoke achievement completed event.
 			tierCompleted = index;
@@ -21,5 +21,9 @@ public class HitNObstacles : TieredAchievement {
 	}
 	public override string getDescription() {
 		return "Hit " + tiers[tierCompleted] + " obstacles.";
+	}
+
+	public override string getNextTierDescription() {
+		return "Hit " + tiers[tierCompleted + 1] + " obstacles.";
 	}
 }

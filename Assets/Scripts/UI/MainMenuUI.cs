@@ -19,9 +19,15 @@ public class MainMenuUI : MonoBehaviour {
 
 		play.onClick.AddListener(loadLevelsPage);
 		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
+
 		stats.onClick.AddListener(() => {
 			animation.Play("hideMainMenuPanel");
 			FindObjectOfType<StatsUI>().GetComponent<Animation>().Play("displayStatsPanel");
+		});
+
+		achievements.onClick.AddListener(() => {
+			animation.Play("hideMainMenuPanel");
+			FindObjectOfType<AchievementsUI>().GetComponent<Animation>().Play("displayAchievementsPanel");
 		});
 	}
 
