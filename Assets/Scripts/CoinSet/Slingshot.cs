@@ -54,7 +54,7 @@ public class Slingshot : MonoBehaviour {
 	void OnMouseUp() {
 		onMouseUp();
 	}
-
+	
 	void draw() {
 		initialPos = PlayerInput.getPosition();
 		crosshair.setPoints(transform.position, transform.position);

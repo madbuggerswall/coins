@@ -32,6 +32,7 @@ public static class PlayerInput {
 
 	public static Vector3 getTouchPosition() {
 		if (Input.touchCount > 0) {
+			Debug.Log("Touched");
 			Vector3 touchPosition = Input.GetTouch(0).position;
 			// touchPosition.z = Camera.main.nearClipPlane;
 			touchPosition.z = Camera.main.transform.position.y;

@@ -16,6 +16,18 @@ public class GameManager : MonoBehaviour {
 		Application.targetFrameRate = 60;
 	}
 
+	void OnApplicationPause(bool pauseStatus) {
+
+	}
+
+	void OnApplicationFocus(bool focusStatus) {
+
+	}
+
+	void OnApplicationQuit() {
+
+	}
+
 	// Singleton 
 	public static GameManager getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }

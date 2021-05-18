@@ -20,6 +20,8 @@ public class MainMenuUI : MonoBehaviour {
 		play.onClick.AddListener(loadLevelsPage);
 		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
 
+		if (stats == null) { Debug.Log("stats null"); }
+
 		stats.onClick.AddListener(() => {
 			animation.Play("hideMainMenuPanel");
 			FindObjectOfType<StatsUI>().GetComponent<Animation>().Play("displayStatsPanel");
@@ -30,6 +32,8 @@ public class MainMenuUI : MonoBehaviour {
 			FindObjectOfType<AchievementsUI>().GetComponent<Animation>().Play("displayAchievementsPanel");
 		});
 	}
+
+	
 
 	void loadLevelsPage() {
 		GameManager.getInstance().levels.loadLevelsPage();
