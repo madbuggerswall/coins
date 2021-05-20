@@ -7,7 +7,7 @@ public class Blocker : MonoBehaviour {
 	float restingY = -0.6f;
 
 	Rigidbody rigidBody;
-	Collider collider;
+	new Collider collider;
 
 	void Awake() {
 		rigidBody = GetComponent<Rigidbody>();

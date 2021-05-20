@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AchievementPopupUI : MonoBehaviour {
 	Queue<string> descriptions;
-	Animation animation;
+	new Animation animation;
 
 	[SerializeField] Text description;
 

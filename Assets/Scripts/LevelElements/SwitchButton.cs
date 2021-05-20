@@ -9,7 +9,7 @@ public class SwitchButton : MonoBehaviour {
 	[SerializeField] UnityEvent activate;
 	[SerializeField] UnityEvent deactivate;
 
-	Animation animation;
+	new Animation animation;
 	Material switchMaterial;
 
 	int coinCount = 0;

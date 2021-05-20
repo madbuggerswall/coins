@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour {
 	Stats stats;
-	Animation animation;
+	new Animation animation;
 
 	[SerializeField] Text coinsShot;
 	[SerializeField] Text obstaclesHit;

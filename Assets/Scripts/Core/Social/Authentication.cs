@@ -6,7 +6,7 @@ using Firebase.Auth;
 
 public class Authentication : MonoBehaviour {
 	static Authentication instance;
-	
+
 	FirebaseUser user;
 
 	void Awake() {
@@ -19,17 +19,19 @@ public class Authentication : MonoBehaviour {
 
 	// TODO: Implement Google sing-in
 	IEnumerator signInWithGoogle() {
+		// TODO: Native extension for getting credential prerequisites.
 		string googleIdToken = "", googleAccessToken = "";
+		
 		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
 		Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
 		var signInTask = authentication.SignInWithCredentialAsync(credential);
 		yield return new WaitUntil(() => signInTask.IsCompleted);
 
 		if (signInTask.Exception != null) {
-			Debug.LogWarning($"Failed to register task with{signInTask.Exception}");
+			ToastUI.getInstance().displayToast($"Failed to register task with{signInTask.Exception}");
 		} else {
-			Firebase.Auth.FirebaseUser newUser = signInTask.Result;
-			Debug.LogFormat("Firebase user created successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
+			user = signInTask.Result;
+			ToastUI.getInstance().displayToast("Firebase user created successfully: " + user.DisplayName + " " + user.UserId);
 		}
 	}
 
@@ -41,27 +43,42 @@ public class Authentication : MonoBehaviour {
 		yield return new WaitUntil(() => signInTask.IsCompleted);
 
 		if (signInTask.Exception != null) {
-			Debug.LogWarning($"Failed to register task with{signInTask.Exception}");
+			ToastUI.getInstance().displayToast($"Failed to register task with {signInTask.Exception}");
 		} else {
 			user = signInTask.Result;
-			Debug.LogFormat("Firebase user created successfully: {0} ({1})", user.DisplayName, user.UserId);
+			ToastUI.getInstance().displayToast("Firebase user created successfully: " + user.DisplayName + " " + user.UserId);
 		}
 	}
 
 	// Register user
-	IEnumerator registerUser(string email, string password) {
+	public IEnumerator registerUser(string email, string password) {
 		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
 		var registrationTask = authentication.CreateUserWithEmailAndPasswordAsync(email, password);
 		yield return new WaitUntil(() => registrationTask.IsCompleted);
 
 		if (registrationTask.Exception != null) {
-			Debug.LogWarning($"Failed to register task with{registrationTask.Exception}");
+			ToastUI.getInstance().displayToast($"Failed to register task with{registrationTask.Exception}");
 		} else {
 			user = registrationTask.Result;
-			Debug.LogFormat("Firebase user created successfully: {0} ({1})", user.DisplayName, user.UserId);
+			ToastUI.getInstance().displayToast("Firebase user created successfully: " + user.DisplayName + " " + user.UserId);
 			StartCoroutine(sendVerificationEmail());
 		}
 	}
+
+	// Sign in with mail and password
+	IEnumerator signInWithEmail(string email, string password) {
+		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
+		var signInTask = authentication.SignInWithEmailAndPasswordAsync(email, password);
+		yield return new WaitUntil(() => signInTask.IsCompleted);
+
+		if (signInTask.Exception != null) {
+			ToastUI.getInstance().displayToast($"Failed to sign in with {signInTask.Exception}");
+		} else {
+			user = signInTask.Result;
+			ToastUI.getInstance().displayToast("Firebase user created successfully: " + user.DisplayName + " " + user.UserId);
+		}
+	}
+
 
 	IEnumerator sendVerificationEmail() {
 		if (user != null) {
@@ -70,14 +87,14 @@ public class Authentication : MonoBehaviour {
 				yield return new WaitUntil(() => emailTask.IsCompleted);
 
 				if (emailTask.IsCanceled) {
-					Debug.LogError("SendEmailVerificationAsync was canceled.");
+					ToastUI.getInstance().displayToast("SendEmailVerificationAsync was canceled.");
 				} else if (emailTask.IsFaulted) {
-					Debug.LogError("SendEmailVerificationAsync encountered an error: " + emailTask.Exception);
+					ToastUI.getInstance().displayToast("SendEmailVerificationAsync encountered an error: " + emailTask.Exception);
 				} else {
-					Debug.Log("Email sent successfully.");
+					ToastUI.getInstance().displayToast("Email sent successfully.");
 				}
 			} else {
-				Debug.Log("User is verified");
+				ToastUI.getInstance().displayToast("User is verified");
 			}
 		}
 	}

@@ -9,7 +9,7 @@ public class AchievementsUI : MonoBehaviour {
 	Stats stats;
 
 	[SerializeField] Button returnButton;
-	Animation animation;
+	new Animation animation;
 
 	void Awake() {
 		stats = Stats.loadFromFile();

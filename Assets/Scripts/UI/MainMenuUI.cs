@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour {
-	Animation animation;
+	new Animation animation;
 
 	[SerializeField] Button play;
 	[SerializeField] Button multiplayer;
