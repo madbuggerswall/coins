@@ -41,7 +41,6 @@ public class Achievements {
 	public static Achievements loadFromFile() {
 		if (SaveManager.exists(FilePath.achievements)) {
 			Achievements achievements = SaveManager.load<Achievements>(FilePath.achievements);
-
 			return achievements;
 		} else {
 			return new Achievements();

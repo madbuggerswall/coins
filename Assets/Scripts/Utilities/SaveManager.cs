@@ -5,6 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 public static class FilePath {
 	public static readonly string stats = "/stats.dat";
 	public static readonly string achievements = "/achievements.dat";
+	public static readonly string stageManager = "/stageManager.dat";
+
 }
 
 public class SaveManager {

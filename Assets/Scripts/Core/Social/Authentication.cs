@@ -8,21 +8,37 @@ public class Authentication : MonoBehaviour {
 	static Authentication instance;
 
 	FirebaseUser user;
+	FirebaseAuth authentication;
 
 	void Awake() {
 		assertSingleton();
+		authentication = FirebaseAuth.DefaultInstance;
+		authentication.StateChanged += authStateChanged;
 	}
 
 	// Singleton
 	public static Authentication getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 
+	// Check for persistent login behaviour
+	void authStateChanged(object sender, System.EventArgs eventArgs) {
+		if (authentication.CurrentUser != user) {
+			bool signedIn = user != authentication.CurrentUser && authentication.CurrentUser != null;
+			if (!signedIn && user != null) {
+				ToastUI.getInstance().displayToast("Signed out " + user.UserId);
+			}
+			user = authentication.CurrentUser;
+			if (signedIn) {
+				ToastUI.getInstance().displayToast("Signed in " + user.Email);
+			}
+		}
+	}
+
 	// TODO: Implement Google sing-in
 	IEnumerator signInWithGoogle() {
 		// TODO: Native extension for getting credential prerequisites.
 		string googleIdToken = "", googleAccessToken = "";
-		
-		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
+
 		Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
 		var signInTask = authentication.SignInWithCredentialAsync(credential);
 		yield return new WaitUntil(() => signInTask.IsCompleted);
@@ -37,8 +53,6 @@ public class Authentication : MonoBehaviour {
 
 	// Anonymous sign-in
 	IEnumerator signInAnonymously() {
-		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
-
 		var signInTask = authentication.SignInAnonymouslyAsync();
 		yield return new WaitUntil(() => signInTask.IsCompleted);
 
@@ -67,7 +81,6 @@ public class Authentication : MonoBehaviour {
 
 	// Sign in with mail and password
 	IEnumerator signInWithEmail(string email, string password) {
-		FirebaseAuth authentication = FirebaseAuth.DefaultInstance;
 		var signInTask = authentication.SignInWithEmailAndPasswordAsync(email, password);
 		yield return new WaitUntil(() => signInTask.IsCompleted);
 

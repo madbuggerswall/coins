@@ -8,14 +8,14 @@ public class ToastUI : MonoBehaviour {
 	static ToastUI instance;
 
 	Queue<string> messages;
-	new Animation animation;
+	Animation animPlayer;
 
 	[SerializeField] Text message;
 
 	void Awake() {
 		assertSingleton();
 		messages = new Queue<string>();
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 	}
 
 	// Singleton
@@ -24,15 +24,15 @@ public class ToastUI : MonoBehaviour {
 
 	public void displayToast(string message) {
 		messages.Enqueue(message);
-		if (!animation.isPlaying)
+		if (!animPlayer.isPlaying)
 			StartCoroutine(playQueue());
 	}
 
 	IEnumerator playQueue() {
-		while (messages.Count > 0 && !animation.isPlaying) {
+		while (messages.Count > 0 && !animPlayer.isPlaying) {
 			message.text = messages.Dequeue();
-			animation.Play();
-			yield return new WaitWhile(() => { return animation.isPlaying; });
+			animPlayer.Play();
+			yield return new WaitWhile(() => { return animPlayer.isPlaying; });
 		}
 	}
 }

@@ -38,6 +38,7 @@ public class Puzzle : CoinGame {
 			events.playerHasNoShotsLeft.Invoke();
 		}
 	}
+
 	public void setState(PuzzleState.State state) { this.state = state; }
 	public Formation getFormation() { return formation; }
 }

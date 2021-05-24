@@ -9,15 +9,15 @@ public class AchievementsUI : MonoBehaviour {
 	Stats stats;
 
 	[SerializeField] Button returnButton;
-	new Animation animation;
+	Animation animPlayer;
 
 	void Awake() {
 		stats = Stats.loadFromFile();
 		achievements = Achievements.loadFromFile();
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 
 		returnButton.onClick.AddListener(() => {
-			animation.Play("hideAchievementsPanel");
+			animPlayer.Play("hideAchievementsPanel");
 			FindObjectOfType<MainMenuUI>().GetComponent<Animation>().Play("displayMainMenuPanel");
 		});
 

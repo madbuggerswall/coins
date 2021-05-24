@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CredentialUI : MonoBehaviour {
-	new Animation animation;
+	Animation animPlayer;
 
 	[SerializeField] InputField emailField;
 	[SerializeField] InputField passwordField;
@@ -14,10 +14,10 @@ public class CredentialUI : MonoBehaviour {
 	[SerializeField] Button signUp;
 
 	void Awake() {
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 
 		cancel.onClick.AddListener(() => {
-			animation.Play("hideCredentialPanel");
+			animPlayer.Play("hideCredentialPanel");
 			FindObjectOfType<MainMenuUI>().GetComponent<Animation>().Play("displayMainMenuPanel");
 		});
 

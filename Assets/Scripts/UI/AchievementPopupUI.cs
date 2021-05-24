@@ -5,26 +5,26 @@ using UnityEngine.UI;
 
 public class AchievementPopupUI : MonoBehaviour {
 	Queue<string> descriptions;
-	new Animation animation;
+	Animation animPlayer;
 
 	[SerializeField] Text description;
 
 	void Awake() {
 		descriptions = new Queue<string>();
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 	}
 
 	public void displayAchievement(string description) {
 		descriptions.Enqueue(description);
-		if (!animation.isPlaying)
+		if (!animPlayer.isPlaying)
 			StartCoroutine(playQueue());
 	}
 
 	IEnumerator playQueue() {
-		while (descriptions.Count > 0 && !animation.isPlaying) {
+		while (descriptions.Count > 0 && !animPlayer.isPlaying) {
 			description.text = descriptions.Dequeue();
-			animation.Play();
-			yield return new WaitWhile(() => { return animation.isPlaying; });
+			animPlayer.Play();
+			yield return new WaitWhile(() => { return animPlayer.isPlaying; });
 		}
 	}
 }

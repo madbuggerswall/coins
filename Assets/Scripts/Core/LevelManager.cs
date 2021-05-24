@@ -7,10 +7,12 @@ public class LevelManager : MonoBehaviour {
 	static LevelManager instance;
 	public Events events;
 
+	// Gametype utils
 	public Func<CoinGame> getGame;
 	Puzzle puzzle;
 	Match match;
 
+	Level level;
 	[SerializeField] Stats stats;
 	[SerializeField] Achievements achievements;
 
@@ -41,5 +43,11 @@ public class LevelManager : MonoBehaviour {
 		} else {
 			getGame = () => { return puzzle; };
 		}
+	}
+
+
+	// TODO: Rename function
+	void writeGameData() {
+		
 	}
 }

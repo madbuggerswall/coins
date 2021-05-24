@@ -15,12 +15,12 @@ public class PauseMenu : MonoBehaviour {
 		play.onClick.AddListener(() => pauseGame(!gameObject.activeSelf));
 		restart.onClick.AddListener(() => {
 			pauseGame(false);
-			GameManager.getInstance().levels.restartLevel();
+			GameManager.getInstance().levelLoader.restartLevel();
 		});
 
 		home.onClick.AddListener(() => {
 			pauseGame(false);
-			GameManager.getInstance().levels.loadMainMenu();
+			GameManager.getInstance().levelLoader.loadMainMenu();
 		});
 
 		sound.onClick.AddListener(() => {

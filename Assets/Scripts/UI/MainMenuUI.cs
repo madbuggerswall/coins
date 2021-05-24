@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour {
-	new Animation animation;
+	Animation animPlayer;
 
 	[SerializeField] Button play;
 	[SerializeField] Button multiplayer;
@@ -15,28 +15,24 @@ public class MainMenuUI : MonoBehaviour {
 	[SerializeField] Button settings;
 
 	void Awake() {
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 
-		play.onClick.AddListener(loadLevelsPage);
+		play.onClick.AddListener(() => { 
+			
+		});
 		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
 
 		if (stats == null) { Debug.Log("stats null"); }
 
 		stats.onClick.AddListener(() => {
-			animation.Play("hideMainMenuPanel");
+			animPlayer.Play("hideMainMenuPanel");
 			FindObjectOfType<StatsUI>().GetComponent<Animation>().Play("displayStatsPanel");
 		});
 
 		achievements.onClick.AddListener(() => {
-			animation.Play("hideMainMenuPanel");
+			animPlayer.Play("hideMainMenuPanel");
 			FindObjectOfType<AchievementsUI>().GetComponent<Animation>().Play("displayAchievementsPanel");
 		});
-	}
-
-	
-
-	void loadLevelsPage() {
-		GameManager.getInstance().levels.loadLevelsPage();
 	}
 
 	void loadOfflineMultiplayer() {

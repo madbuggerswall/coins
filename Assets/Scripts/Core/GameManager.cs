@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 	static GameManager instance;
 
-	public Levels levels;
+	public LevelLoader levelLoader;
+	public StageManager stageManager;
 
 	void Awake() {
 		assertSingleton();
-		levels = new Levels();
+		levelLoader = new LevelLoader();
+		stageManager = StageManager.loadFromFile();
 
 		Application.targetFrameRate = 60;
+		DontDestroyOnLoad(this);
 	}
 
 	void OnApplicationPause(bool pauseStatus) {

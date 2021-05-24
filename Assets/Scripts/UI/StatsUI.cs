@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour {
 	Stats stats;
-	new Animation animation;
+	Animation animPlayer;
 
 	[SerializeField] Text coinsShot;
 	[SerializeField] Text obstaclesHit;
@@ -17,7 +17,7 @@ public class StatsUI : MonoBehaviour {
 
 	void Awake() {
 		stats = Stats.loadFromFile();
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 
 		coinsShot.text = stats.getCoinsShot().ToString();
 		obstaclesHit.text = stats.getObstaclesHit().ToString();
@@ -26,7 +26,7 @@ public class StatsUI : MonoBehaviour {
 		foulsCommitted.text = stats.getFoulsCommitted().ToString();
 
 		returnButton.onClick.AddListener(() => {
-			animation.Play("hideStatsPanel");
+			animPlayer.Play("hideStatsPanel");
 			FindObjectOfType<MainMenuUI>().GetComponent<Animation>().Play("displayMainMenuPanel");
 		});
 	}

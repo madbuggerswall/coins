@@ -9,7 +9,7 @@ public class SwitchButton : MonoBehaviour {
 	[SerializeField] UnityEvent activate;
 	[SerializeField] UnityEvent deactivate;
 
-	new Animation animation;
+	Animation animPlayer;
 	Material switchMaterial;
 
 	int coinCount = 0;
@@ -20,7 +20,7 @@ public class SwitchButton : MonoBehaviour {
 
 	void Awake() {
 		switchMaterial = switchButton.GetComponent<Renderer>().material;
-		animation = GetComponent<Animation>();
+		animPlayer = GetComponent<Animation>();
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -33,10 +33,10 @@ public class SwitchButton : MonoBehaviour {
 			isSwitchOn = !isSwitchOn;
 			if (isSwitchOn) {
 				activate.Invoke();
-				animation.Play(turnGreen);
+				animPlayer.Play(turnGreen);
 			} else {
 				deactivate.Invoke();
-				animation.Play(turnRed);
+				animPlayer.Play(turnRed);
 			}
 		}
 	}
