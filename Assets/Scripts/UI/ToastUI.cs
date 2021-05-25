@@ -16,6 +16,7 @@ public class ToastUI : MonoBehaviour {
 		assertSingleton();
 		messages = new Queue<string>();
 		animPlayer = GetComponent<Animation>();
+		DontDestroyOnLoad(this);
 	}
 
 	// Singleton

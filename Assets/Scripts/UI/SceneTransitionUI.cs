@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class SceneTransitionUI : MonoBehaviour {
 	static SceneTransitionUI instance;
-	Animation animPlayer;
 
 	bool toggle = false;
-	void Awake() {
-		assertSingleton();
-		animPlayer = GetComponent<Animation>();
-	}
 
-	void Update() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			toggle = !toggle;
-			if (toggle) lighten();
-			else darken();
-		}
+	void OnEnable() {
+		Debug.Log("OnEnable SceneTransitionUI");
+		assertSingleton();
 	}
 
 	// Singleton 
@@ -25,10 +17,10 @@ public class SceneTransitionUI : MonoBehaviour {
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 
 	public void lighten() {
-		animPlayer.Play("LightenSceneTransition");
+		GetComponent<Animation>().Play("LightenSceneTransition");
 	}
 
 	public void darken() {
-		animPlayer.Play("DarkenSceneTransition");
+		GetComponent<Animation>().Play("DarkenSceneTransition");
 	}
 }

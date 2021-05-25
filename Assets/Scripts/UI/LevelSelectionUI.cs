@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelSelectionUI : MonoBehaviour {
+	Animation animPlayer;
+
 	StageManager stageManager;
 
 	const float marginVert = 40;
@@ -12,9 +14,17 @@ public class LevelSelectionUI : MonoBehaviour {
 	[SerializeField] RectTransform levelsParent;
 	[SerializeField] RectTransform levelPanelPrefab;
 
+	[SerializeField] Button returnButton;
+
 	void Awake() {
+		animPlayer = GetComponent<Animation>();
 		stageManager = GameManager.getInstance().stageManager;
 		initializeLevelList();
+
+		returnButton.onClick.AddListener(() => {
+			animPlayer.Play("hideLevelSelectionPanel");
+			FindObjectOfType<MainMenuUI>().GetComponent<Animation>().Play("displayMainMenuPanel");
+		});
 	}
 
 	void initializeLevelList() {

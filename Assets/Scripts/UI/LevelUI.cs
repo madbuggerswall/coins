@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,11 @@ public class LevelUI : MonoBehaviour {
 		stars = levelInfo.GetComponentsInChildren<Image>();
 		playButton = GetComponent<Button>();
 
-		playButton.onClick.AddListener(() => { });
+		playButton.onClick.AddListener(() => {
+			string scenePath = Path.Combine(level.getStagePath(), level.getLevelPath());
+			Debug.Log(scenePath);
+			GameManager.getInstance().levelLoader.loadLevel(scenePath);
+		});
 	}
 
 	void lockLevel(bool isUnlocked) {

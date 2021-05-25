@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 [Serializable]
 public class Stage {
-	readonly string stagePath;
-	readonly string stageName;
-	readonly int stageNumber;
+	[SerializeField] readonly string stagePath;
+	[SerializeField] readonly string stageName;
+	[SerializeField] readonly int stageNumber;
 
 	[SerializeField] bool isUnlocked;
 	[SerializeField] bool isCompleted;
@@ -27,4 +27,5 @@ public class Stage {
 	public void addLevel(Level level) { levels.Add(level); }
 
 	public List<Level> getLevels() { return levels; }
+	public string getStagePath() { return stagePath; }
 }

@@ -23,8 +23,13 @@ public class LevelManager : MonoBehaviour {
 		events = new Events();
 		stats.initialize();
 		achievements.initialize(stats);
+
 	}
 
+	void Start() {
+		SceneTransitionUI.getInstance().lighten();
+	}
+	
 	void OnApplicationQuit() {
 		Debug.Log("Application has quit");
 		SaveManager.save<Stats>(stats, FilePath.stats);
@@ -43,11 +48,5 @@ public class LevelManager : MonoBehaviour {
 		} else {
 			getGame = () => { return puzzle; };
 		}
-	}
-
-
-	// TODO: Rename function
-	void writeGameData() {
-		
 	}
 }

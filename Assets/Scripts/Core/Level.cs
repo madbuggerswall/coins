@@ -3,6 +3,7 @@ using System;
 
 [Serializable]
 public class Level {
+	[SerializeField] readonly string stagePath;
 	[SerializeField] readonly string levelPath;
 	[SerializeField] readonly string levelName;
 	[SerializeField] readonly int levelNumber;
@@ -12,10 +13,11 @@ public class Level {
 	[SerializeField] bool isUnlocked;
 	[SerializeField] bool[] completion = { false, false, false };
 
-	public Level(string levelPath, string levelName, int levelNumber) {
+	public Level(string stagePath, string levelPath, string levelName, int levelNumber) {
+		this.stagePath = stagePath;
+		this.levelPath = levelPath;
 		this.levelName = levelName;
 		this.levelNumber = levelNumber;
-		this.levelPath = levelPath;
 
 		isUnlocked = (levelNumber == 1);
 	}
@@ -24,6 +26,8 @@ public class Level {
 	public void unlock() { isUnlocked = true; }
 
 	// Getters
+
+	public string getStagePath() { return stagePath; }
 	public string getLevelPath() { return levelPath; }
 	public string getLevelName() { return levelName; }
 	public int getLevelNumber() { return levelNumber; }

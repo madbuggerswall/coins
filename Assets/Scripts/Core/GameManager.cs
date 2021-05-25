@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 
 		Application.targetFrameRate = 60;
 		DontDestroyOnLoad(this);
+
 	}
 
 	void OnApplicationPause(bool pauseStatus) {

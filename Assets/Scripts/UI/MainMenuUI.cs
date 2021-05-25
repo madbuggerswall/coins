@@ -17,12 +17,12 @@ public class MainMenuUI : MonoBehaviour {
 	void Awake() {
 		animPlayer = GetComponent<Animation>();
 
-		play.onClick.AddListener(() => { 
-			
+		play.onClick.AddListener(() => {
+			animPlayer.Play("hideMainMenuPanel");
+			FindObjectOfType<LevelSelectionUI>().GetComponent<Animation>().Play("displayLevelSelectionPanel");
 		});
-		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
 
-		if (stats == null) { Debug.Log("stats null"); }
+		multiplayer.onClick.AddListener(loadOfflineMultiplayer);
 
 		stats.onClick.AddListener(() => {
 			animPlayer.Play("hideMainMenuPanel");
@@ -33,6 +33,11 @@ public class MainMenuUI : MonoBehaviour {
 			animPlayer.Play("hideMainMenuPanel");
 			FindObjectOfType<AchievementsUI>().GetComponent<Animation>().Play("displayAchievementsPanel");
 		});
+	}
+
+	void Start() {
+		// Lighten the screen from dark everytime main menu scene is loaded.
+		SceneTransitionUI.getInstance().lighten();
 	}
 
 	void loadOfflineMultiplayer() {
