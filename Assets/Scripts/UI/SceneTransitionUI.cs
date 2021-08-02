@@ -8,7 +8,6 @@ public class SceneTransitionUI : MonoBehaviour {
 	bool toggle = false;
 
 	void OnEnable() {
-		Debug.Log("OnEnable SceneTransitionUI");
 		assertSingleton();
 	}
 

@@ -23,8 +23,9 @@ public class LevelUI : MonoBehaviour {
 
 		playButton.onClick.AddListener(() => {
 			string scenePath = Path.Combine(level.getStagePath(), level.getLevelPath());
-			Debug.Log(scenePath);
-			GameManager.getInstance().levelLoader.loadLevel(scenePath);
+			GameManager gameManager = GameManager.getInstance();
+			gameManager.stageManager.setLastLoadedLevel(level);
+			gameManager.levelLoader.loadLevel(scenePath);
 		});
 	}
 

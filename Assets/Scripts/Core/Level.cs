@@ -24,7 +24,7 @@ public class Level {
 
 	public void incrementAttempts() { attempts++; }
 	public void unlock() { isUnlocked = true; }
-
+	public void markCompleted() { isCompleted = true; }
 	// Getters
 
 	public string getStagePath() { return stagePath; }

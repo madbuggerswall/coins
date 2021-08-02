@@ -24,16 +24,26 @@ public class LevelManager : MonoBehaviour {
 		stats.initialize();
 		achievements.initialize(stats);
 
+		// Migrate this block to a more context relevant script.
+		events.playerScored.AddListener(() => {
+			GameManager.getInstance().stageManager.getLastLoadedLevel().markCompleted();
+			GameManager.getInstance().stageManager.unlockNextLevel();
+			SaveManager.save<Stats>(stats, FilePath.stats);
+			SaveManager.save<Achievements>(achievements, FilePath.achievements);
+			SaveManager.save<StageManager>(GameManager.getInstance().stageManager, FilePath.stageManager);
+		});
 	}
 
 	void Start() {
 		SceneTransitionUI.getInstance().lighten();
 	}
-	
+
+	// Migrate this block to a more context relevant script.
 	void OnApplicationQuit() {
 		Debug.Log("Application has quit");
 		SaveManager.save<Stats>(stats, FilePath.stats);
 		SaveManager.save<Achievements>(achievements, FilePath.achievements);
+		SaveManager.save<StageManager>(GameManager.getInstance().stageManager, FilePath.stageManager);
 	}
 
 	// Singleton 

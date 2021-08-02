@@ -1,13 +1,18 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class StageManager {
+	[SerializeField] List<Stage> stages;
 	[SerializeField] Stage japaneseGarden;
+
 	Level lastLoadedLevel;
 
 	public StageManager() {
 		japaneseGarden = new Stage("Scenes/Puzzle Levels/Japanese Garden", "Japanese Garden", 1);
+		stages = new List<Stage>();
+		stages.Add(japaneseGarden);
 
 		Level level1 = new Level(japaneseGarden.getStagePath(), "Puzzle 1", "First Slings", 1);
 		Level level2 = new Level(japaneseGarden.getStagePath(), "Puzzle 2", "Cards", 2);
@@ -34,5 +39,16 @@ public class StageManager {
 		}
 	}
 
+	public void unlockNextLevel() {
+		bool nextLevelUnlocked = japaneseGarden.unlockNextLevel(lastLoadedLevel);
+		if (!nextLevelUnlocked) {
+			// TODO: Unlock next stage
+		}
+	}
+
+	// Getters
 	public Stage getStage() { return japaneseGarden; }
+	public Level getLastLoadedLevel() { return lastLoadedLevel; }
+	// Setters
+	public void setLastLoadedLevel(Level level) { lastLoadedLevel = level; }
 }

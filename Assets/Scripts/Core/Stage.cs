@@ -25,7 +25,16 @@ public class Stage {
 	}
 
 	public void addLevel(Level level) { levels.Add(level); }
-
+	public bool unlockNextLevel(Level level) {
+		int index = levels.IndexOf(level) + 1;
+		if(index >= levels.Count){
+			return false;
+		}else{
+			levels[index].unlock();
+			return true;
+		}
+	}
+	// Getters
 	public List<Level> getLevels() { return levels; }
 	public string getStagePath() { return stagePath; }
 }
