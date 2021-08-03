@@ -4,6 +4,7 @@
 # !ProjectSettings
 Assets/*
 !Scripts
+!Shaders
 !Editor
 !omnisharp.json
 !.gitignore

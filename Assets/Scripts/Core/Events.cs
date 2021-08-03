@@ -3,6 +3,7 @@ using UnityEngine.Events;
 public class Events {
 	public UnityEvent coinStatusChanged;
 	public UnityEvent coinShot;
+	public UnityEvent coinPassedThrough;
 	public UnityEvent coinShotInGoal;
 	public UnityEvent coinShotEnded;
 
@@ -23,6 +24,7 @@ public class Events {
 	public Events() {
 		coinStatusChanged = new UnityEvent();
 		coinShot = new UnityEvent();
+		coinPassedThrough = new UnityEvent();
 		coinShotInGoal = new UnityEvent();
 		coinShotEnded = new UnityEvent();
 

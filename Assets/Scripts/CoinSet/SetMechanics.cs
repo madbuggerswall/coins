@@ -34,6 +34,7 @@ public class SetMechanics {
 		int layerMask = 1 << Layers.thrownCoin;
 		if (Physics.Linecast(startPos, endPos, layerMask)) {
 			passedThrough = true;
+			LevelManager.getInstance().events.coinPassedThrough.Invoke();
 		}
 	}
 

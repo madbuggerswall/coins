@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Ditch this state machine in favor of event-driven control.
 public interface CoinSetState {
 	void hasCoinsStopped();
 	void checkPassThrough();

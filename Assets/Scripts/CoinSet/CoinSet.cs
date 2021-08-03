@@ -6,13 +6,13 @@ using UnityEngine.Events;
 public class CoinSet : MonoBehaviour {
 	SelectedCoinIndicator selectedCoinIndicator;
 	SetMechanics setMechanics;
-	Guide guide;
+	GuideString guide;
 
 	Coin[] coins;
 	CoinSetState state;
 	void Awake() {
 		coins = GetComponentsInChildren<Coin>();
-		guide = GetComponentInChildren<Guide>();
+		guide = GetComponentInChildren<GuideString>();
 
 		setMechanics = new SetMechanics(this);
 		// Move this line to a more context-appropriate script/function.
@@ -65,6 +65,6 @@ public class CoinSet : MonoBehaviour {
 	// Setters & Getters
 	public void setState(CoinSetState state) { this.state = state; }
 	public Coin[] getCoins() { return coins; }
-	public Guide getGuide() { return guide; }
+	public GuideString getGuide() { return guide; }
 	public SetMechanics getMechanics() { return setMechanics; }
 }
