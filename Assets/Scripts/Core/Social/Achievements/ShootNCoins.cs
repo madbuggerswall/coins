@@ -12,7 +12,6 @@ public class ShootNCoins : TieredAchievement {
 	public override void check() {
 		value = stats.getCoinsShot();
 		int index = tiers.IndexOf(value);
-		Debug.Log("Checked");
 		if (index > tierCompleted) {
 			tierCompleted = index;
 			unlocked = (index == tiers.Count) ? true : false;

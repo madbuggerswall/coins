@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class GuideString : MonoBehaviour {
 	Coin[] coins;
-	float lineThickness = .2f;
+	float lineThickness = .4f;
 
 	MeshRenderer meshRenderer;
 

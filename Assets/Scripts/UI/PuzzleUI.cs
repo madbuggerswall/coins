@@ -8,7 +8,6 @@ public class PuzzleUI : MonoBehaviour {
 	[SerializeField] Button pause;
 	[SerializeField] GameObject pauseMenu;
 	[SerializeField] GameObject shotsLeft;
-	[SerializeField] GameObject goalPanel;
 	[SerializeField] GameObject faulPanel;
 	[SerializeField] GameObject completedPanel;
 	[SerializeField] GameObject failedPanel;
@@ -37,11 +36,6 @@ public class PuzzleUI : MonoBehaviour {
 		});
 	}
 
-	IEnumerator enableGoalPanelFor(float seconds) {
-		goalPanel.SetActive(true);
-		yield return new WaitForSeconds(seconds);
-		goalPanel.SetActive(false);
-	}
 	IEnumerator enableFaulPanelFor(float seconds) {
 		faulPanel.SetActive(true);
 		yield return new WaitForSeconds(seconds);

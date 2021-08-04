@@ -7,7 +7,7 @@ public class CollapsibleObstacle : MonoBehaviour {
 
 	Vector3 uncollapsedPosition;
 	Vector3 collapsedPosition;
-	float collapseSpeed = 2;
+	float collapseSpeed = 4;
 
 	void Awake() {
 		rigidBody = GetComponentInChildren<Rigidbody>();
