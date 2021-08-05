@@ -7,7 +7,7 @@ public class Puzzle : MonoBehaviour {
 	CoinSet coinSet;
 	Player player;
 	protected bool hasPlayerShotInGoal;
-	Formation formation;
+	// Formation formation;
 
 	void Awake() {
 		coinSet = CoinSet.getInstance();
@@ -16,21 +16,11 @@ public class Puzzle : MonoBehaviour {
 		LevelManager.getInstance().events.coinShotEnded.AddListener(evaluateShot);
 	}
 
-	void Start() {
-		formation = new Formation(coinSet.getCoins());
-	}
-
-	IEnumerator resetCoinSet() {
-		yield return formation.resetCoinSet();
-		LevelManager.getInstance().events.playerContinuesTurn.Invoke();
-	}
-
 	void evaluateShot() {
 		Events events = LevelManager.getInstance().events;
 		if (playerFouled()) {
 			events.playerFouled.Invoke();
 			setPlayerShotInGoal(false);
-			StartCoroutine(resetCoinSet());
 		} else if (hasPlayerShotInGoal) {
 			events.playerScored.Invoke();
 		} else if (playerHasShotsLeft()) {
@@ -57,5 +47,4 @@ public class Puzzle : MonoBehaviour {
 	public void setPlayerShotInGoal(bool value) { hasPlayerShotInGoal = value; }
 	public CoinSet getCoinSet() { return coinSet; }
 	public Player getPlayer() { return player; }
-	public Formation getFormation() { return formation; }
 }
