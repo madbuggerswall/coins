@@ -14,7 +14,7 @@ public class PuzzleUI : MonoBehaviour {
 	ShotsLeftUI shotsLeftUI;
 
 	void Awake() {
-		shotsLeftUI = new ShotsLeftUI(shotsLeft, LevelManager.getInstance().getGame().getPlayer().getShotsLeft());
+		shotsLeftUI = new ShotsLeftUI(shotsLeft, LevelManager.getInstance().getPlayer().getShotsLeft());
 		resetPlayerShotsUI();
 		initializeListeners();
 		pause.onClick.AddListener(() => pauseMenu.GetComponent<PauseMenu>().pauseGame(!pauseMenu.activeSelf));

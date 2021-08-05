@@ -8,7 +8,7 @@ public abstract class Card : MonoBehaviour {
 
 	protected void spawnParticleFX(GameObject particlePrefab) {
 		Particles particles = Particles.getInstance();
-		foreach (Coin coin in LevelManager.getInstance().getGame().getCoinSet().getCoins()) {
+		foreach (Coin coin in CoinSet.getInstance().getCoins()) {
 			particles.explodeAt(particlePrefab, coin.transform.position);
 		}
 	}

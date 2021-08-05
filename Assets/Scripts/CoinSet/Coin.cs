@@ -22,4 +22,7 @@ public class Coin : MonoBehaviour {
 	}
 
 	public void setDrag(float drag) { rigidBody.drag = drag; }
+
+	// Getters
+	public Rigidbody getRigidbody() { return rigidBody; }
 }

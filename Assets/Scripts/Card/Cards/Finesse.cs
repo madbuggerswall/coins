@@ -20,7 +20,7 @@ public class Finesse : Card {
 	}
 
 	void applyFinesse() {
-		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		Coin[] coins = CoinSet.getInstance().getCoins();
 		foreach (Coin coin in coins) {
 			if (coin.gameObject.layer == Layers.thrownCoin) {
 				finesseHelper = coin.gameObject.AddComponent<ApplyFinesse>();

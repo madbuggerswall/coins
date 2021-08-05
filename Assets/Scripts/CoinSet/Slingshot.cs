@@ -34,6 +34,20 @@ public class Slingshot : MonoBehaviour {
 		rigidBody = GetComponent<Rigidbody>();
 		// rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;
 		aimAction = () => { };
+
+		LevelManager.getInstance().events.playerReady.AddListener(enableControls);
+		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
+		LevelManager.getInstance().events.coinShotEnded.AddListener(resetStatus);
+		LevelManager.getInstance().events.playerContinuesTurn.AddListener(enableControls);
+
+		LevelManager.getInstance().events.cardDeckHidden.AddListener(enableControls);
+		LevelManager.getInstance().events.cardDeckRevealed.AddListener(disableControls);
+
+		LevelManager.getInstance().events.cardPlayed.AddListener(disableControls);
+		LevelManager.getInstance().events.cardApplied.AddListener(enableControls);
+		
+		LevelManager.getInstance().events.gamePaused.AddListener(disableControls);
+		LevelManager.getInstance().events.gameUnpaused.AddListener(enableControls);
 	}
 
 	void Update() {
@@ -54,7 +68,7 @@ public class Slingshot : MonoBehaviour {
 	void OnMouseUp() {
 		onMouseUp();
 	}
-	
+
 	void draw() {
 		initialPos = PlayerInput.getPosition();
 		crosshair.setPoints(transform.position, transform.position);
@@ -116,7 +130,7 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	void resetOtherCoinStatus() {
-		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		Coin[] coins = CoinSet.getInstance().getCoins();
 		foreach (Coin coin in coins) {
 			if (coin != GetComponent<Coin>()) {
 				coin.GetComponent<Slingshot>().resetStatus();
@@ -140,6 +154,7 @@ public class Slingshot : MonoBehaviour {
 
 	public void resetStatus() {
 		coinStatus = 0;
+		gameObject.layer = Layers.coin;
 	}
 
 	public CoinStatus getCoinStatus() { return coinStatus; }

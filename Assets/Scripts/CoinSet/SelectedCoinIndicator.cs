@@ -5,7 +5,7 @@ public class SelectedCoinIndicator {
 	GameObject indicator;
 
 	public SelectedCoinIndicator() {
-		coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		coins = CoinSet.getInstance().getCoins();
 		LevelManager.getInstance().events.coinStatusChanged.AddListener(spawnIndicator);
 	}
 

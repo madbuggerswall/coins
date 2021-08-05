@@ -10,16 +10,21 @@ public class Events {
 	public UnityEvent collectibleCollected;
 	public UnityEvent obstacleHit;
 
+	public UnityEvent playerReady;
 	public UnityEvent playerFouled;
 	public UnityEvent playerScored;
 	public UnityEvent playerContinuesTurn;
-	public UnityEvent playerTurnPassed;
 	public UnityEvent playerHasNoShotsLeft;
 	public UnityEvent sessionEnded;
 
 	// Puzzle
 	public UnityEvent cardPlayed;
 	public UnityEvent cardApplied;
+
+	public UnityEvent gamePaused;
+	public UnityEvent gameUnpaused;
+	public UnityEvent cardDeckRevealed;
+	public UnityEvent cardDeckHidden;
 
 	public Events() {
 		coinStatusChanged = new UnityEvent();
@@ -31,15 +36,21 @@ public class Events {
 		collectibleCollected = new UnityEvent();
 		obstacleHit = new UnityEvent();
 
+		playerReady = new UnityEvent();
 		playerFouled = new UnityEvent();
 		playerScored = new UnityEvent();
 		playerContinuesTurn = new UnityEvent();
-		playerTurnPassed = new UnityEvent();
+		// playerTurnPassed = new UnityEvent();
 		playerHasNoShotsLeft = new UnityEvent();
 		sessionEnded = new UnityEvent();
 
 		// Puzzle
 		cardPlayed = new UnityEvent();
 		cardApplied = new UnityEvent();
+
+		gamePaused = new UnityEvent();
+		gameUnpaused = new UnityEvent();
+		cardDeckRevealed = new UnityEvent();
+		cardDeckHidden = new UnityEvent();
 	}
 }

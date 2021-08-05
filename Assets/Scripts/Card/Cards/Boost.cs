@@ -19,7 +19,7 @@ public class Boost : Card {
 	}
 
 	void boostCoins() {
-		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		Coin[] coins = CoinSet.getInstance().getCoins();
 		foreach (Coin coin in coins) {
 			Slingshot slingshot = coin.GetComponent<Slingshot>();
 			initialForceMag = slingshot.getMaxForceMag();
@@ -28,7 +28,7 @@ public class Boost : Card {
 	}
 
 	void resetBoost() {
-		Coin[] coins = LevelManager.getInstance().getGame().getCoinSet().getCoins();
+		Coin[] coins = CoinSet.getInstance().getCoins();
 		foreach (Coin coin in coins) {
 			coin.GetComponent<Slingshot>().setMaxForceMag(initialForceMag);
 		}

@@ -9,7 +9,7 @@ public class Undo : Card {
 	public override void reset() { }
 
 	IEnumerator resetCoinSet() {
-		yield return ((Puzzle) LevelManager.getInstance().getGame()).getFormation().resetCoinSet();
+		yield return FindObjectOfType<Puzzle>().getFormation().resetCoinSet();
 		LevelManager.getInstance().events.playerContinuesTurn.Invoke();
 	}
 }

@@ -36,11 +36,11 @@ public class PauseMenu : MonoBehaviour {
 	public void pauseGame(bool paused) {
 		if (paused) {
 			Time.timeScale = 0;
-			LevelManager.getInstance().getGame().getCoinSet().disableControls();
+			LevelManager.getInstance().events.gamePaused.Invoke();
 			gameObject.SetActive(paused);
 		} else {
 			Time.timeScale = 1;
-			LevelManager.getInstance().getGame().getCoinSet().enableControls();
+			LevelManager.getInstance().events.gameUnpaused.Invoke();
 			gameObject.SetActive(paused);
 		}
 	}

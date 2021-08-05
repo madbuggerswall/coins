@@ -5,20 +5,16 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-4)]
 public class LevelManager : MonoBehaviour {
 	static LevelManager instance;
+
 	public Events events;
 
-	// Gametype utils
-	public Func<CoinGame> getGame;
-	Puzzle puzzle;
-	Match match;
-
 	Level level;
+	[SerializeField] Player player;
 	[SerializeField] Stats stats;
 	[SerializeField] Achievements achievements;
 
 	void Awake() {
 		assertSingleton();
-		selectGameType();
 
 		events = new Events();
 		stats.initialize();
@@ -36,6 +32,7 @@ public class LevelManager : MonoBehaviour {
 
 	void Start() {
 		SceneTransitionUI.getInstance().lighten();
+		events.playerReady.Invoke();
 	}
 
 	// Migrate this block to a more context relevant script.
@@ -50,13 +47,6 @@ public class LevelManager : MonoBehaviour {
 	public static LevelManager getInstance() { return instance; }
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 
-	void selectGameType() {
-		puzzle = FindObjectOfType<Puzzle>();
-		match = FindObjectOfType<Match>();
-		if (puzzle == null) {
-			getGame = () => { return match; };
-		} else {
-			getGame = () => { return puzzle; };
-		}
-	}
+	// Getters
+	public Player getPlayer() { return player; }
 }

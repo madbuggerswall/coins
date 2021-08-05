@@ -32,17 +32,17 @@ public class MatchUI : MonoBehaviour {
 	// Initializes event listeners.
 	void initializeListeners() {
 		Events events = LevelManager.getInstance().events;
-		Match match = (Match) LevelManager.getInstance().getGame();
+		// Match match = (Match) LevelManager.getInstance().getGame();
 
-		events.playerFouled.AddListener(() => showFaulPanel());
-		events.playerFouled.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
-		events.playerScored.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
-		events.playerContinuesTurn.AddListener(() => setActivePlayerShotsLeft(match.isPlayerLeftActive(), match.getPlayer().getShotsLeft()));
-		events.playerHasNoShotsLeft.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
-		events.playerScored.AddListener(() => showGoalPanel());
-		events.playerScored.AddListener(() => setActivePlayerScore(match.isPlayerLeftActive(), match.getPlayer().getScore()));
-		events.playerTurnPassed.AddListener(() => passTurn(match.isPlayerLeftActive()));
-		events.sessionEnded.AddListener(() => showWinPanel(match.isPlayerLeftActive()));
+		// events.playerFouled.AddListener(() => showFaulPanel());
+		// events.playerFouled.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		// events.playerScored.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		// events.playerContinuesTurn.AddListener(() => setActivePlayerShotsLeft(match.isPlayerLeftActive(), match.getPlayer().getShotsLeft()));
+		// events.playerHasNoShotsLeft.AddListener(() => resetActivePlayerShotsUI(match.isPlayerLeftActive()));
+		// events.playerScored.AddListener(() => showGoalPanel());
+		// events.playerScored.AddListener(() => setActivePlayerScore(match.isPlayerLeftActive(), match.getPlayer().getScore()));
+		// // events.playerTurnPassed.AddListener(() => passTurn(match.isPlayerLeftActive()));
+		// events.sessionEnded.AddListener(() => showWinPanel(match.isPlayerLeftActive()));
 	}
 
 	void setScoreL(int score) { scoreLeft.text = score.ToString(); }

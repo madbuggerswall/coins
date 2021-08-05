@@ -9,7 +9,7 @@ public class GainShots : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (!coinEntered) {
 			coinEntered = true;
-			Player player = LevelManager.getInstance().getGame().getPlayer();
+			Player player = LevelManager.getInstance().getPlayer();
 			player.setShotsLeft(player.getShotsLeft() + shots);
 		}
 	}

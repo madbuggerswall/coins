@@ -32,10 +32,10 @@ public class DeckHandle : EventTrigger {
 
 	public override void OnPointerUp(PointerEventData pointerEventData) {
 		if (open) {
-			LevelManager.getInstance().getGame().getCoinSet().enableControls();
+			LevelManager.getInstance().events.cardDeckHidden.Invoke();
 			StartCoroutine(collapse(finalPosition, initialPosition));
 		} else {
-			LevelManager.getInstance().getGame().getCoinSet().disableControls();
+			LevelManager.getInstance().events.cardDeckRevealed.Invoke();
 			StartCoroutine(collapse(initialPosition, finalPosition));
 		}
 	}
