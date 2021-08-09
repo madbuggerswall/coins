@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Make this class a MonoBehaviour with event listeners.
 public class SelectedCoinIndicator {
 	Coin[] coins;
 	GameObject indicator;

@@ -16,7 +16,6 @@ public class Collectible : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		Particles.getInstance().explodeAt(Particles.collectiblePrefab, transform.position);
 		LevelManager.getInstance().events.collectibleCollected.Invoke();
-		LevelManager.getInstance().getPlayer().incrementCollectibles();
 		gameObject.SetActive(false);
 	}
 }

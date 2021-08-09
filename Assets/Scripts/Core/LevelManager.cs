@@ -8,8 +8,7 @@ public class LevelManager : MonoBehaviour {
 
 	public Events events;
 
-	Level level;
-	[SerializeField] Player player;
+	Player player;
 	[SerializeField] Stats stats;
 	[SerializeField] Achievements achievements;
 
@@ -17,6 +16,8 @@ public class LevelManager : MonoBehaviour {
 		assertSingleton();
 
 		events = new Events();
+
+		player = GetComponent<Player>();
 		stats.initialize();
 		achievements.initialize(stats);
 

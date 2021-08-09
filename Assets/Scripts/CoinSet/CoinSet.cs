@@ -8,32 +8,15 @@ public class CoinSet : MonoBehaviour {
 	static CoinSet instance;
 
 	Coin[] coins;
-	
+
 	SelectedCoinIndicator selectedCoinIndicator;
 	SetMechanics setMechanics;
 
-	UnityAction checkCoinSetStationary;
-	UnityAction checkPassThrough;
-
 	void Awake() {
 		assertSingleton();
-
+	
 		coins = GetComponentsInChildren<Coin>();
-
 		setMechanics = new SetMechanics(this);
-
-		checkCoinSetStationary = delegate { };
-		checkPassThrough = delegate { };
-
-		LevelManager.getInstance().events.coinShot.AddListener(delegate {
-			checkCoinSetStationary = setMechanics.checkCoinSetStationary;
-			checkPassThrough = setMechanics.checkFoulLine;
-		});
-
-		LevelManager.getInstance().events.coinShotEnded.AddListener(delegate {
-			checkCoinSetStationary = delegate { };
-			checkPassThrough = delegate { };
-		});
 	}
 
 	void Start() {
@@ -41,11 +24,11 @@ public class CoinSet : MonoBehaviour {
 	}
 
 	void Update() {
-		checkCoinSetStationary();
+		setMechanics.hasCoinShotEnded();
 	}
 
 	void FixedUpdate() {
-		checkPassThrough();
+		setMechanics.checkFoulLine();
 	}
 
 	// Singleton 
@@ -53,6 +36,7 @@ public class CoinSet : MonoBehaviour {
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 
 	// Setters & Getters
+	
 	public Coin[] getCoins() { return coins; }
 	public SetMechanics getMechanics() { return setMechanics; }
 }

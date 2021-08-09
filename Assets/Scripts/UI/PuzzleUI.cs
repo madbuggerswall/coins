@@ -24,7 +24,7 @@ public class PuzzleUI : MonoBehaviour {
 		Events events = LevelManager.getInstance().events;
 
 		events.playerFouled.AddListener(() => showFaulPanel());
-		events.playerContinuesTurn.AddListener(() => setShotsLeft(FindObjectOfType<Puzzle>().getPlayer().getShotsLeft()));
+		events.playerContinuesTurn.AddListener(() => setShotsLeft(LevelManager.getInstance().getPlayer().getShotsLeft()));
 		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
 		events.playerScored.AddListener(() => {
 			completedPanel.SetActive(true);

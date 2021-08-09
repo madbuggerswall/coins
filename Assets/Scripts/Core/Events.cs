@@ -11,11 +11,11 @@ public class Events {
 	public UnityEvent obstacleHit;
 
 	public UnityEvent playerReady;
+	public UnityEvent playerShotValid;
 	public UnityEvent playerFouled;
 	public UnityEvent playerScored;
 	public UnityEvent playerContinuesTurn;
 	public UnityEvent playerHasNoShotsLeft;
-	public UnityEvent sessionEnded;
 
 	// Puzzle
 	public UnityEvent cardPlayed;
@@ -23,6 +23,8 @@ public class Events {
 
 	public UnityEvent gamePaused;
 	public UnityEvent gameUnpaused;
+	public UnityEvent sessionEnded;
+
 	public UnityEvent cardDeckRevealed;
 	public UnityEvent cardDeckHidden;
 
@@ -36,13 +38,12 @@ public class Events {
 		collectibleCollected = new UnityEvent();
 		obstacleHit = new UnityEvent();
 
-		playerReady = new UnityEvent();
+		playerReady = new UnityEvent(); //	Invoke after an entrance sequence.
+		playerShotValid = new UnityEvent();
 		playerFouled = new UnityEvent();
 		playerScored = new UnityEvent();
 		playerContinuesTurn = new UnityEvent();
-		// playerTurnPassed = new UnityEvent();
 		playerHasNoShotsLeft = new UnityEvent();
-		sessionEnded = new UnityEvent();
 
 		// Puzzle
 		cardPlayed = new UnityEvent();
@@ -50,6 +51,8 @@ public class Events {
 
 		gamePaused = new UnityEvent();
 		gameUnpaused = new UnityEvent();
+		sessionEnded = new UnityEvent();
+
 		cardDeckRevealed = new UnityEvent();
 		cardDeckHidden = new UnityEvent();
 	}

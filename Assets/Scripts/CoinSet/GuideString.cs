@@ -10,12 +10,12 @@ public class GuideString : MonoBehaviour {
 	MeshRenderer meshRenderer;
 
 	public UnityAction drawGuideLine = () => { };
-	
+
 	void Start() {
 		coins = GetComponentInParent<CoinSet>().getCoins();
 		meshRenderer = GetComponent<MeshRenderer>();
 		LevelManager.getInstance().events.coinStatusChanged.AddListener(selectGuide);
-		LevelManager.getInstance().events.coinPassedThrough.AddListener(delegate { StartCoroutine(strum(4)); });
+		LevelManager.getInstance().events.coinPassedThrough.AddListener(delegate { StartCoroutine(strum()); });
 		meshRenderer.material.SetFloat("_Amplitude", 0);
 	}
 
@@ -27,12 +27,11 @@ public class GuideString : MonoBehaviour {
 		}
 	}
 
-
-	public void enable(bool value) {
+	void enable(bool value) {
 		meshRenderer.enabled = value;
 	}
 
-	public void setPoints(Vector3 startPoint, Vector3 endPoint) {
+	void setPoints(Vector3 startPoint, Vector3 endPoint) {
 		setPosition(startPoint, endPoint);
 	}
 
@@ -55,8 +54,7 @@ public class GuideString : MonoBehaviour {
 		}
 	}
 
-	// State functions
-	public void selectGuide() {
+	void selectGuide() {
 		enable(true);
 		CoinStatus maxCoinStatus = 0;
 		int maxCoinStatusIndex = 0;
@@ -73,8 +71,19 @@ public class GuideString : MonoBehaviour {
 			enable(false);
 	}
 
-	IEnumerator strum(float speed) {
+	public Coin getShotCoin() {
+		foreach (Coin coin in coins) {
+			if (coin.GetComponent<Slingshot>().getCoinStatus() == CoinStatus.shot) {
+				return coin;
+			}
+		}
+		return null;
+	}
+
+	IEnumerator strum() {
 		// Animation Speed and Amplitude will be effected by coin speed.
+		float speed = getShotCoin().getRigidbody().velocity.magnitude;
+
 		float decay = 0.2f / lineThickness;
 		float amplitude = 0.3f / lineThickness;
 		while (amplitude >= 0) {
@@ -83,7 +92,5 @@ public class GuideString : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}
 		meshRenderer.material.SetFloat("_Amplitude", 0);
-
 	}
-
 }
