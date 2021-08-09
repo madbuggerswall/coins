@@ -9,6 +9,6 @@ public class Undo : Card {
 	public override void reset() { }
 
 	IEnumerator resetCoinSet() {
-		yield return FindObjectOfType<CoinRecorder>().playLastValidShot();
+		yield return FindObjectOfType<CoinRecorder>().rewindLastValidShot();
 	}
 }

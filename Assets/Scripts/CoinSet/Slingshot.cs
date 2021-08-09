@@ -45,9 +45,11 @@ public class Slingshot : MonoBehaviour {
 
 		LevelManager.getInstance().events.cardPlayed.AddListener(disableControls);
 		LevelManager.getInstance().events.cardApplied.AddListener(enableControls);
-		
+
 		LevelManager.getInstance().events.gamePaused.AddListener(disableControls);
 		LevelManager.getInstance().events.gameUnpaused.AddListener(enableControls);
+
+		LevelManager.getInstance().events.playerHasNoShotsLeft.AddListener(disableControls);
 	}
 
 	void Update() {

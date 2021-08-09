@@ -23,9 +23,8 @@ public class PuzzleUI : MonoBehaviour {
 	void initializeListeners() {
 		Events events = LevelManager.getInstance().events;
 
-		events.playerFouled.AddListener(() => showFaulPanel());
-		events.playerContinuesTurn.AddListener(() => setShotsLeft(LevelManager.getInstance().getPlayer().getShotsLeft()));
-		events.playerHasNoShotsLeft.AddListener(() => resetPlayerShotsUI());
+		events.playerFouled.AddListener(showFaulPanel);
+		events.playerShotValid.AddListener(() => setShotsLeft(LevelManager.getInstance().getPlayer().getShotsLeft()));
 		events.playerScored.AddListener(() => {
 			completedPanel.SetActive(true);
 			pause.enabled = false;

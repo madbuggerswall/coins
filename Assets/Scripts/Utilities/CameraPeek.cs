@@ -2,17 +2,19 @@ using UnityEngine;
 
 public class CameraPeek : MonoBehaviour {
 	[SerializeField] Transform peekCrosshair;
-	[SerializeField] Transform coinL;
-	[SerializeField] Transform coinC;
-	[SerializeField] Transform coinR;
+	Coin[] coins;
 
 	Vector3 deltaPosition;
 	Vector3 formerMousePosition;
 	Vector3 deltaMousePosition;
-	Vector3 averageCoinPosition;
+	Vector3 averageCoinPos;
+
+	void Awake() {
+		coins = CoinSet.getInstance().getCoins();
+	}
 
 	void Update() {
-		averageCoinPosition = (coinL.position + coinC.position + coinR.position) / 3f;
+		averageCoinPos = (coins[0].transform.position + coins[1].transform.position + coins[2].transform.position) / 3f;
 
 		if (Input.touchCount == 2) {
 			deltaPosition = (Input.GetTouch(0).deltaPosition + Input.GetTouch(1).deltaPosition) / 2f;
@@ -25,7 +27,7 @@ public class CameraPeek : MonoBehaviour {
 			deltaMousePosition.z = 0;
 			peekCrosshair.position += deltaMousePosition;
 		} else {
-			peekCrosshair.position = averageCoinPosition;
+			peekCrosshair.position = averageCoinPos;
 		}
 		clampCrosshairPosition();
 		formerMousePosition = Input.mousePosition;

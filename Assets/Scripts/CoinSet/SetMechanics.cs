@@ -34,11 +34,10 @@ public class SetMechanics {
 			hasPlayerShotInGoal = false;
 		} else if (hasPlayerShotInGoal) {
 			events.playerScored.Invoke();
-		} else if (!playerHasShotsLeft()) {
-			events.playerHasNoShotsLeft.Invoke();
 		} else {
-			events.playerShotValid.Invoke();
+			Debug.Log("VALID");
 			events.playerContinuesTurn.Invoke();
+			events.playerShotValid.Invoke();
 		}
 	}
 

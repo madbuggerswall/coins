@@ -12,8 +12,11 @@ public class Player : MonoBehaviour {
 	}
 
 
+	void decrementShotsLeft() {
+		shotsLeft--;
+		if (shotsLeft <= 0) LevelManager.getInstance().events.playerHasNoShotsLeft.Invoke();
+	}
 	void incrementCollectibles() { collectibles++; }
-	void decrementShotsLeft() { shotsLeft--; }
 	public void incrementScore() { score++; }
 	public void setShotsLeft(int shotsLeft) { this.shotsLeft = shotsLeft; }
 	public int getShotsLeft() { return shotsLeft; }
