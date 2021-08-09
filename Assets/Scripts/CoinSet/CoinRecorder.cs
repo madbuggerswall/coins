@@ -38,13 +38,7 @@ public class CoinRecorder : MonoBehaviour {
 
 	public IEnumerator play() {
 		setCoinsKinematic(true);
-
-		for (int i = coinTrails[0].Count - 1; i >= 0; i--) {
-			for (int j = 0; j < coins.Length; j++) {
-				coinTrails[j][i].applyValuesTo(coins[j].transform);
-			}
-			yield return null;
-		}
+		yield return play(coinTrails);
 		setCoinsKinematic(false);
 		clearTrailData();
 		LevelManager.getInstance().events.playerContinuesTurn.Invoke();
@@ -52,25 +46,26 @@ public class CoinRecorder : MonoBehaviour {
 
 	public IEnumerator playLastValidShot() {
 		setCoinsKinematic(true);
-
-		for (int i = lastValidShot[0].Count - 1; i >= 0; i--) {
-			for (int j = 0; j < coins.Length; j++) {
-				lastValidShot[j][i].applyValuesTo(coins[j].transform);
-			}
-			yield return null;
-		}
+		yield return play(lastValidShot);
 		setCoinsKinematic(false);
 		LevelManager.getInstance().events.playerContinuesTurn.Invoke();
 	}
 
+	IEnumerator play(List<TransformDTO>[] shotRecording) {
+		for (int i = shotRecording[0].Count - 1; i >= 0; i--) {
+			for (int j = 0; j < coins.Length; j++) {
+				shotRecording[j][i].applyValuesTo(coins[j].transform);
+			}
+			yield return null;
+		}
+	}
+
 	void saveLastShot() {
 		clearLastValidShot();
-		Debug.Log(coinTrails[0].Count);
 		for (int i = 0; i < coinTrails.Length; i++) {
 			for (int j = 0; j < coinTrails[0].Count; j++) {
 				lastValidShot[i].Add(coinTrails[i][j]);
 			}
-			Debug.Log(coinTrails[i].Count);
 		}
 	}
 
