@@ -7,8 +7,10 @@ public class DeckHandle : EventTrigger {
 	Vector3 initialPosition;
 	Vector3 finalPosition;
 	RectTransform parent;
+
 	bool open = false;
 	bool isEnabled = true;
+
 	void Awake() {
 		parent = transform.parent.GetComponent<RectTransform>();
 		initialPosition = parent.anchoredPosition;
@@ -18,13 +20,14 @@ public class DeckHandle : EventTrigger {
 			StartCoroutine(collapse(finalPosition, initialPosition));
 		});
 
-		LevelManager.getInstance().events.coinShot.AddListener(delegate { isEnabled = false; });
-		LevelManager.getInstance().events.playerContinuesTurn.AddListener(delegate { isEnabled = true; });
-
-		LevelManager.getInstance().events.gamePaused.AddListener(delegate { isEnabled = false; });
-		LevelManager.getInstance().events.gameUnpaused.AddListener(delegate { isEnabled = true; });
-		LevelManager.getInstance().events.playerHasNoShotsLeft.AddListener(delegate { isEnabled = false; });
-
+		Events events = LevelManager.getInstance().events;
+		events.coinShot.AddListener(delegate { isEnabled = false; });
+		events.playerContinuesTurn.AddListener(delegate { isEnabled = true; });
+		events.gamePaused.AddListener(delegate { isEnabled = false; });
+		events.gameUnpaused.AddListener(delegate { isEnabled = true; });
+		events.playerHasNoShotsLeft.AddListener(delegate { isEnabled = false; });
+		events.cardPlayed.AddListener(delegate { isEnabled = false; });
+		events.cardApplied.AddListener(delegate { isEnabled = true; });
 	}
 
 	public override void OnPointerEnter(PointerEventData pointerEventData) { }

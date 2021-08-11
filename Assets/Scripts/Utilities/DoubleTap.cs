@@ -1,12 +1,15 @@
 using UnityEngine;
 
-public class DoubleTap {
-
+public class DoubleTap : MonoBehaviour {
 	float doubleTapThreshold = 0.5f;
 	float tapTime;
 	bool tappedOnce;
 
-	public DoubleTap() { }
+	void Update() {
+		if (doubleTapped()) {
+			LevelManager.getInstance().events.cardApplied.Invoke();
+		}
+	}
 
 	public bool doubleTapped() {
 		if (!tappedOnce && Input.GetMouseButtonDown(0)) {

@@ -35,7 +35,6 @@ public class SetMechanics {
 		} else if (hasPlayerShotInGoal) {
 			events.playerScored.Invoke();
 		} else {
-			Debug.Log("VALID");
 			events.playerContinuesTurn.Invoke();
 			events.playerShotValid.Invoke();
 		}

@@ -13,7 +13,7 @@ public class PuzzleUI : MonoBehaviour {
 	[SerializeField] GameObject failedPanel;
 	ShotsLeftUI shotsLeftUI;
 
-	void Awake() {
+	void Start() {
 		shotsLeftUI = new ShotsLeftUI(shotsLeft, LevelManager.getInstance().getPlayer().getShotsLeft());
 		resetPlayerShotsUI();
 		initializeListeners();

@@ -35,21 +35,24 @@ public class Slingshot : MonoBehaviour {
 		// rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;
 		aimAction = () => { };
 
-		LevelManager.getInstance().events.playerReady.AddListener(enableControls);
-		LevelManager.getInstance().events.coinShot.AddListener(disableControls);
-		LevelManager.getInstance().events.coinShotEnded.AddListener(resetStatus);
-		LevelManager.getInstance().events.playerContinuesTurn.AddListener(enableControls);
+		// Subscribe to events
+		Events events = LevelManager.getInstance().events;
+		events.playerReady.AddListener(enableControls);
+		events.coinShot.AddListener(disableControls);
+		events.coinShotEnded.AddListener(resetStatus);
+		events.playerContinuesTurn.AddListener(enableControls);
 
-		LevelManager.getInstance().events.cardDeckHidden.AddListener(enableControls);
-		LevelManager.getInstance().events.cardDeckRevealed.AddListener(disableControls);
+		events.cardDeckHidden.AddListener(enableControls);
+		events.cardDeckRevealed.AddListener(disableControls);
 
-		LevelManager.getInstance().events.cardPlayed.AddListener(disableControls);
-		LevelManager.getInstance().events.cardApplied.AddListener(enableControls);
+		events.cardPlayed.AddListener(disableControls);
+		events.cardPlayed.AddListener(resetStatus);
+		events.cardPlayed.AddListener(delegate { crosshair.enable(false); });
+		events.cardApplied.AddListener(enableControls);
 
-		LevelManager.getInstance().events.gamePaused.AddListener(disableControls);
-		LevelManager.getInstance().events.gameUnpaused.AddListener(enableControls);
-
-		LevelManager.getInstance().events.playerHasNoShotsLeft.AddListener(disableControls);
+		events.gamePaused.AddListener(disableControls);
+		events.gameUnpaused.AddListener(enableControls);
+		events.playerHasNoShotsLeft.AddListener(disableControls);
 	}
 
 	void Update() {
@@ -140,23 +143,24 @@ public class Slingshot : MonoBehaviour {
 		}
 	}
 
-	public void enableControls() {
+	void enableControls() {
 		onMouseDown = draw;
 		onMouseDrag = aim;
 		onMouseUp = release;
 		aimAction = freeAim;
 	}
 
-	public void disableControls() {
+	void disableControls() {
 		onMouseDown = () => { };
 		onMouseDrag = () => { };
 		onMouseUp = () => { };
 		aimAction = () => { };
 	}
 
-	public void resetStatus() {
+	void resetStatus() {
 		coinStatus = 0;
 		gameObject.layer = Layers.coin;
+		LevelManager.getInstance().events.coinStatusChanged.Invoke();
 	}
 
 	public CoinStatus getCoinStatus() { return coinStatus; }
