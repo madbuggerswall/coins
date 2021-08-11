@@ -19,12 +19,15 @@ public class PlayNCards : TieredAchievement {
 			GameObject.FindObjectOfType<AchievementPopupUI>().displayAchievement(getDescription());
 		}
 	}
-	
+
 	public override string getDescription() {
 		return "Play " + tiers[tierCompleted] + " cards.";
 	}
-	
+
 	public override string getNextTierDescription() {
-		return "Play " + tiers[tierCompleted+1] + " cards.";
+		if (tierCompleted + 1 >= tiers.Count)
+			return "Completed.";
+		else
+			return "Play " + tiers[tierCompleted + 1] + " cards.";
 	}
 }

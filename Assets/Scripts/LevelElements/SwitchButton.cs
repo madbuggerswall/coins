@@ -5,9 +5,8 @@ using UnityEngine.Events;
 
 public class SwitchButton : MonoBehaviour {
 	[SerializeField] GameObject switchButton;
-	
-	[SerializeField] UnityEvent activate;
-	[SerializeField] UnityEvent deactivate;
+
+	[SerializeField] CollapsibleObstacle collapsibleObstacle;
 
 	Animation animPlayer;
 	Material switchMaterial;
@@ -19,6 +18,7 @@ public class SwitchButton : MonoBehaviour {
 	const string turnRed = "turnRed";
 
 	void Awake() {
+		initializeCollapsibleObstacle();
 		switchMaterial = switchButton.GetComponent<Renderer>().material;
 		animPlayer = GetComponent<Animation>();
 	}
@@ -32,12 +32,17 @@ public class SwitchButton : MonoBehaviour {
 		if (coinCount == 0) {
 			isSwitchOn = !isSwitchOn;
 			if (isSwitchOn) {
-				activate.Invoke();
+				collapsibleObstacle.startCollapsing();
 				animPlayer.Play(turnGreen);
 			} else {
-				deactivate.Invoke();
+				collapsibleObstacle.startUncollapsing();
 				animPlayer.Play(turnRed);
 			}
 		}
+	}
+
+	void initializeCollapsibleObstacle() {
+		if (collapsibleObstacle == null)
+			collapsibleObstacle = transform.parent.GetComponentInChildren<CollapsibleObstacle>();
 	}
 }

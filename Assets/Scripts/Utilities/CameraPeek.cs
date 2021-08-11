@@ -9,6 +9,8 @@ public class CameraPeek : MonoBehaviour {
 	Vector3 deltaMousePosition;
 	Vector3 averageCoinPos;
 
+	float initialDistance = 0;
+	float distance = 0;
 	void Awake() {
 		coins = CoinSet.getInstance().getCoins();
 	}
@@ -16,11 +18,14 @@ public class CameraPeek : MonoBehaviour {
 	void Update() {
 		averageCoinPos = (coins[0].transform.position + coins[1].transform.position + coins[2].transform.position) / 3f;
 
+		if (Input.touchCount == 2 && initialDistance == 0) {
+			initialDistance = screenToWorld(Input.GetTouch(0).position - Input.GetTouch(1).position, 0.1f).magnitude;
+		} else if (Input.touchCount == 0 && initialDistance != 0)
+			initialDistance = 0;
+
 		if (Input.touchCount == 2) {
-			deltaPosition = (Input.GetTouch(0).deltaPosition + Input.GetTouch(1).deltaPosition) / 2f;
-			deltaPosition = screenToWorld(deltaPosition, 0.1f);
-			deltaMousePosition.z = 0;
-			peekCrosshair.position += deltaPosition;
+			distance = screenToWorld(Input.GetTouch(0).position - Input.GetTouch(1).position, 0.1f).magnitude;
+			peekCrosshair.position = (initialDistance - distance) * Vector3.right;
 		} else if (Input.GetMouseButton(1)) {
 			deltaMousePosition = Input.mousePosition - formerMousePosition;
 			deltaMousePosition = screenToWorld(deltaMousePosition, 0.1f);

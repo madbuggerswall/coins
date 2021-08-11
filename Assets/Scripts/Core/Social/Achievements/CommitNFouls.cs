@@ -25,6 +25,9 @@ public class CommitNFouls : TieredAchievement {
 	}
 
 	public override string getNextTierDescription() {
-		return "Commit " + tiers[tierCompleted + 1] + " fouls.";
+		if (tierCompleted + 1 >= tiers.Count)
+			return "Completed.";
+		else
+			return "Commit " + tiers[tierCompleted + 1] + " fouls.";
 	}
 }

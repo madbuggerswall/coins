@@ -24,6 +24,9 @@ public class CollectNCollectibles : TieredAchievement {
 		return "Collect " + tiers[tierCompleted] + " collectibles.";
 	}
 	public override string getNextTierDescription() {
-		return "Collect " + tiers[tierCompleted + 1] + " collectibles.";
+		if (tierCompleted + 1 >= tiers.Count)
+			return "Completed.";
+		else
+			return "Collect " + tiers[tierCompleted + 1] + " collectibles.";
 	}
 }

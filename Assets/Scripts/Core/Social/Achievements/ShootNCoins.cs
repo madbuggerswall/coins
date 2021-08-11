@@ -23,6 +23,9 @@ public class ShootNCoins : TieredAchievement {
 		return "Shoot " + tiers[tierCompleted] + " coins.";
 	}
 	public override string getNextTierDescription() {
-		return "Shoot " + tiers[tierCompleted + 1] + " coins.";
+		if (tierCompleted + 1 >= tiers.Count)
+			return "Completed.";
+		else
+			return "Shoot " + tiers[tierCompleted + 1] + " coins.";
 	}
 }

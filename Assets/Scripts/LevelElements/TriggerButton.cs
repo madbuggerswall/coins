@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class TriggerButton : MonoBehaviour {
-	[SerializeField] UnityEvent triggerEnter;
-	[SerializeField] UnityEvent triggerExit;
+	[SerializeField] CollapsibleObstacle collapsibleObstacle;
 
 	[SerializeField] Transform button;
 	Vector3 initialButtonPos;
@@ -13,6 +12,10 @@ public class TriggerButton : MonoBehaviour {
 
 	[SerializeField] float collapseSpeed;
 	int coinCount = 0;
+
+	void Awake() {
+		initializeCollapsibleObstacle();
+	}
 
 	void Start() {
 		initialButtonPos = button.position;
@@ -22,7 +25,7 @@ public class TriggerButton : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		coinCount++;
 		if (coinCount == 1) {
-			triggerEnter.Invoke();
+			collapsibleObstacle.startCollapsing();
 			StartCoroutine(collapse());
 		}
 	}
@@ -30,7 +33,7 @@ public class TriggerButton : MonoBehaviour {
 	void OnTriggerExit(Collider other) {
 		coinCount--;
 		if (coinCount == 0) {
-			triggerExit.Invoke();
+			collapsibleObstacle.startUncollapsing();
 			StartCoroutine(uncollapse());
 		}
 	}
@@ -60,5 +63,10 @@ public class TriggerButton : MonoBehaviour {
 			interpolant += Time.deltaTime * collapseSpeed;
 			yield return new WaitForEndOfFrame();
 		}
+	}
+
+	void initializeCollapsibleObstacle() {
+		if (collapsibleObstacle == null)
+			collapsibleObstacle = transform.parent.GetComponentInChildren<CollapsibleObstacle>();
 	}
 }

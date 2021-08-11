@@ -24,6 +24,9 @@ public class HitNObstacles : TieredAchievement {
 	}
 
 	public override string getNextTierDescription() {
-		return "Hit " + tiers[tierCompleted + 1] + " obstacles.";
+		if (tierCompleted + 1 >= tiers.Count)
+			return "Completed.";
+		else
+			return "Hit " + tiers[tierCompleted + 1] + " obstacles.";
 	}
 }
