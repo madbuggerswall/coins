@@ -9,6 +9,7 @@ Shader "Unlit/String" {
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
 		
+		_ColorMul ("Color Mul", Range(0,2)) = 0.4
 		_Amplitude ("Wave Size", Range(0,2)) = 0.4
 		_Frequency ("Wave Freqency", Range(1, 24)) = 2
 		_AnimationSpeed ("Animation Speed", Range(0,48)) = 1
@@ -28,10 +29,12 @@ Shader "Unlit/String" {
 
 			struct appdata_t {
 				float4 vertex : POSITION;
+
 			};
 
 			struct v2f {
 				float4 vertex : SV_POSITION;
+				float4 color : COLOR;
 			};
 
 			fixed4 _Color;
@@ -40,6 +43,7 @@ Shader "Unlit/String" {
 			float _Amplitude;
 			float _Frequency;
 			float _AnimationSpeed;
+			float _ColorMul;
 
 			v2f vert (appdata_t data)
 			{
@@ -50,16 +54,21 @@ Shader "Unlit/String" {
 				modifiedPos.x += sin(-data.vertex.y * _Frequency + _Time.y * _AnimationSpeed) * _Amplitude;
 				
 				data.vertex = modifiedPos;
-				
+				float3 baseWorldPos = unity_ObjectToWorld._m03_m13_m23;
+
 				o.vertex = UnityObjectToClipPos(data.vertex);
+				o.color = 1 - _ColorMul * abs(data.vertex.y) ;
+				o.color -= sqrt(_ColorMul) * _ColorMul * data.vertex.z;
 				return o;
 			}
 
 			fixed4 frag (v2f i) : COLOR
 			{
-				fixed4 col = _Color;
+				fixed4 col = _Color * i.color;
 				return col;
 			}
+			
+
 			ENDCG
 		}
 	}

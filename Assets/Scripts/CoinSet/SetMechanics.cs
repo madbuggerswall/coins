@@ -68,7 +68,7 @@ public class SetMechanics {
 	// Casts a line between two points to detect pass-through.
 	void checkLineBetween(Vector3 startPos, Vector3 endPos) {
 		int layerMask = 1 << Layers.thrownCoin;
-		if (Physics.Linecast(startPos, endPos, layerMask)) {
+		if (Physics.Linecast(startPos, endPos, layerMask) && !passedThrough) {
 			passedThrough = true;
 			LevelManager.getInstance().events.coinPassedThrough.Invoke();
 		}

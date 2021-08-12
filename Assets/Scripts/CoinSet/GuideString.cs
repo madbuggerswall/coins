@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class GuideString : MonoBehaviour {
 	Coin[] coins;
-	float lineThickness = .4f;
+	[SerializeField] float lineThickness = .4f;
 
 	MeshRenderer meshRenderer;
 
@@ -21,10 +21,6 @@ public class GuideString : MonoBehaviour {
 
 	void Update() {
 		drawGuideLine();
-
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
-			meshRenderer.material.SetFloat("_Amplitude", 1);
-		}
 	}
 
 	void enable(bool value) {
@@ -67,8 +63,7 @@ public class GuideString : MonoBehaviour {
 		}
 		if (maxCoinStatus > 0) {
 			selectCoinPair(maxCoinStatusIndex);
-		} else
-			enable(false);
+		}
 	}
 
 	public Coin getShotCoin() {
@@ -85,7 +80,9 @@ public class GuideString : MonoBehaviour {
 		float speed = getShotCoin().getRigidbody().velocity.magnitude;
 
 		float decay = 0.2f / lineThickness;
-		float amplitude = 0.3f / lineThickness;
+		float amplitude = 0.3f / lineThickness * Mathf.InverseLerp(0f, 24f, speed);
+		float animationSpeed = 14 + 14 * Mathf.InverseLerp(0f, 24f, speed);
+		meshRenderer.material.SetFloat("_AnimationSpeed", animationSpeed);
 		while (amplitude >= 0) {
 			meshRenderer.material.SetFloat("_Amplitude", amplitude);
 			amplitude -= Time.deltaTime * decay;

@@ -12,23 +12,23 @@ public class CameraPeek : MonoBehaviour {
 	// Touch
 	float initialDistance = 0;
 	float distance = 0;
-	
+
 	Vector3 averageCoinPos;
-	
+
 	void Awake() {
 		coins = CoinSet.getInstance().getCoins();
 	}
 
 	void Update() {
 		averageCoinPos = (coins[0].transform.position + coins[1].transform.position + coins[2].transform.position) / 3f;
-		
-		#if UNITY_ANDROID || UNITY_IOS
-			touchInput();
-		#endif
 
-		#if UNITY_EDITOR
-			mouseInput();
-		#endif
+#if UNITY_ANDROID || UNITY_IOS
+		touchInput();
+#endif
+
+#if UNITY_EDITOR
+		mouseInput();
+#endif
 
 		clampCrosshairPosition();
 	}
@@ -41,7 +41,9 @@ public class CameraPeek : MonoBehaviour {
 
 		if (Input.touchCount == 2) {
 			distance = screenToWorld(Input.GetTouch(0).position - Input.GetTouch(1).position, 0.1f).magnitude;
-			peekCrosshair.position = (initialDistance - distance) * Vector3.right;
+			peekCrosshair.position = (initialDistance - distance + averageCoinPos.x) * Vector3.right;
+		} else {
+			peekCrosshair.position = averageCoinPos;
 		}
 	}
 

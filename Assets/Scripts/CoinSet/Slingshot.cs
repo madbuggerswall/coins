@@ -27,7 +27,7 @@ public class Slingshot : MonoBehaviour {
 	UnityAction onMouseUp;
 	UnityAction aimAction;
 
-	CoinStatus coinStatus;
+	[SerializeField] CoinStatus coinStatus;
 
 	void Awake() {
 		crosshair = GetComponentInChildren<Crosshair>();
