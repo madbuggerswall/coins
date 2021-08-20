@@ -61,6 +61,7 @@ public class Slingshot : MonoBehaviour {
 
 	// Draw
 	void OnMouseDown() {
+		Debug.Log(gameObject.name);
 		onMouseDown();
 	}
 
@@ -93,9 +94,15 @@ public class Slingshot : MonoBehaviour {
 			crosshair.setColor(Color.red);
 		else
 			crosshair.setColor(Color.white);
+
+		Physics.autoSimulation = false;
+		Time.timeScale = 0.2f;
+		FindObjectOfType<TrajectoryPrediction>().simulate(GetComponent<Coin>(),throwForce);
 	}
 
-	void release() {
+	public void release() {
+		Time.timeScale = 1f;
+		Physics.autoSimulation = true;
 		crosshair.enable(false);
 		// Cancel shot
 		if (throwForce.magnitude <= cancelThreshold) {

@@ -57,8 +57,10 @@ Shader "Unlit/String" {
 				float3 baseWorldPos = unity_ObjectToWorld._m03_m13_m23;
 
 				o.vertex = UnityObjectToClipPos(data.vertex);
-				o.color = 1 - _ColorMul * abs(data.vertex.y) ;
-				o.color -= sqrt(_ColorMul) * _ColorMul * data.vertex.z;
+
+				// Shading
+				o.color = 1 - 8 * _ColorMul * abs(data.vertex.y * data.vertex.y) ;
+				o.color -= 16 * _ColorMul * data.vertex.z - baseWorldPos.y;
 				return o;
 			}
 
