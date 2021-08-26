@@ -24,6 +24,7 @@ public class TrajectoryPrediction : MonoBehaviour {
 		trajectoryScene = SceneManager.CreateScene("Trajectory Scene", sceneParameters);
 		physicsScene = trajectoryScene.GetPhysicsScene();
 
+
 		initalizeElements();
 		instantiateElements();
 	}
@@ -72,15 +73,17 @@ public class TrajectoryPrediction : MonoBehaviour {
 		}
 	}
 
-	public void simulate(Coin realCoin, Vector3 force) {
+	public void simulate(Transform realCoin, Vector3 force) {
+
 		GameObject coin = coins[0];
-		coin.transform.position = realCoin.transform.position;
-		coin.transform.rotation = realCoin.transform.rotation;
-		coin.GetComponent<Rigidbody>().velocity = Vector3.zero;
+		Rigidbody coinRigidbody = coin.GetComponent<Rigidbody>();
+		coin.transform.position = realCoin.position;
+		coin.transform.rotation = realCoin.rotation;
+		coinRigidbody.velocity = Vector3.zero;
 		lineRenderer.SetPosition(0, coin.transform.position);
-		coin.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+		coinRigidbody.AddForce(force, ForceMode.Impulse);
 		for (int i = 1; i < iterations; i++) {
-			physicsScene.Simulate(4 * Time.fixedDeltaTime);
+			physicsScene.Simulate(2 * Time.fixedDeltaTime);
 			lineRenderer.SetPosition(i, coin.transform.position);
 		}
 	}
