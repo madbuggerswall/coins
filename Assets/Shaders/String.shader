@@ -45,8 +45,7 @@ Shader "Unlit/String" {
 			float _AnimationSpeed;
 			float _ColorMul;
 
-			v2f vert (appdata_t data)
-			{
+			v2f vert (appdata_t data){
 				v2f o;
 				
 				float4 modifiedPos = data.vertex;

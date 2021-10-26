@@ -74,7 +74,6 @@ public class TrajectoryPrediction : MonoBehaviour {
 	}
 
 	public void simulate(Transform realCoin, Vector3 force) {
-
 		GameObject coin = coins[0];
 		Rigidbody coinRigidbody = coin.GetComponent<Rigidbody>();
 		coin.transform.position = realCoin.position;

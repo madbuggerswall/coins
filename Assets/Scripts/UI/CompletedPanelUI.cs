@@ -13,5 +13,6 @@ public class CompletedPanelUI : MonoBehaviour {
 		restart.onClick.AddListener(GameManager.getInstance().levelLoader.restartLevel);
 		mainMenu.onClick.AddListener(GameManager.getInstance().levelLoader.loadMainMenu);
 		nextLevel.onClick.AddListener(GameManager.getInstance().levelLoader.loadNextLevel);
+		LevelManager.getInstance().events.playerScored.AddListener(delegate { gameObject.SetActive(true); });
 	}
 }

@@ -13,11 +13,12 @@ public class FailedPanelUI : MonoBehaviour {
 		mainMenu.onClick.AddListener(loadMainMenu);
 	}
 
+	// TODO 
 	void restartScene() {
-		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+		GameManager.getInstance().levelLoader.restartLevel();
 	}
 
 	void loadMainMenu() {
-		SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Single);
+		GameManager.getInstance().levelLoader.loadMainMenu();
 	}
 }

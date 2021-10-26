@@ -33,6 +33,12 @@ public class GameManager : MonoBehaviour {
 	}
 
 	// Singleton 
-	public static GameManager getInstance() { return instance; }
+	public static GameManager getInstance() {
+		if (instance == null) {
+			GameObject gameManagerGO = new GameObject("GameManager");
+			return gameManagerGO.AddComponent<GameManager>();
+		}
+		return instance;
+	}
 	void assertSingleton() { if (instance == null) { instance = this; } else { Destroy(gameObject); } }
 }
