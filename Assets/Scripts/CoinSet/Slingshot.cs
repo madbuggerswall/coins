@@ -29,10 +29,7 @@ public class Slingshot : MonoBehaviour {
 
 	[SerializeField] CoinStatus coinStatus;
 
-	TrajectoryPrediction trajectoryPrediction;
 	void Awake() {
-		trajectoryPrediction = FindObjectOfType<TrajectoryPrediction>();
-		
 		crosshair = GetComponentInChildren<Crosshair>();
 		rigidBody = GetComponent<Rigidbody>();
 		// rigidBody.sleepThreshold = rigidBody.mass * 1f * 0.5f;

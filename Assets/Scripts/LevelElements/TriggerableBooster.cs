@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Booster : MonoBehaviour {
-	// Default is 36
+public class TriggerableBooster : MonoBehaviour, ITriggerable {
 	[SerializeField] float force = 36;
-
-	// Default is 4
 	[SerializeField] float stuckThreshold = 4;
+	[SerializeField] bool isInverse;
 	float entryTime;
+
+	ParticleSystem particles;
+	BoxCollider boxCollider;
+
+	void Awake() {
+		particles = GetComponentInChildren<ParticleSystem>();
+		boxCollider = GetComponent<BoxCollider>();
+		particles.gameObject.SetActive(isInverse);
+		boxCollider.enabled = isInverse;
+	}
 
 	void OnTriggerEnter(Collider other) {
 		StartCoroutine(changeColor(Color.gray, Color.white));
@@ -24,6 +32,15 @@ public class Booster : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		StartCoroutine(changeColor(Color.white, Color.gray));
+	}
+
+	public void trigger() {
+		boxCollider.enabled = !isInverse;
+		particles.gameObject.SetActive(!isInverse);
+	}
+	public void untrigger() {
+		boxCollider.enabled = isInverse;
+		particles.gameObject.SetActive(isInverse);
 	}
 
 	IEnumerator changeColor(Color first, Color last) {

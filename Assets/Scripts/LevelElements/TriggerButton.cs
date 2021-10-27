@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class TriggerButton : MonoBehaviour {
-	[SerializeField] CollapsibleObstacle collapsibleObstacle;
+	[SerializeField] List<ITriggerable> triggerables = new List<ITriggerable>();
 
 	[SerializeField] Transform button;
 	Vector3 initialButtonPos;
@@ -14,7 +14,7 @@ public class TriggerButton : MonoBehaviour {
 	int coinCount = 0;
 
 	void Awake() {
-		initializeCollapsibleObstacle();
+		initializeTriggerable();
 	}
 
 	void Start() {
@@ -25,7 +25,7 @@ public class TriggerButton : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		coinCount++;
 		if (coinCount == 1) {
-			collapsibleObstacle.startCollapsing();
+			triggerAll();
 			StartCoroutine(collapse());
 		}
 	}
@@ -33,7 +33,7 @@ public class TriggerButton : MonoBehaviour {
 	void OnTriggerExit(Collider other) {
 		coinCount--;
 		if (coinCount == 0) {
-			collapsibleObstacle.startUncollapsing();
+			untriggerAll();
 			StartCoroutine(uncollapse());
 		}
 	}
@@ -65,8 +65,20 @@ public class TriggerButton : MonoBehaviour {
 		}
 	}
 
-	void initializeCollapsibleObstacle() {
-		if (collapsibleObstacle == null)
-			collapsibleObstacle = transform.parent.GetComponentInChildren<CollapsibleObstacle>();
+	void triggerAll() {
+		foreach (ITriggerable triggerable in triggerables) {
+			triggerable.trigger();
+		}
+	}
+
+	void untriggerAll() {
+		foreach (ITriggerable triggerable in triggerables) {
+			triggerable.untrigger();
+		}
+	}
+
+	void initializeTriggerable() {
+		if (triggerables.Count == 0)
+			triggerables.AddRange(transform.parent.GetComponentsInChildren<ITriggerable>());
 	}
 }

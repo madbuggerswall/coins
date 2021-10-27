@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class SwitchButton : MonoBehaviour {
 	[SerializeField] GameObject switchButton;
 
-	[SerializeField] CollapsibleObstacle collapsibleObstacle;
+	[SerializeField] List<ITriggerable> triggerables = new List<ITriggerable>();
 
 	Animation animPlayer;
 	Material switchMaterial;
@@ -18,7 +18,7 @@ public class SwitchButton : MonoBehaviour {
 	const string turnRed = "turnRed";
 
 	void Awake() {
-		initializeCollapsibleObstacle();
+		initializeTriggerable();
 		switchMaterial = switchButton.GetComponent<Renderer>().material;
 		animPlayer = GetComponent<Animation>();
 	}
@@ -32,17 +32,29 @@ public class SwitchButton : MonoBehaviour {
 		if (coinCount == 0) {
 			isSwitchOn = !isSwitchOn;
 			if (isSwitchOn) {
-				collapsibleObstacle.startCollapsing();
+				triggerAll();
 				animPlayer.Play(turnGreen);
 			} else {
-				collapsibleObstacle.startUncollapsing();
+				untriggerAll();
 				animPlayer.Play(turnRed);
 			}
 		}
 	}
 
-	void initializeCollapsibleObstacle() {
-		if (collapsibleObstacle == null)
-			collapsibleObstacle = transform.parent.GetComponentInChildren<CollapsibleObstacle>();
+	void triggerAll() {
+		foreach (ITriggerable triggerable in triggerables) {
+			triggerable.trigger();
+		}
+	}
+
+	void untriggerAll() {
+		foreach (ITriggerable triggerable in triggerables) {
+			triggerable.untrigger();
+		}
+	}
+
+	void initializeTriggerable() {
+		if (triggerables.Count == 0)
+			triggerables.AddRange(transform.parent.GetComponentsInChildren<ITriggerable>());
 	}
 }
