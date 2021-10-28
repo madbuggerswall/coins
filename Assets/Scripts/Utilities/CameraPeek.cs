@@ -22,7 +22,7 @@ public class CameraPeek : MonoBehaviour {
 	void Update() {
 		averageCoinPos = (coins[0].transform.position + coins[1].transform.position + coins[2].transform.position) / 3f;
 
-#if UNITY_ANDROID || UNITY_IOS
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
 		touchInput();
 #endif
 
@@ -34,6 +34,7 @@ public class CameraPeek : MonoBehaviour {
 	}
 
 	void touchInput() {
+		Debug.Log("Touch input");
 		if (Input.touchCount == 2 && initialDistance == 0) {
 			initialDistance = screenToWorld(Input.GetTouch(0).position - Input.GetTouch(1).position, 0.1f).magnitude;
 		} else if (Input.touchCount == 0 && initialDistance != 0)

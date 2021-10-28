@@ -35,7 +35,7 @@ public class GuideString : MonoBehaviour {
 		Vector3 direction = end - start;
 		transform.position = (end + start) * 0.5f;
 		transform.rotation = Quaternion.FromToRotation(Vector3.forward, direction);
-		transform.eulerAngles = new Vector3(90, transform.eulerAngles.y * Mathf.Sign(direction.y), 0);
+		transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, 0);
 		transform.localScale = new Vector3(lineThickness, direction.magnitude, 1);
 	}
 

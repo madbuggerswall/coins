@@ -18,6 +18,10 @@ public class CollapsibleObstacle : MonoBehaviour, ITriggerable {
 		if (isInverse) StartCoroutine(collapse());
 	}
 
+	private void OnCollisionStay(Collision other) {
+		
+	}
+
 	public void trigger() {
 		if (isInverse)
 			StartCoroutine(uncollapse());

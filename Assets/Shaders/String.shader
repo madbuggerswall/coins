@@ -5,6 +5,8 @@
 // - no lightmap support
 // - no texture
 
+// TODO: Make this shader a silhouetted shader.
+
 Shader "Unlit/String" {
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
@@ -39,13 +41,12 @@ Shader "Unlit/String" {
 
 			fixed4 _Color;
 
-
 			float _Amplitude;
 			float _Frequency;
 			float _AnimationSpeed;
 			float _ColorMul;
 
-			v2f vert (appdata_t data){
+			v2f vert (appdata_t data)	{
 				v2f o;
 				
 				float4 modifiedPos = data.vertex;
@@ -63,8 +64,7 @@ Shader "Unlit/String" {
 				return o;
 			}
 
-			fixed4 frag (v2f i) : COLOR
-			{
+			fixed4 frag (v2f i) : COLOR	{
 				fixed4 col = _Color * i.color;
 				return col;
 			}
