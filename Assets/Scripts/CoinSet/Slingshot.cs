@@ -15,6 +15,7 @@ public class Slingshot : MonoBehaviour {
 	Vector3 initialPos;
 	Vector3 finalPos;
 	Vector3 throwForce;
+	bool isReadyToShoot = false;
 	[SerializeField] float maxThrowForceMag = 32;
 
 	Crosshair crosshair;
@@ -78,7 +79,7 @@ public class Slingshot : MonoBehaviour {
 		initialPos = PlayerInput.getPosition();
 		crosshair.setPoints(transform.position, transform.position);
 		crosshair.enable(true);
-
+		isReadyToShoot = true;
 		// Select coin
 		coinStatus |= CoinStatus.selected;
 		resetOtherCoinStatus();
@@ -96,6 +97,8 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	public void release() {
+		if (!isReadyToShoot) return;
+		isReadyToShoot = false;
 		crosshair.enable(false);
 		// Cancel shot
 		if (throwForce.magnitude <= cancelThreshold) {
@@ -114,6 +117,7 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	void freeAim() {
+		isReadyToShoot = true;
 		if ((coinStatus & CoinStatus.selected) > 0) {
 			if (Input.GetMouseButtonDown(0)) {
 				crosshair.enable(true);

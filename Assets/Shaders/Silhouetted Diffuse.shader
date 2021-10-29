@@ -29,10 +29,10 @@ Shader "Outlined/Silhouetted Diffuse" {
 		v2f o;
 		o.pos = UnityObjectToClipPos(v.vertex);
 		
-		float3 norm   = mul ((float3x3)UNITY_MATRIX_IT_MV, v.normal);
-		float2 offset = TransformViewToProjection(norm.xy);
+		// float3 norm   = mul ((float3x3)UNITY_MATRIX_IT_MV, v.normal);
+		// float2 offset = TransformViewToProjection(norm.xy);
 		
-		o.pos.xy += offset * o.pos.z * _Outline;
+		// o.pos.xy += offset * o.pos.z * _Outline;
 		o.color = _OutlineColor;
 		return o;
 	}
@@ -78,53 +78,6 @@ Shader "Outlined/Silhouetted Diffuse" {
 				Ambient [_Color]
 			}
 			Lighting Off
-			SetTexture [_MainTex] {
-				ConstantColor [_Color]
-				Combine texture * constant
-			}
-			SetTexture [_MainTex] {
-				Combine previous * primary DOUBLE
-			}
-		}
-	}
-	
-	// Commenting out this whole subhader did nothing on the shader.
-	SubShader {
-		Tags { "Queue" = "Transparent" }
-		
-		// Commenting out this pass did nothing on the shader.
-		Pass {
-			Name "OUTLINE"
-			Cull Front
-			ZWrite Off
-			ZTest Always
-			ColorMask RGB
-			
-			// You can choose what kind of blending mode you want for the outline.
-			Blend SrcAlpha OneMinusSrcAlpha // Normal
-			//Blend One One // Additive
-			//Blend One OneMinusDstColor // Soft Additive
-			//Blend DstColor Zero // Multiplicative
-			//Blend DstColor SrcColor // 2x Multiplicative
-			
-			CGPROGRAM
-			#pragma vertex vert
-			#pragma exclude_renderers gles xbox360 ps3
-			ENDCG
-			SetTexture [_MainTex] { combine primary }
-		}
-
-		// Commenting out this pass did nothing on the shader
-		Pass {
-			Name "BASE"
-			ZWrite On
-			ZTest LEqual
-			Blend SrcAlpha OneMinusSrcAlpha
-			Material {
-				Diffuse [_Color]
-				Ambient [_Color]
-			}
-			// Lighting On
 			SetTexture [_MainTex] {
 				ConstantColor [_Color]
 				Combine texture * constant

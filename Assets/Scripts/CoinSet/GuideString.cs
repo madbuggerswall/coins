@@ -36,7 +36,7 @@ public class GuideString : MonoBehaviour {
 		transform.position = (end + start) * 0.5f;
 		transform.rotation = Quaternion.FromToRotation(Vector3.forward, direction);
 		transform.eulerAngles = new Vector3(90, transform.eulerAngles.y, 0);
-		transform.localScale = new Vector3(lineThickness, direction.magnitude, 1);
+		transform.localScale = new Vector3(lineThickness, direction.magnitude - 2, 1);
 	}
 
 	void selectCoinPair(int index) {
