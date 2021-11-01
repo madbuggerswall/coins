@@ -11,12 +11,12 @@ public class Shrink : Card {
 	public override void apply() {
 		StartCoroutine(shrink());
 		spawnParticleFX(Particles.shrinkFXPrefab);
-		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
+		LevelManager.getInstance().events.playerShotValid.AddListener(reset);
 	}
 
 	public override void reset() {
 		StartCoroutine(resetShrink());
-		LevelManager.getInstance().events.coinShotEnded.RemoveListener(reset);
+		LevelManager.getInstance().events.playerShotValid.RemoveListener(reset);
 	}
 
 	IEnumerator shrink() {

@@ -7,9 +7,11 @@ public class GainShots : MonoBehaviour {
 	bool coinEntered = false;
 
 	ParticleSystem[] particleSystems;
+	BoxCollider boxCollider;
 
 	void Awake() {
 		particleSystems = GetComponentsInChildren<ParticleSystem>();
+		boxCollider = GetComponent<BoxCollider>();
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -17,6 +19,7 @@ public class GainShots : MonoBehaviour {
 			coinEntered = true;
 			Player player = LevelManager.getInstance().getPlayer();
 			player.setShotsLeft(player.getShotsLeft() + shots);
+			boxCollider.enabled = false;
 			stopEmitting();
 		}
 	}

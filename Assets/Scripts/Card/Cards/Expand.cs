@@ -11,12 +11,12 @@ public class Expand : Card {
 	public override void apply() {
 		StartCoroutine(expand());
 		spawnParticleFX(Particles.expandFXPrefab);
-		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
+		LevelManager.getInstance().events.playerShotValid.AddListener(reset);
 	}
 
 	public override void reset() {
 		StartCoroutine(resetExpand());
-		LevelManager.getInstance().events.coinShotEnded.RemoveListener(reset);
+		LevelManager.getInstance().events.playerShotValid.RemoveListener(reset);
 	}
 
 	IEnumerator expand() {

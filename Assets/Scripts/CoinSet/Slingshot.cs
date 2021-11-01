@@ -117,11 +117,9 @@ public class Slingshot : MonoBehaviour {
 	}
 
 	void freeAim() {
-		isReadyToShoot = true;
 		if ((coinStatus & CoinStatus.selected) > 0) {
 			if (Input.GetMouseButtonDown(0)) {
-				crosshair.enable(true);
-				initialPos = PlayerInput.getPosition();
+				draw();
 			} else if (Input.GetMouseButton(0)) {
 				aim();
 			} else if (Input.GetMouseButtonUp(0)) {

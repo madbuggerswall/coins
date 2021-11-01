@@ -9,12 +9,12 @@ public class Ghost : Card {
 	public override void apply() {
 		becomeGhost();
 		spawnParticleFX(Particles.ghostFXPrefab);
-		LevelManager.getInstance().events.coinShotEnded.AddListener(reset);
+		LevelManager.getInstance().events.playerShotValid.AddListener(reset);
 	}
 
 	public override void reset() {
 		resetGhost();
-		LevelManager.getInstance().events.coinShotEnded.RemoveListener(reset);
+		LevelManager.getInstance().events.playerShotValid.RemoveListener(reset);
 	}
 
 	void becomeGhost() {
