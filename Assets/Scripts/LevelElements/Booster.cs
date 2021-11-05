@@ -4,32 +4,25 @@ using UnityEngine;
 
 public class Booster : MonoBehaviour {
 	// Default is 36
-	[SerializeField] float force = 36;
-
-	// Default is 4
-	[SerializeField] float stuckThreshold = 4;
-	float entryTime;
+	protected static float force = 36;
 
 	void OnTriggerEnter(Collider other) {
-		StartCoroutine(changeColor(Color.gray, Color.white));
-		entryTime = Time.time;
+		// StartCoroutine(changeColor(green, brightGreen));
 	}
 
 	void OnTriggerStay(Collider other) {
-		other.attachedRigidbody.AddForce(transform.forward * force);
-		if (Time.time - entryTime > stuckThreshold) {
-			other.attachedRigidbody.AddForce(-Vector3.right * force);
-		}
+		other.attachedRigidbody.AddForceAtPosition(transform.forward * force, other.ClosestPoint(transform.position));
 	}
 
 	void OnTriggerExit(Collider other) {
-		StartCoroutine(changeColor(Color.white, Color.gray));
+		// StartCoroutine(changeColor(brightGreen, green));
 	}
 
-	IEnumerator changeColor(Color first, Color last) {
+	protected IEnumerator changeColor(Color first, Color last) {
 		float interpolant = 0;
+		ParticleSystem.MainModule mainModule = GetComponentInChildren<ParticleSystem>().main;
 		while (true) {
-			// material.color = Color.Lerp(first, last, interpolant);
+			mainModule.startColor = Color.Lerp(first, last, interpolant);
 			if (interpolant > 1) break;
 			interpolant += Time.deltaTime * 6;
 			yield return new WaitForEndOfFrame();

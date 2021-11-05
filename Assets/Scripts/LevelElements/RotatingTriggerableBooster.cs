@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerableBooster : Booster, ITriggerable {
+public class RotatingTriggerableBooster : RotatingBooster, ITriggerable {
 	[SerializeField] bool isInverse;
 
 	ParticleSystem particles;
@@ -13,6 +13,8 @@ public class TriggerableBooster : Booster, ITriggerable {
 		boxCollider = GetComponent<BoxCollider>();
 		particles.gameObject.SetActive(isInverse);
 		boxCollider.enabled = isInverse;
+		
+		LevelManager.getInstance().events.playerShotValid.AddListener(rotate);
 	}
 
 	public void trigger() {
